@@ -84,6 +84,8 @@ manifold-analysis/
 
 The `examples/` folder contains a complete worked example:
 
+![Example Visualization](examples/screenshot.png)
+
 ```bash
 # The data is already fetched - just open the visualization
 open examples/asl3_danger_viz.html
