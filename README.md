@@ -8,6 +8,9 @@ Analyze and visualize prediction market data from [Manifold Markets](https://man
 - **Trader Analytics**: Volume, trade count, YES/NO breakdown, bull/bear stance
 - **Time Series**: Monthly cumulative volume charts
 - **Interactive Visualizations**: Standalone HTML files with Chart.js
+- **P&L Estimation**: Estimate trader profits based on entry prices vs current probability
+- **Market Impact**: Track how much each trader moved the price
+- **Trader Classification**: Auto-tag traders as WHALE, BULL, BEAR, ACTIVE, WINNER, LOSER
 
 ## Quick Start
 
@@ -68,6 +71,8 @@ Use one of the example HTML files as a template:
 manifold-analysis/
 ├── scripts/
 │   ├── fetch_market_data.py    # API fetcher with pagination
+│   ├── analyze_traders.py      # Deep trader analysis (P&L, impact, timing)
+│   ├── generate_viz.py         # Generate enhanced HTML visualizations
 │   └── parse_trades.py         # Parse text/CSV trade data
 ├── examples/
 │   ├── asl3_danger_data.json   # Example: ASL-3 market data
@@ -94,6 +99,29 @@ open examples/asl3_danger_viz.html
 Market: "Will any LLM released by EOY 2025 be dangerously ASL-3?"
 - 145 trades, 60 traders, Ṁ18k volume
 - Shows how data flows from API → JSON → HTML viz
+
+## Trader Analysis
+
+Run deep analysis on any market:
+
+```bash
+python3 scripts/analyze_traders.py market_data.json --current-prob 0.95
+```
+
+Outputs:
+- **P&L Leaderboard**: Estimated profits based on entry price vs current
+- **Biggest Losers**: Who's underwater on their positions
+- **Market Movers**: Traders with most price impact
+- **Position Flippers**: Who changed direction
+- **Classifications**: WHALE, BULL, BEAR, ACTIVE, WINNER, LOSER tags
+
+### Generating Enhanced Visualizations
+
+```bash
+python3 scripts/generate_viz.py data.json usernames.json -o output.html --url "username/market-slug"
+```
+
+The enhanced viz includes P&L estimates, ROI%, market impact, and trader type badges.
 
 ## API Reference
 

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Will any LLM released by EOY 2025 be dangerously ASL-3? - Market Analysis</title>
+  <title>Will any LLM released by EOY 2025 be dangerously ASL-3 as defined by Anthropic? - Analysis</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); color: white; padding: 32px; }
-    .container { max-width: 1100px; margin: 0 auto; }
+    .container { max-width: 1200px; margin: 0 auto; }
     h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
     .subtitle { color: #64748b; font-size: 14px; margin-bottom: 32px; }
     .subtitle a { color: #60a5fa; text-decoration: none; }
@@ -22,13 +22,11 @@
     .legend { display: flex; justify-content: center; gap: 32px; margin-top: 16px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 8px; }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .legend-text { color: #94a3b8; }
-    .legend-value { font-family: monospace; }
-    table { width: 100%; font-size: 14px; border-collapse: collapse; }
-    th { text-align: left; padding: 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid rgba(71, 85, 105, 0.5); }
+    table { width: 100%; font-size: 13px; border-collapse: collapse; }
+    th { text-align: left; padding: 10px 8px; color: #64748b; font-weight: 500; border-bottom: 1px solid rgba(71, 85, 105, 0.5); }
     th.right { text-align: right; }
     th.center { text-align: center; }
-    td { padding: 12px; border-bottom: 1px solid rgba(71, 85, 105, 0.2); }
+    td { padding: 10px 8px; border-bottom: 1px solid rgba(71, 85, 105, 0.2); }
     td.right { text-align: right; }
     td.center { text-align: center; }
     .rank { color: #94a3b8; }
@@ -37,17 +35,23 @@
     .volume { font-family: monospace; color: #fbbf24; }
     .yes-vol { font-family: monospace; color: #10b981; }
     .no-vol { font-family: monospace; color: #ef4444; }
-    .stance { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-    .stance.bull { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .stance.bear { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .stance.mixed { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.4); }
+    .pnl-pos { font-family: monospace; color: #10b981; }
+    .pnl-neg { font-family: monospace; color: #ef4444; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; margin-right: 4px; }
+    .badge.whale { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+    .badge.bull { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .badge.bear { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .badge.active { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+    .badge.winner { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .badge.loser { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .badge.retail { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
     .footer { margin-top: 32px; text-align: center; color: #64748b; font-size: 12px; }
     @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Will any LLM released by EOY 2025 be dangerously ASL-3?</h1>
+    <h1>Will any LLM released by EOY 2025 be dangerously ASL-3 as defined by Anthropic?</h1>
     <p class="subtitle"><a href="https://manifold.markets/JacobPfau/will-any-llm-released-by-eoy-2025-be-da" target="_blank">manifold.markets/JacobPfau/will-any-llm-released-by-eoy-2025-be-da</a></p>
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-label"><span>🎯</span> Probability</div><div class="stat-value">96%</div></div>
@@ -59,23 +63,29 @@
       <h2 class="chart-title">Cumulative Volume Over Time <span>(Stacked by Position)</span></h2>
       <div style="position: relative; height: 350px; width: 100%;"><canvas id="volumeChart"></canvas></div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background: #10b981;"></div><span class="legend-text">YES</span><span class="legend-value yes-vol">Ṁ15.6k (86.2%)</span></div>
-        <div class="legend-item"><div class="legend-dot" style="background: #ef4444;"></div><span class="legend-text">NO</span><span class="legend-value no-vol">Ṁ2.5k (13.8%)</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background: #10b981;"></div><span style="color:#94a3b8">YES</span><span class="yes-vol">Ṁ15.6k (86.2%)</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background: #ef4444;"></div><span style="color:#94a3b8">NO</span><span class="no-vol">Ṁ2.5k (13.8%)</span></div>
       </div>
     </div>
     <div class="chart-container">
-      <h2 class="chart-title">Top Traders by Volume</h2>
+      <h2 class="chart-title">Trader Leaderboard <span>(with estimated P&L)</span></h2>
       <table>
-        <thead><tr><th>#</th><th>Trader</th><th class="right">Volume</th><th class="right">Trades</th><th class="right">YES</th><th class="right">NO</th><th class="center">Position</th></tr></thead>
+        <thead><tr>
+          <th>#</th><th>Trader</th><th>Types</th>
+          <th class="right">Volume</th><th class="right">Trades</th>
+          <th class="right">YES</th><th class="right">NO</th>
+          <th class="right">Est. P&L</th><th class="right">ROI</th>
+          <th class="right">Impact</th>
+        </tr></thead>
         <tbody id="traderTable"></tbody>
       </table>
     </div>
-    <div class="footer">Data from Manifold Markets API • Generated <span id="date"></span></div>
+    <div class="footer">Data from Manifold Markets API • Enhanced analysis • Generated <span id="date"></span></div>
   </div>
   <script>
     const dailyData = [{"month": "Sep 2023", "YES": 874, "NO": 488}, {"month": "Oct 2023", "YES": 1004, "NO": 507}, {"month": "Dec 2023", "YES": 1091, "NO": 607}, {"month": "Jan 2024", "YES": 1215, "NO": 807}, {"month": "Mar 2024", "YES": 1215, "NO": 1007}, {"month": "May 2024", "YES": 1317, "NO": 1392}, {"month": "Jun 2024", "YES": 1477, "NO": 1452}, {"month": "Jul 2024", "YES": 1477, "NO": 1537}, {"month": "Aug 2024", "YES": 1702, "NO": 1567}, {"month": "Nov 2024", "YES": 2013, "NO": 1567}, {"month": "Dec 2024", "YES": 2263, "NO": 2067}, {"month": "Jan 2025", "YES": 2413, "NO": 2067}, {"month": "Feb 2025", "YES": 3061, "NO": 2202}, {"month": "Mar 2025", "YES": 6125, "NO": 2252}, {"month": "Apr 2025", "YES": 6125, "NO": 2302}, {"month": "May 2025", "YES": 15648, "NO": 2509}];
-    const traders = [{"name": "@HenriThunberg", "volume": 5088, "trades": 4, "yesPct": 100.0, "yes": 5088, "no": 0}, {"name": "@RobertCousineau", "volume": 2602, "trades": 2, "yesPct": 100.0, "yes": 2602, "no": 0}, {"name": "@AdamK", "volume": 2373, "trades": 12, "yesPct": 100.0, "yes": 2373, "no": 0}, {"name": "@JoshYou", "volume": 1630, "trades": 8, "yesPct": 93.9, "yes": 1530, "no": 100}, {"name": "@JavierPrieto", "volume": 1000, "trades": 1, "yesPct": 100.0, "yes": 1000, "no": 0}, {"name": "@FelixHofstatter", "volume": 550, "trades": 2, "yesPct": 0.0, "yes": 0, "no": 550}, {"name": "@ThomasPoltoranos", "volume": 532, "trades": 1, "yesPct": 100.0, "yes": 532, "no": 0}, {"name": "@acc", "volume": 416, "trades": 12, "yesPct": 28.1, "yes": 117, "no": 299}, {"name": "@Mira", "volume": 395, "trades": 23, "yesPct": 99.0, "yes": 391, "no": 4}, {"name": "@NeuralBets", "volume": 330, "trades": 5, "yesPct": 100.0, "yes": 330, "no": 0}, {"name": "@cibyr", "volume": 307, "trades": 4, "yesPct": 0.0, "yes": 0, "no": 307}, {"name": "@MattLashofSullivan", "volume": 250, "trades": 1, "yesPct": 0.0, "yes": 0, "no": 250}, {"name": "@Crazytieguy", "volume": 250, "trades": 1, "yesPct": 100.0, "yes": 250, "no": 0}, {"name": "@AbuElBanat", "volume": 250, "trades": 1, "yesPct": 100.0, "yes": 250, "no": 0}, {"name": "@ErikBjareholt", "volume": 200, "trades": 1, "yesPct": 0.0, "yes": 0, "no": 200}, {"name": "@2BjZn7l2acSH", "volume": 150, "trades": 2, "yesPct": 0.0, "yes": 0, "no": 150}, {"name": "@stNuIBu29JSL", "volume": 128, "trades": 4, "yesPct": 100.0, "yes": 128, "no": 0}, {"name": "@ty35kTRZ6EXh", "volume": 112, "trades": 8, "yesPct": 73.4, "yes": 82, "no": 30}, {"name": "@Z3DdfIKhMAbR", "volume": 100, "trades": 2, "yesPct": 100.0, "yes": 100, "no": 0}, {"name": "@GzFn7mDYAoO0", "volume": 100, "trades": 1, "yesPct": 100.0, "yes": 100, "no": 0}];
-    function formatCurrency(v) { if (v >= 1000000) return `Ṁ${(v/1000000).toFixed(2)}M`; if (v >= 1000) return `Ṁ${(v/1000).toFixed(1)}k`; return `Ṁ${Math.round(v)}`; }
+    const traders = [{"name": "@HenriThunberg", "volume": 5088, "trades": 4, "yesPct": 100.0, "yes": 5088, "no": 0, "pnl": -7.0, "roi": -0.1, "impact": 8.0, "types": ["WHALE", "BULL"]}, {"name": "@RobertCousineau", "volume": 2602, "trades": 2, "yesPct": 100.0, "yes": 2602, "no": 0, "pnl": 131.0, "roi": 5.0, "impact": 9.8, "types": ["WHALE", "BULL"]}, {"name": "@AdamK", "volume": 2373, "trades": 12, "yesPct": 100.0, "yes": 2373, "no": 0, "pnl": 778.0, "roi": 32.8, "impact": 26.8, "types": ["WHALE", "BULL"]}, {"name": "@JoshYou", "volume": 1630, "trades": 8, "yesPct": 93.9, "yes": 1530, "no": 100, "pnl": 431.0, "roi": 26.5, "impact": 26.3, "types": ["WHALE", "BULL"]}, {"name": "@JavierPrieto", "volume": 1000, "trades": 1, "yesPct": 100.0, "yes": 1000, "no": 0, "pnl": 30.0, "roi": 3.0, "impact": 2.8, "types": ["WHALE", "BULL"]}, {"name": "@FelixHofstatter", "volume": 550, "trades": 2, "yesPct": 0.0, "yes": 0, "no": 550, "pnl": -480.0, "roi": -87.3, "impact": 19.3, "types": ["WHALE", "BEAR", "LOSER"]}, {"name": "@ThomasPoltoranos", "volume": 532, "trades": 1, "yesPct": 100.0, "yes": 532, "no": 0, "pnl": -18.0, "roi": -3.3, "impact": 0.2, "types": ["WHALE", "BULL"]}, {"name": "@acc", "volume": 416, "trades": 12, "yesPct": 28.1, "yes": 117, "no": 299, "pnl": -167.0, "roi": -40.2, "impact": 21.6, "types": ["WHALE", "LOSER"]}, {"name": "@Mira", "volume": 395, "trades": 23, "yesPct": 99.0, "yes": 391, "no": 4, "pnl": 746.0, "roi": 188.8, "impact": 22.8, "types": ["WHALE", "ACTIVE", "BULL", "WINNER"]}, {"name": "@NeuralBets", "volume": 330, "trades": 5, "yesPct": 100.0, "yes": 330, "no": 0, "pnl": 285.0, "roi": 86.2, "impact": 8.9, "types": ["WHALE", "BULL", "WINNER"]}, {"name": "@cibyr", "volume": 307, "trades": 4, "yesPct": 0.0, "yes": 0, "no": 307, "pnl": -255.0, "roi": -83.1, "impact": 48.0, "types": ["BEAR", "LOSER"]}, {"name": "@MattLashofSullivan", "volume": 250, "trades": 1, "yesPct": 0.0, "yes": 0, "no": 250, "pnl": -229.0, "roi": -91.7, "impact": 4.8, "types": ["BEAR", "LOSER"]}, {"name": "@Crazytieguy", "volume": 250, "trades": 1, "yesPct": 100.0, "yes": 250, "no": 0, "pnl": 156.0, "roi": 62.4, "impact": 6.9, "types": ["BULL", "WINNER"]}, {"name": "@AbuElBanat", "volume": 250, "trades": 1, "yesPct": 100.0, "yes": 250, "no": 0, "pnl": 0.0, "roi": 0.0, "impact": 0.5, "types": ["BULL"]}, {"name": "@ErikBjareholt", "volume": 200, "trades": 1, "yesPct": 0.0, "yes": 0, "no": 200, "pnl": -179.0, "roi": -89.7, "impact": 8.0, "types": ["BEAR", "LOSER"]}, {"name": "@2BjZn7l2acSH", "volume": 150, "trades": 2, "yesPct": 0.0, "yes": 0, "no": 150, "pnl": -125.0, "roi": -83.6, "impact": 4.9, "types": ["BEAR", "LOSER"]}, {"name": "@stNuIBu29JSL", "volume": 128, "trades": 4, "yesPct": 100.0, "yes": 128, "no": 0, "pnl": 117.0, "roi": 91.6, "impact": 10.8, "types": ["BULL", "WINNER"]}, {"name": "@ty35kTRZ6EXh", "volume": 112, "trades": 8, "yesPct": 73.4, "yes": 82, "no": 30, "pnl": 20.0, "roi": 18.0, "impact": 1.8, "types": ["RETAIL"]}, {"name": "@Z3DdfIKhMAbR", "volume": 100, "trades": 2, "yesPct": 100.0, "yes": 100, "no": 0, "pnl": 99.0, "roi": 99.4, "impact": 3.0, "types": ["BULL", "WINNER"]}, {"name": "@GzFn7mDYAoO0", "volume": 100, "trades": 1, "yesPct": 100.0, "yes": 100, "no": 0, "pnl": 139.0, "roi": 138.8, "impact": 3.8, "types": ["BULL", "WINNER"]}, {"name": "@W9kPoFuWwmY3", "volume": 100, "trades": 1, "yesPct": 100.0, "yes": 100, "no": 0, "pnl": 93.0, "roi": 92.5, "impact": 3.4, "types": ["BULL", "WINNER"]}, {"name": "@4uPR5pVMErTp", "volume": 100, "trades": 2, "yesPct": 0.0, "yes": 0, "no": 100, "pnl": -7.0, "roi": -7.5, "impact": 4.4, "types": ["BEAR"]}, {"name": "@LUMKDoMQuVhI", "volume": 90, "trades": 2, "yesPct": 100.0, "yes": 90, "no": 0, "pnl": 70.0, "roi": 78.0, "impact": 3.3, "types": ["BULL", "WINNER"]}, {"name": "@AwC9Eyahh7Nx", "volume": 90, "trades": 1, "yesPct": 100.0, "yes": 90, "no": 0, "pnl": 110.0, "roi": 122.6, "impact": 3.3, "types": ["BULL", "WINNER"]}, {"name": "@eieeU345lwUI", "volume": 75, "trades": 1, "yesPct": 0.0, "yes": 0, "no": 75, "pnl": -69.0, "roi": -91.7, "impact": 2.2, "types": ["BEAR", "LOSER"]}];
+    function fmt(v) { if (v >= 1000000) return `Ṁ${(v/1000000).toFixed(2)}M`; if (v >= 1000) return `Ṁ${(v/1000).toFixed(1)}k`; return `Ṁ${Math.round(v)}`; }
     const ctx = document.getElementById('volumeChart').getContext('2d');
     new Chart(ctx, {
       type: 'line',
@@ -84,15 +94,27 @@
         { label: 'NO', data: dailyData.map(d => d.NO), borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.3)', fill: true, tension: 0.4, pointRadius: 3, order: 1 }
       ]},
       options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(15,23,42,0.95)', callbacks: { label: ctx => `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`, footer: items => `Total: ${formatCurrency(items.reduce((s,i) => s+i.raw, 0))}` } } },
-        scales: { x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }, y: { stacked: true, grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: v => formatCurrency(v) } } }
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(15,23,42,0.95)', callbacks: { label: ctx => `${ctx.dataset.label}: ${fmt(ctx.raw)}`, footer: items => `Total: ${fmt(items.reduce((s,i) => s+i.raw, 0))}` } } },
+        scales: { x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }, y: { stacked: true, grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: v => fmt(v) } } }
       }
     });
     const tb = document.getElementById('traderTable');
     traders.forEach((t, i) => {
-      const st = t.yesPct >= 80 ? 'bull' : (t.yesPct <= 20 ? 'bear' : 'mixed');
-      const txt = st === 'bull' ? '🟢 BULL' : (st === 'bear' ? '🔴 BEAR' : '⚪ MIXED');
-      tb.innerHTML += `<tr><td class="${i<3?'rank gold':'rank'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</td><td class="trader-name">${t.name}</td><td class="right volume">${formatCurrency(t.volume)}</td><td class="right" style="color:#94a3b8">${t.trades}</td><td class="right yes-vol">${formatCurrency(t.yes)}</td><td class="right no-vol">${formatCurrency(t.no)}</td><td class="center"><span class="stance ${st}">${txt}</span></td></tr>`;
+      const badges = t.types.map(type => `<span class="badge ${type.toLowerCase()}">${type}</span>`).join('');
+      const pnlClass = t.pnl >= 0 ? 'pnl-pos' : 'pnl-neg';
+      const pnlSign = t.pnl >= 0 ? '+' : '';
+      tb.innerHTML += `<tr>
+        <td class="${i<3?'rank gold':'rank'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</td>
+        <td class="trader-name">${t.name}</td>
+        <td>${badges}</td>
+        <td class="right volume">${fmt(t.volume)}</td>
+        <td class="right" style="color:#94a3b8">${t.trades}</td>
+        <td class="right yes-vol">${fmt(t.yes)}</td>
+        <td class="right no-vol">${fmt(t.no)}</td>
+        <td class="right ${pnlClass}">${pnlSign}${fmt(Math.abs(t.pnl))}</td>
+        <td class="right ${pnlClass}">${pnlSign}${t.roi.toFixed(0)}%</td>
+        <td class="right" style="color:#94a3b8">${t.impact.toFixed(1)}%</td>
+      </tr>`;
     });
     document.getElementById('date').textContent = new Date().toLocaleDateString();
   </script>
