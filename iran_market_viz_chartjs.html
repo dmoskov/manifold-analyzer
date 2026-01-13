@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iran Regime Fall 2026 - Market Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      color: white;
+      padding: 32px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #64748b; font-size: 14px; margin-bottom: 32px; }
+    .subtitle a { color: #60a5fa; text-decoration: none; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: rgba(51, 65, 85, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(71, 85, 105, 0.5);
+    }
+    .stat-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-value { font-size: 24px; font-weight: 700; }
+    .chart-container {
+      background: rgba(51, 65, 85, 0.2);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(71, 85, 105, 0.3);
+    }
+    .chart-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .chart-title span { font-size: 14px; color: #64748b; font-weight: 400; margin-left: 12px; }
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 16px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .legend-text { color: #94a3b8; }
+    .legend-value { font-family: monospace; }
+    table {
+      width: 100%;
+      font-size: 14px;
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+      padding: 12px;
+      color: #64748b;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+    }
+    th.right { text-align: right; }
+    th.center { text-align: center; }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+    }
+    td.right { text-align: right; }
+    td.center { text-align: center; }
+    .rank { color: #94a3b8; }
+    .rank.gold { color: #fbbf24; font-weight: 600; }
+    .trader-name { color: #e2e8f0; font-weight: 500; }
+    .volume { font-family: monospace; color: #fbbf24; }
+    .yes-vol { font-family: monospace; color: #10b981; }
+    .no-vol { font-family: monospace; color: #ef4444; }
+    .trades { color: #94a3b8; }
+    .stance {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .stance.bull { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .stance.bear { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .stance.mixed { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.4); }
+    .footer {
+      margin-top: 32px;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+    }
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Will Iran's regime fall in 2026?</h1>
+    <p class="subtitle">
+      <a href="https://manifold.markets/SaviorofPlant/will-irans-regime-fall-in-2026" target="_blank">
+        manifold.markets/SaviorofPlant/will-irans-regime-fall-in-2026
+      </a>
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label"><span>🎯</span> Current Probability</div>
+        <div class="stat-value">39%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span>📊</span> Total Volume</div>
+        <div class="stat-value">Ṁ1.71M</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span>🔄</span> Total Trades</div>
+        <div class="stat-value">2,271</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span>👥</span> Unique Traders</div>
+        <div class="stat-value">679</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h2 class="chart-title">Cumulative Volume Over Time <span>(Stacked by Position)</span></h2>
+      <canvas id="volumeChart" height="400"></canvas>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #10b981;"></div>
+          <span class="legend-text">YES (Regime Falls)</span>
+          <span class="legend-value yes-vol">Ṁ566k (33%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #ef4444;"></div>
+          <span class="legend-text">NO (Regime Stays)</span>
+          <span class="legend-value no-vol">Ṁ1.14M (67%)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h2 class="chart-title">Top 20 Traders by Volume</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Trader</th>
+            <th class="right">Volume</th>
+            <th class="right">Trades</th>
+            <th class="right">YES Vol</th>
+            <th class="right">NO Vol</th>
+            <th class="center">Position</th>
+          </tr>
+        </thead>
+        <tbody id="traderTable"></tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      Data fetched from Manifold Markets API • Analysis generated <span id="date"></span>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    const dailyData = [
+      { date: "Dec 30", YES: 61, NO: 251 },
+      { date: "Dec 31", YES: 1188, NO: 3627 },
+      { date: "Jan 1", YES: 1608, NO: 5699 },
+      { date: "Jan 2", YES: 3062, NO: 76818 },
+      { date: "Jan 3", YES: 6155, NO: 78992 },
+      { date: "Jan 4", YES: 26913, NO: 181083 },
+      { date: "Jan 5", YES: 45098, NO: 251661 },
+      { date: "Jan 6", YES: 55019, NO: 254357 },
+      { date: "Jan 7", YES: 163831, NO: 573627 },
+      { date: "Jan 8", YES: 181034, NO: 605453 },
+      { date: "Jan 9", YES: 210954, NO: 661374 },
+      { date: "Jan 10", YES: 411002, NO: 1021045 },
+      { date: "Jan 11", YES: 506564, NO: 1065387 },
+      { date: "Jan 12", YES: 546880, NO: 1115876 },
+      { date: "Jan 13", YES: 566075, NO: 1144907 }
+    ];
+
+    const traders = [
+      { name: "@SemioticRivalry", volume: 636584, trades: 13, yesPct: 0.0, yes: 0, no: 636584 },
+      { name: "@Joshua", volume: 171454, trades: 10, yesPct: 0.0, yes: 0, no: 171454 },
+      { name: "@musteval", volume: 135527, trades: 31, yesPct: 100.0, yes: 135527, no: 0 },
+      { name: "@AmmonLam", volume: 82148, trades: 2, yesPct: 100.0, yes: 82148, no: 0 },
+      { name: "@Panfilo", volume: 50000, trades: 36, yesPct: 0.0, yes: 0, no: 50000 },
+      { name: "@brod", volume: 44396, trades: 29, yesPct: 17.0, yes: 7547, no: 36849 },
+      { name: "@ChadCotty", volume: 42134, trades: 155, yesPct: 53.1, yes: 22373, no: 19761 },
+      { name: "@ermitsou", volume: 39500, trades: 5, yesPct: 100.0, yes: 39500, no: 0 },
+      { name: "@skibidist", volume: 31667, trades: 8, yesPct: 100.0, yes: 31667, no: 0 },
+      { name: "@Emanuele1000", volume: 28057, trades: 49, yesPct: 30.3, yes: 8501, no: 19556 },
+      { name: "@AdamK", volume: 23811, trades: 8, yesPct: 39.1, yes: 9310, no: 14501 },
+      { name: "@Transparent", volume: 20025, trades: 4, yesPct: 100.0, yes: 20025, no: 0 },
+      { name: "@bens", volume: 18813, trades: 7, yesPct: 27.3, yes: 5136, no: 13677 },
+      { name: "@Arky", volume: 18004, trades: 12, yesPct: 0.0, yes: 0, no: 18004 },
+      { name: "@Cactus", volume: 16216, trades: 65, yesPct: 33.6, yes: 5449, no: 10767 },
+      { name: "@EvanDaniel", volume: 14046, trades: 6, yesPct: 100.0, yes: 14046, no: 0 },
+      { name: "@SuperTaxGenius", volume: 10100, trades: 11, yesPct: 100.0, yes: 10100, no: 0 },
+      { name: "@Gen", volume: 10003, trades: 2, yesPct: 0.0, yes: 0, no: 10003 },
+      { name: "@sama", volume: 10000, trades: 2, yesPct: 100.0, yes: 10000, no: 0 },
+      { name: "@zsig", volume: 9308, trades: 21, yesPct: 0.0, yes: 0, no: 9308 }
+    ];
+
+    // Format currency
+    function formatCurrency(value) {
+      if (value >= 1000000) return `Ṁ${(value / 1000000).toFixed(1)}M`;
+      if (value >= 1000) return `Ṁ${(value / 1000).toFixed(1)}k`;
+      return `Ṁ${Math.round(value)}`;
+    }
+
+    // Create chart
+    const ctx = document.getElementById('volumeChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: dailyData.map(d => d.date),
+        datasets: [
+          {
+            label: 'YES',
+            data: dailyData.map(d => d.YES),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.3)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: '#10b981',
+            order: 2
+          },
+          {
+            label: 'NO',
+            data: dailyData.map(d => d.NO),
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.3)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: '#ef4444',
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+            titleColor: '#fff',
+            bodyColor: '#94a3b8',
+            borderColor: '#334155',
+            borderWidth: 1,
+            padding: 12,
+            callbacks: {
+              label: function(context) {
+                return `${context.dataset.label}: ${formatCurrency(context.raw)}`;
+              },
+              footer: function(items) {
+                const total = items.reduce((sum, item) => sum + item.raw, 0);
+                return `Total: ${formatCurrency(total)}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#334155' },
+            ticks: { color: '#94a3b8' }
+          },
+          y: {
+            stacked: true,
+            grid: { color: '#334155' },
+            ticks: {
+              color: '#94a3b8',
+              callback: function(value) {
+                return formatCurrency(value);
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Populate trader table
+    const tableBody = document.getElementById('traderTable');
+    traders.forEach((t, i) => {
+      const stance = t.yesPct >= 80 ? 'bull' : (t.yesPct <= 20 ? 'bear' : 'mixed');
+      const stanceText = stance === 'bull' ? '🟢 BULL' : (stance === 'bear' ? '🔴 BEAR' : '⚪ MIXED');
+      const rankClass = i < 3 ? 'rank gold' : 'rank';
+      const rankText = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : i + 1));
+
+      tableBody.innerHTML += `
+        <tr>
+          <td class="${rankClass}">${rankText}</td>
+          <td class="trader-name">${t.name}</td>
+          <td class="right volume">${formatCurrency(t.volume)}</td>
+          <td class="right trades">${t.trades}</td>
+          <td class="right yes-vol">${formatCurrency(t.yes)}</td>
+          <td class="right no-vol">${formatCurrency(t.no)}</td>
+          <td class="center"><span class="stance ${stance}">${stanceText}</span></td>
+        </tr>
+      `;
+    });
+
+    // Set date
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+  </script>
+</body>
+</html>

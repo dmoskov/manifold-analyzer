@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will an AI get gold on any IMO by end of 2025? - Market Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      color: white;
+      padding: 32px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #64748b; font-size: 14px; margin-bottom: 32px; }
+    .subtitle a { color: #60a5fa; text-decoration: none; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: rgba(51, 65, 85, 0.3); border-radius: 16px; padding: 20px; border: 1px solid rgba(71, 85, 105, 0.5); }
+    .stat-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; color: #64748b; text-transform: uppercase; }
+    .stat-value { font-size: 24px; font-weight: 700; }
+    .chart-container { background: rgba(51, 65, 85, 0.2); border-radius: 20px; padding: 24px; margin-bottom: 32px; border: 1px solid rgba(71, 85, 105, 0.3); }
+    .chart-title { font-size: 20px; font-weight: 600; margin-bottom: 24px; }
+    .chart-title span { font-size: 14px; color: #64748b; font-weight: 400; margin-left: 12px; }
+    .legend { display: flex; justify-content: center; gap: 32px; margin-top: 16px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .legend-text { color: #94a3b8; }
+    .legend-value { font-family: monospace; }
+    table { width: 100%; font-size: 14px; border-collapse: collapse; }
+    th { text-align: left; padding: 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid rgba(71, 85, 105, 0.5); }
+    th.right { text-align: right; }
+    th.center { text-align: center; }
+    td { padding: 12px; border-bottom: 1px solid rgba(71, 85, 105, 0.2); }
+    td.right { text-align: right; }
+    td.center { text-align: center; }
+    .rank { color: #94a3b8; }
+    .rank.gold { color: #fbbf24; font-weight: 600; }
+    .trader-name { color: #e2e8f0; font-weight: 500; }
+    .volume { font-family: monospace; color: #fbbf24; }
+    .yes-vol { font-family: monospace; color: #10b981; }
+    .no-vol { font-family: monospace; color: #ef4444; }
+    .trades { color: #94a3b8; }
+    .stance { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .stance.bull { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .stance.bear { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .stance.mixed { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.4); }
+    .footer { margin-top: 32px; text-align: center; color: #64748b; font-size: 12px; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Will an AI get gold on any IMO by end of 2025?</h1>
+    <p class="subtitle">
+      <a href="https://manifold.markets/Logaems/will-an-ai-get-gold-on-any-international" target="_blank">manifold.markets/Logaems/will-an-ai-get-gold-on-any-international</a>
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label"><span>🎯</span> Current Probability</div>
+        <div class="stat-value">97%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span>📊</span> Total Volume</div>
+        <div class="stat-value">Ṁ7.85M</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span>🔄</span> Total Trades</div>
+        <div class="stat-value">13,903</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><span>👥</span> Unique Traders</div>
+        <div class="stat-value">3,088</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h2 class="chart-title">Cumulative Volume Over Time <span>(Stacked by Position)</span></h2>
+      <canvas id="volumeChart" height="400"></canvas>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #10b981;"></div>
+          <span class="legend-text">YES</span>
+          <span class="legend-value yes-vol">Ṁ4.73M (60.3%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #ef4444;"></div>
+          <span class="legend-text">NO</span>
+          <span class="legend-value no-vol">Ṁ3.11M (39.7%)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h2 class="chart-title">Top 20 Traders by Volume</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Trader</th>
+            <th class="right">Volume</th>
+            <th class="right">Trades</th>
+            <th class="right">YES Vol</th>
+            <th class="right">NO Vol</th>
+            <th class="center">Position</th>
+          </tr>
+        </thead>
+        <tbody id="traderTable"></tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      Data fetched from Manifold Markets API • Analysis generated <span id="date"></span>
+    </div>
+  </div>
+
+  <script>
+    const dailyData = [{"month": "Feb 2022", "YES": 1440, "NO": 2749}, {"month": "Mar 2022", "YES": 2005, "NO": 10154}, {"month": "Apr 2022", "YES": 2073, "NO": 11712}, {"month": "May 2022", "YES": 2235, "NO": 12109}, {"month": "Jun 2022", "YES": 2447, "NO": 12922}, {"month": "Jul 2022", "YES": 3791, "NO": 16358}, {"month": "Aug 2022", "YES": 5968, "NO": 19147}, {"month": "Sep 2022", "YES": 7244, "NO": 22818}, {"month": "Oct 2022", "YES": 14153, "NO": 28956}, {"month": "Nov 2022", "YES": 19640, "NO": 52125}, {"month": "Dec 2022", "YES": 25965, "NO": 65839}, {"month": "Jan 2023", "YES": 32075, "NO": 81399}, {"month": "Feb 2023", "YES": 37396, "NO": 90696}, {"month": "Mar 2023", "YES": 53216, "NO": 120170}, {"month": "Apr 2023", "YES": 64833, "NO": 135718}, {"month": "May 2023", "YES": 78248, "NO": 163914}, {"month": "Jun 2023", "YES": 94102, "NO": 187729}, {"month": "Jul 2023", "YES": 106520, "NO": 208556}, {"month": "Aug 2023", "YES": 128511, "NO": 241477}, {"month": "Sep 2023", "YES": 138235, "NO": 279840}, {"month": "Oct 2023", "YES": 143699, "NO": 307409}, {"month": "Nov 2023", "YES": 162087, "NO": 393440}, {"month": "Dec 2023", "YES": 187922, "NO": 439222}, {"month": "Jan 2024", "YES": 222691, "NO": 567942}, {"month": "Feb 2024", "YES": 250250, "NO": 664717}, {"month": "Mar 2024", "YES": 264097, "NO": 751058}, {"month": "Apr 2024", "YES": 284435, "NO": 892228}, {"month": "May 2024", "YES": 289208, "NO": 935930}, {"month": "Jun 2024", "YES": 320993, "NO": 1018057}, {"month": "Jul 2024", "YES": 834095, "NO": 1345512}, {"month": "Aug 2024", "YES": 1170378, "NO": 1479758}, {"month": "Sep 2024", "YES": 1235337, "NO": 1513512}, {"month": "Oct 2024", "YES": 1311366, "NO": 1540134}, {"month": "Nov 2024", "YES": 1431175, "NO": 1638205}, {"month": "Dec 2024", "YES": 1879838, "NO": 1704379}, {"month": "Jan 2025", "YES": 2493417, "NO": 1861918}, {"month": "Feb 2025", "YES": 2796764, "NO": 1926939}, {"month": "Mar 2025", "YES": 2871605, "NO": 1945688}, {"month": "Apr 2025", "YES": 2982400, "NO": 2033127}, {"month": "May 2025", "YES": 3065550, "NO": 2107512}, {"month": "Jun 2025", "YES": 3126279, "NO": 2381684}, {"month": "Jul 2025", "YES": 4734460, "NO": 3113620}];
+    const traders = [{"name": "@srFlJRuVlGa7", "volume": 942546, "trades": 159, "yesPct": 93.0, "yes": 876838, "no": 65708}, {"name": "@P072vlqSJzRF", "volume": 492841, "trades": 18, "yesPct": 97.6, "yes": 480841, "no": 12000}, {"name": "@MbBbNEvx5beN", "volume": 447436, "trades": 63, "yesPct": 0.0, "yes": 0, "no": 447436}, {"name": "@P9beSdXRrjQW", "volume": 382290, "trades": 79, "yesPct": 56.5, "yes": 216092, "no": 166199}, {"name": "@Dfb1xQjetuXP", "volume": 333410, "trades": 196, "yesPct": 98.6, "yes": 328806, "no": 4604}, {"name": "@cfz8q51Q6xdr", "volume": 210314, "trades": 281, "yesPct": 33.9, "yes": 71353, "no": 138961}, {"name": "@CalibratedNeutral", "volume": 195427, "trades": 474, "yesPct": 7.7, "yes": 14981, "no": 180446}, {"name": "@lkkqZxiWCpOg", "volume": 181305, "trades": 49, "yesPct": 69.6, "yes": 126225, "no": 55080}, {"name": "@dgga", "volume": 180370, "trades": 2, "yesPct": 100.0, "yes": 180370, "no": 0}, {"name": "@RqRkNuiib7U9", "volume": 178775, "trades": 55, "yesPct": 85.6, "yes": 153114, "no": 25660}, {"name": "@LtTpRz6DO9aT", "volume": 159913, "trades": 13, "yesPct": 0.0, "yes": 0, "no": 159913}, {"name": "@J4dwF92wNbVJ", "volume": 142726, "trades": 46, "yesPct": 0.0, "yes": 5, "no": 142721}, {"name": "@tlmGNz9kjXc2", "volume": 125671, "trades": 13, "yesPct": 99.8, "yes": 125400, "no": 271}, {"name": "@Ziddletwix", "volume": 105470, "trades": 10, "yesPct": 100.0, "yes": 105470, "no": 0}, {"name": "@jO7sUhIDTQbA", "volume": 101268, "trades": 17, "yesPct": 39.5, "yes": 39999, "no": 61269}, {"name": "@MugaSofer", "volume": 100710, "trades": 17, "yesPct": 99.9, "yes": 100627, "no": 84}, {"name": "@2yBGlqecngd9", "volume": 100500, "trades": 2, "yesPct": 100.0, "yes": 100500, "no": 0}, {"name": "@TenShino", "volume": 92706, "trades": 29, "yesPct": 91.8, "yes": 85139, "no": 7567}, {"name": "@946iB1LqFIR0", "volume": 87967, "trades": 43, "yesPct": 89.8, "yes": 78962, "no": 9006}, {"name": "@i1QKGmkOPFXt", "volume": 86295, "trades": 6, "yesPct": 100.0, "yes": 86295, "no": 0}];
+
+    function formatCurrency(value) {
+      if (value >= 1000000) return `Ṁ${(value / 1000000).toFixed(2)}M`;
+      if (value >= 1000) return `Ṁ${(value / 1000).toFixed(0)}k`;
+      return `Ṁ${Math.round(value)}`;
+    }
+
+    const ctx = document.getElementById('volumeChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: dailyData.map(d => d.month),
+        datasets: [
+          {
+            label: 'YES',
+            data: dailyData.map(d => d.YES),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.3)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: '#10b981',
+            order: 2
+          },
+          {
+            label: 'NO',
+            data: dailyData.map(d => d.NO),
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.3)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: '#ef4444',
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+            titleColor: '#fff',
+            bodyColor: '#94a3b8',
+            borderColor: '#334155',
+            borderWidth: 1,
+            padding: 12,
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`,
+              footer: items => `Total: ${formatCurrency(items.reduce((sum, item) => sum + item.raw, 0))}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+          y: {
+            stacked: true,
+            grid: { color: '#334155' },
+            ticks: { color: '#94a3b8', callback: v => formatCurrency(v) }
+          }
+        }
+      }
+    });
+
+    const tableBody = document.getElementById('traderTable');
+    traders.forEach((t, i) => {
+      const stance = t.yesPct >= 80 ? 'bull' : (t.yesPct <= 20 ? 'bear' : 'mixed');
+      const stanceText = stance === 'bull' ? '🟢 BULL' : (stance === 'bear' ? '🔴 BEAR' : '⚪ MIXED');
+      const rankClass = i < 3 ? 'rank gold' : 'rank';
+      const rankText = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : i + 1));
+      tableBody.innerHTML += `
+        <tr>
+          <td class="${rankClass}">${rankText}</td>
+          <td class="trader-name">${t.name}</td>
+          <td class="right volume">${formatCurrency(t.volume)}</td>
+          <td class="right trades">${t.trades}</td>
+          <td class="right yes-vol">${formatCurrency(t.yes)}</td>
+          <td class="right no-vol">${formatCurrency(t.no)}</td>
+          <td class="center"><span class="stance ${stance}">${stanceText}</span></td>
+        </tr>
+      `;
+    });
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+  </script>
+</body>
+</html>

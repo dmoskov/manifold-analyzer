@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iran Regime Fall 2026 - Market Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/recharts@2.10.3/umd/Recharts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.6/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+    const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } = window.Recharts;
+
+    // Data
+    const dailyData = [
+      { date: "Dec 30", YES: 61, NO: 251 },
+      { date: "Dec 31", YES: 1188, NO: 3627 },
+      { date: "Jan 1", YES: 1608, NO: 5699 },
+      { date: "Jan 2", YES: 3062, NO: 76818 },
+      { date: "Jan 3", YES: 6155, NO: 78992 },
+      { date: "Jan 4", YES: 26913, NO: 181083 },
+      { date: "Jan 5", YES: 45098, NO: 251661 },
+      { date: "Jan 6", YES: 55019, NO: 254357 },
+      { date: "Jan 7", YES: 163831, NO: 573627 },
+      { date: "Jan 8", YES: 181034, NO: 605453 },
+      { date: "Jan 9", YES: 210954, NO: 661374 },
+      { date: "Jan 10", YES: 411002, NO: 1021045 },
+      { date: "Jan 11", YES: 506564, NO: 1065387 },
+      { date: "Jan 12", YES: 546880, NO: 1115876 },
+      { date: "Jan 13", YES: 566075, NO: 1144907 }
+    ];
+
+    const traders = [
+      { name: "@SemioticRivalry", volume: 636584, trades: 13, yesPct: 0.0, yes: 0, no: 636584 },
+      { name: "@Joshua", volume: 171454, trades: 10, yesPct: 0.0, yes: 0, no: 171454 },
+      { name: "@musteval", volume: 135527, trades: 31, yesPct: 100.0, yes: 135527, no: 0 },
+      { name: "@AmmonLam", volume: 82148, trades: 2, yesPct: 100.0, yes: 82148, no: 0 },
+      { name: "@Panfilo", volume: 50000, trades: 36, yesPct: 0.0, yes: 0, no: 50000 },
+      { name: "@brod", volume: 44396, trades: 29, yesPct: 17.0, yes: 7547, no: 36849 },
+      { name: "@ChadCotty", volume: 42134, trades: 155, yesPct: 53.1, yes: 22373, no: 19761 },
+      { name: "@ermitsou", volume: 39500, trades: 5, yesPct: 100.0, yes: 39500, no: 0 },
+      { name: "@skibidist", volume: 31667, trades: 8, yesPct: 100.0, yes: 31667, no: 0 },
+      { name: "@Emanuele1000", volume: 28057, trades: 49, yesPct: 30.3, yes: 8501, no: 19556 },
+      { name: "@AdamK", volume: 23811, trades: 8, yesPct: 39.1, yes: 9310, no: 14501 },
+      { name: "@Transparent", volume: 20025, trades: 4, yesPct: 100.0, yes: 20025, no: 0 },
+      { name: "@bens", volume: 18813, trades: 7, yesPct: 27.3, yes: 5136, no: 13677 },
+      { name: "@Arky", volume: 18004, trades: 12, yesPct: 0.0, yes: 0, no: 18004 },
+      { name: "@Cactus", volume: 16216, trades: 65, yesPct: 33.6, yes: 5449, no: 10767 },
+      { name: "@EvanDaniel", volume: 14046, trades: 6, yesPct: 100.0, yes: 14046, no: 0 },
+      { name: "@SuperTaxGenius", volume: 10100, trades: 11, yesPct: 100.0, yes: 10100, no: 0 },
+      { name: "@Gen", volume: 10003, trades: 2, yesPct: 0.0, yes: 0, no: 10003 },
+      { name: "@sama", volume: 10000, trades: 2, yesPct: 100.0, yes: 10000, no: 0 },
+      { name: "@zsig", volume: 9308, trades: 21, yesPct: 0.0, yes: 0, no: 9308 }
+    ];
+
+    const colors = {
+      YES: '#10b981',
+      NO: '#ef4444'
+    };
+
+    const formatCurrency = (value) => {
+      if (value >= 1000000) return `Ṁ${(value / 1000000).toFixed(1)}M`;
+      if (value >= 1000) return `Ṁ${(value / 1000).toFixed(1)}k`;
+      return `Ṁ${Math.round(value)}`;
+    };
+
+    const CustomTooltip = ({ active, payload, label }) => {
+      if (!active || !payload || !payload.length) return null;
+      const yes = payload.find(p => p.dataKey === 'YES')?.value || 0;
+      const no = payload.find(p => p.dataKey === 'NO')?.value || 0;
+      const total = yes + no;
+
+      return (
+        <div style={{
+          background: 'rgba(15, 23, 42, 0.95)',
+          border: '1px solid #334155',
+          borderRadius: 12,
+          padding: 16,
+          minWidth: 180,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
+        }}>
+          <p style={{ color: 'white', fontSize: 14, fontWeight: 600, marginBottom: 12 }}>{label}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: colors.YES }} />
+            <span style={{ color: '#94a3b8', fontSize: 13, flex: 1 }}>YES</span>
+            <span style={{ fontFamily: 'monospace', color: '#10b981', fontSize: 13 }}>{formatCurrency(yes)}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: colors.NO }} />
+            <span style={{ color: '#94a3b8', fontSize: 13, flex: 1 }}>NO</span>
+            <span style={{ fontFamily: 'monospace', color: '#ef4444', fontSize: 13 }}>{formatCurrency(no)}</span>
+          </div>
+          <div style={{ borderTop: '1px solid #334155', paddingTop: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ color: '#94a3b8', fontSize: 13 }}>Total</span>
+              <span style={{ fontFamily: 'monospace', color: 'white', fontWeight: 600 }}>{formatCurrency(total)}</span>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    function App() {
+      return (
+        <div style={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+          color: 'white',
+          padding: 32
+        }}>
+          <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+            {/* Header */}
+            <div style={{ marginBottom: 32 }}>
+              <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
+                Will Iran's regime fall in 2026?
+              </h1>
+              <p style={{ color: '#64748b', fontSize: 14 }}>
+                <a href="https://manifold.markets/SaviorofPlant/will-irans-regime-fall-in-2026"
+                   style={{ color: '#60a5fa', textDecoration: 'none' }}
+                   target="_blank">
+                  manifold.markets/SaviorofPlant/will-irans-regime-fall-in-2026
+                </a>
+              </p>
+            </div>
+
+            {/* Stats Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
+              {[
+                { label: "Current Probability", value: "39%", icon: "🎯" },
+                { label: "Total Volume", value: "Ṁ1.71M", icon: "📊" },
+                { label: "Total Trades", value: "2,271", icon: "🔄" },
+                { label: "Unique Traders", value: "679", icon: "👥" },
+              ].map((stat, i) => (
+                <div key={i} style={{
+                  background: 'rgba(51, 65, 85, 0.3)',
+                  borderRadius: 16,
+                  padding: 20,
+                  border: '1px solid rgba(71, 85, 105, 0.5)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <span style={{ fontSize: 18 }}>{stat.icon}</span>
+                    <span style={{ fontSize: 12, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      {stat.label}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 24, fontWeight: 700 }}>{stat.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Chart */}
+            <div style={{
+              background: 'rgba(51, 65, 85, 0.2)',
+              borderRadius: 20,
+              padding: 24,
+              marginBottom: 32,
+              border: '1px solid rgba(71, 85, 105, 0.3)'
+            }}>
+              <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 24 }}>
+                Cumulative Volume Over Time
+                <span style={{ fontSize: 14, color: '#64748b', fontWeight: 400, marginLeft: 12 }}>
+                  (Stacked by Position)
+                </span>
+              </h2>
+              <ResponsiveContainer width="100%" height={400}>
+                <AreaChart data={dailyData} margin={{ top: 10, right: 30, left: 10, bottom: 10 }}>
+                  <defs>
+                    <linearGradient id="gradYES" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.8} />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity={0.2} />
+                    </linearGradient>
+                    <linearGradient id="gradNO" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ef4444" stopOpacity={0.8} />
+                      <stop offset="100%" stopColor="#ef4444" stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                  <XAxis
+                    dataKey="date"
+                    stroke="#64748b"
+                    tick={{ fill: '#94a3b8', fontSize: 12 }}
+                    axisLine={{ stroke: '#334155' }}
+                  />
+                  <YAxis
+                    stroke="#64748b"
+                    tick={{ fill: '#94a3b8', fontSize: 12 }}
+                    tickFormatter={v => `${(v / 1000000).toFixed(1)}M`}
+                    axisLine={{ stroke: '#334155' }}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="YES"
+                    stackId="1"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                    fill="url(#gradYES)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="NO"
+                    stackId="1"
+                    stroke="#ef4444"
+                    strokeWidth={2}
+                    fill="url(#gradNO)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+
+              {/* Legend */}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 32, marginTop: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#10b981' }} />
+                  <span style={{ color: '#94a3b8' }}>YES (Regime Falls)</span>
+                  <span style={{ fontFamily: 'monospace', color: '#10b981' }}>Ṁ566k (33%)</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#ef4444' }} />
+                  <span style={{ color: '#94a3b8' }}>NO (Regime Stays)</span>
+                  <span style={{ fontFamily: 'monospace', color: '#ef4444' }}>Ṁ1.14M (67%)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trader Leaderboard */}
+            <div style={{
+              background: 'rgba(51, 65, 85, 0.2)',
+              borderRadius: 20,
+              padding: 24,
+              border: '1px solid rgba(71, 85, 105, 0.3)'
+            }}>
+              <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 24 }}>
+                Top 20 Traders by Volume
+              </h2>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', fontSize: 14, borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid rgba(71, 85, 105, 0.5)' }}>
+                      <th style={{ textAlign: 'left', padding: 12, color: '#64748b', fontWeight: 500 }}>#</th>
+                      <th style={{ textAlign: 'left', padding: 12, color: '#64748b', fontWeight: 500 }}>Trader</th>
+                      <th style={{ textAlign: 'right', padding: 12, color: '#64748b', fontWeight: 500 }}>Volume</th>
+                      <th style={{ textAlign: 'right', padding: 12, color: '#64748b', fontWeight: 500 }}>Trades</th>
+                      <th style={{ textAlign: 'right', padding: 12, color: '#64748b', fontWeight: 500 }}>YES Vol</th>
+                      <th style={{ textAlign: 'right', padding: 12, color: '#64748b', fontWeight: 500 }}>NO Vol</th>
+                      <th style={{ textAlign: 'center', padding: 12, color: '#64748b', fontWeight: 500 }}>Position</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {traders.map((t, i) => {
+                      const stance = t.yesPct >= 80 ? 'BULL' : (t.yesPct <= 20 ? 'BEAR' : 'MIXED');
+                      const stanceColor = stance === 'BULL' ? '#10b981' : (stance === 'BEAR' ? '#ef4444' : '#94a3b8');
+                      return (
+                        <tr key={i} style={{ borderBottom: '1px solid rgba(71, 85, 105, 0.2)' }}>
+                          <td style={{ padding: 12, color: i < 3 ? '#fbbf24' : '#94a3b8', fontWeight: i < 3 ? 600 : 400 }}>
+                            {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}
+                          </td>
+                          <td style={{ padding: 12, color: '#e2e8f0', fontWeight: 500 }}>{t.name}</td>
+                          <td style={{ padding: 12, textAlign: 'right', fontFamily: 'monospace', color: '#fbbf24' }}>
+                            {formatCurrency(t.volume)}
+                          </td>
+                          <td style={{ padding: 12, textAlign: 'right', color: '#94a3b8' }}>{t.trades}</td>
+                          <td style={{ padding: 12, textAlign: 'right', fontFamily: 'monospace', color: '#10b981' }}>
+                            {formatCurrency(t.yes)}
+                          </td>
+                          <td style={{ padding: 12, textAlign: 'right', fontFamily: 'monospace', color: '#ef4444' }}>
+                            {formatCurrency(t.no)}
+                          </td>
+                          <td style={{ padding: 12, textAlign: 'center' }}>
+                            <span style={{
+                              display: 'inline-block',
+                              padding: '4px 12px',
+                              borderRadius: 20,
+                              fontSize: 12,
+                              fontWeight: 600,
+                              backgroundColor: `${stanceColor}20`,
+                              color: stanceColor,
+                              border: `1px solid ${stanceColor}40`
+                            }}>
+                              {stance === 'BULL' ? '🟢' : stance === 'BEAR' ? '🔴' : '⚪'} {stance}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div style={{ marginTop: 32, textAlign: 'center', color: '#64748b', fontSize: 12 }}>
+              Data fetched from Manifold Markets API • Analysis generated {new Date().toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

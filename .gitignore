@@ -1,0 +1,22 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Temporary/cache
+*.tmp
+
+# Large data files (can be regenerated)
+*_data.json
+*_full.json
+*_usernames.json
+*_cumulative.json
