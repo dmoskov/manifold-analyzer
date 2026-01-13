@@ -69,12 +69,29 @@ manifold-analysis/
 ├── scripts/
 │   ├── fetch_market_data.py    # API fetcher with pagination
 │   └── parse_trades.py         # Parse text/CSV trade data
+├── examples/
+│   ├── asl3_danger_data.json   # Example: ASL-3 market data
+│   ├── asl3_danger_usernames.json
+│   └── asl3_danger_viz.html    # Example visualization
 ├── references/
 │   └── visualization_template.md   # React/Recharts template
 ├── SKILL.md                    # Claude Code skill definition
 ├── *_viz.html                  # Generated visualizations
-└── *_data.json                 # Cached market data
+└── *_data.json                 # Cached market data (gitignored)
 ```
+
+## Example: ASL-3 Danger Market
+
+The `examples/` folder contains a complete worked example:
+
+```bash
+# The data is already fetched - just open the visualization
+open examples/asl3_danger_viz.html
+```
+
+Market: "Will any LLM released by EOY 2025 be dangerously ASL-3?"
+- 145 trades, 60 traders, Ṁ18k volume
+- Shows how data flows from API → JSON → HTML viz
 
 ## API Reference
 

@@ -20,3 +20,7 @@ venv/
 *_full.json
 *_usernames.json
 *_cumulative.json
+
+# But keep example data
+!examples/*_data.json
+!examples/*_usernames.json
