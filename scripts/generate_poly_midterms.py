@@ -37,6 +37,40 @@ RACE_SLUGS = [
 # party for candidate markets that carry no (D)/(R) tag
 NAME_PARTY = {"peltola": "D", "sullivan": "R"}
 
+# Known 2026 general-election nominees / leading candidates per race (many race
+# markets resolve by party only, so candidate names come from here). Source:
+# Wikipedia "2026 United States Senate elections" + Ballotpedia, as of June 2026.
+# "TBD" nominees are simply omitted.
+CANDIDATES = {
+    "maine": {"D": "Graham Platner", "R": "Susan Collins"},
+    "texas": {"D": "James Talarico", "R": "Ken Paxton"},
+    "alaska": {"D": "Mary Peltola", "R": "Dan Sullivan"},
+    "nebraska": {"I": "Dan Osborn", "R": "Pete Ricketts"},
+    "iowa": {"D": "Josh Turek", "R": "Ashley Hinson"},
+    "michigan": {"R": "Mike Rogers"},
+    "ohio": {"D": "Sherrod Brown", "R": "Jon Husted"},
+    "montana": {"D": "Alani Bankhead"},
+    "north-carolina": {"D": "Roy Cooper", "R": "Michael Whatley"},
+    "florida": {"D": "Alexander Vindman", "R": "Ashley Moody"},
+    "south-carolina": {"D": "Annie Andrews", "R": "Lindsey Graham"},
+    "colorado": {"D": "John Hickenlooper", "R": "Mark Baisley"},
+    "georgia": {"D": "Jon Ossoff", "R": "Mike Collins"},
+    "kansas": {"R": "Roger Marshall"},
+    "new-hampshire": {"R": "John E. Sununu"},
+    "mississippi": {"D": "Scott Colom", "R": "Cindy Hyde-Smith"},
+    "minnesota": {},
+    "oklahoma": {"R": "Kevin Hern"},
+    "wyoming": {"R": "Harriet Hageman"},
+    "virginia": {},
+    "kentucky": {"D": "Charles Booker", "R": "Andy Barr"},
+}
+
+
+def matchup(slug):
+    c = CANDIDATES.get(slug, {})
+    parts = [f"{c[p]} ({p})" for p in ("D", "I", "R") if c.get(p)]
+    return " v ".join(parts) if parts else "—"
+
 
 def party_of(label):
     l = label.lower()
@@ -77,13 +111,11 @@ def fmt_usd(v):
 
 
 def race_label(r):
-    """State + leading candidate surname (when the market names candidates)."""
-    fav = r["fav"]
-    m = re.match(r"(.+?)\s*\((?:D|R|I)\)", fav)         # "Ken Paxton (R) 57%"
-    name = (m.group(1) if m else re.sub(r"\s*\d+%\s*$", "", fav)).strip()
-    if name.lower() in ("democrat", "republican", "independent", ""):
-        return r["state"]
-    return f"{r['state']} · {name.split()[-1]}"
+    """State + the leading candidate's surname, from the known-candidate map."""
+    cand = CANDIDATES.get(r["slug"], {})
+    lead = max({"D": r["dem"], "R": r["rep"], "I": r.get("other", 0)}.items(), key=lambda x: x[1])[0]
+    name = cand.get(lead)
+    return f"{r['state']} · {name.split()[-1]}" if name else r["state"]
 
 
 def collect():
@@ -116,6 +148,7 @@ def collect():
         outs = priced_outcomes(ev)
         fav = max(outs, key=lambda x: x[1]) if outs else ("?", 0)
         races.append({
+            "slug": st,
             "state": st.replace("-", " ").title(),
             "dem": round(d, 1),
             "rep": round(r, 1),
@@ -148,9 +181,9 @@ def build_html(d, output_path):
         ind = f' <span style="color:#a78bfa">· Ind {r["other"]:.0f}%</span>' if r["other"] >= 5 else ""
         races_rows += f"""<tr>
           <td class="name">{r['state']}</td>
+          <td style="color:#cbd5e1">{matchup(r['slug'])}</td>
           <td class="right"><span class="dem">{r['dem']:.0f}%</span></td>
           <td class="right"><span class="rep">{r['rep']:.0f}%</span>{ind}</td>
-          <td class="right" style="color:#94a3b8">{r['fav']}</td>
           <td class="right mono">{fmt_usd(r['volume'])}</td>
         </tr>"""
 
@@ -221,7 +254,7 @@ def build_html(d, output_path):
     <div class="chart-container">
       <h2 class="chart-title">Republican House Seats <span>({fmt_usd(d['seats_vol'])})</span></h2>
       <div style="position:relative;height:240px"><canvas id="seatsChart"></canvas></div>
-      <p class="note">Dashed line = 218 (majority). Distribution sits well below it → market expects GOP losses.</p>
+      <p class="note">Amber dashed line = 218 (majority); green bars = outcomes where Republicans keep a majority. The mass sits left of the line → market expects GOP losses (and a likely lost majority).</p>
     </div>
   </div>
 
@@ -234,7 +267,7 @@ def build_html(d, output_path):
   <div class="chart-container">
     <h2 class="chart-title">Senate Races — detail <span>(most competitive first)</span></h2>
     <table>
-      <thead><tr><th>State</th><th class="right">Dem</th><th class="right">Rep</th><th class="right">Favorite</th><th class="right">Volume</th></tr></thead>
+      <thead><tr><th>State</th><th>Matchup</th><th class="right">Dem</th><th class="right">Rep</th><th class="right">Volume</th></tr></thead>
       <tbody>{races_rows}</tbody>
     </table>
   </div>
@@ -254,9 +287,23 @@ def build_html(d, output_path):
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.raw+'%'}}}}}},
       scales:{{x:{{max:100,grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}},y:{{grid:{{display:false}},ticks:{{color:'#cbd5e1',font:{{size:11}}}}}}}}}}}});
 
-  const maj=218;
+  const low=l=>{{const m=l.match(/\\d+/);return m?+m[0]:(l.toLowerCase().includes('below')?0:999);}};
+  // dashed vertical line at 218 (majority), positioned within the 215-219 bucket
+  const majLine={{id:'majLine',afterDatasetsDraw(chart){{
+    const x=chart.scales.x,y=chart.scales.y,idx=seats.findIndex(s=>low(s.label)===215);
+    if(idx<1)return;
+    const step=x.getPixelForValue(idx)-x.getPixelForValue(idx-1);
+    const px=x.getPixelForValue(idx)+0.2*step;           // 218 = 0.6 into the 215-219 bin, i.e. +0.1 bin past center... use +0.2*step
+    const ctx=chart.ctx;ctx.save();
+    ctx.strokeStyle='#fbbf24';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(px,y.top);ctx.lineTo(px,y.bottom);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#fbbf24';ctx.font='600 10px -apple-system,sans-serif';ctx.textAlign='left';
+    ctx.fillText('218 = majority',px+4,y.top+10);ctx.restore();
+  }}}};
   new Chart(document.getElementById('seatsChart'),{{type:'bar',
-    data:{{labels:seats.map(s=>s.label),datasets:[{{data:seats.map(s=>s.p),backgroundColor:'#a78bfa'}}]}},
+    data:{{labels:seats.map(s=>s.label),datasets:[{{data:seats.map(s=>s.p),
+      backgroundColor:seats.map(s=>low(s.label)>=215?'#34d399':'#a78bfa')}}]}},
+    plugins:[majLine],
     options:{{responsive:true,maintainAspectRatio:false,
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.raw+'%'}}}}}},
       scales:{{x:{{grid:{{display:false}},ticks:{{color:'#94a3b8',font:{{size:9}},maxRotation:60,minRotation:45}}}},
