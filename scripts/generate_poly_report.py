@@ -101,23 +101,30 @@ def build_report(markets, title, output_path):
 
     # --- Term structure: today's probability across resolution dates ---
     # Group markets into families (same question, different deadline) and plot
-    # current YES% vs end date. This is the present-day cross-section over time.
+    # current YES% vs end date on a true time axis. Each point carries its
+    # market volume so the chart can size points and surface it in tooltips.
+    def to_ms(date_str):
+        return int(datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp() * 1000)
+
     families = {}
     for m in markets:
         families.setdefault(family_stem(m["title"]), []).append(m)
-    ts_dates = sorted({m["end_date"] for fam in families.values() if len(fam) >= 2 for m in fam})
     ts_datasets = []
     color_i = 0
     for stem, fam in families.items():
         if len(fam) < 2:
             continue
-        by_date = {m["end_date"]: m["yes"] for m in fam}
+        pts = sorted(fam, key=lambda m: m["end_date"])
         ts_datasets.append({
             "label": min(fam, key=lambda m: m["end_date"])["title"].rstrip("?").split(" by ")[0],
-            "data": [by_date.get(d) for d in ts_dates],
+            "points": [{"x": to_ms(m["end_date"]), "y": m["yes"], "vol": round(m["volume"]), "date": m["end_date"]} for m in pts],
             "color": PALETTE[color_i % len(PALETTE)],
         })
         color_i += 1
+
+    # Vertical reference markers (x in epoch ms). MoU = Islamabad MoU 60-day
+    # window from June 14, 2026 -> expires ~Aug 13, 2026.
+    ts_markers = [{"label": "MoU 60-day window expires (~Aug 13)", "x": to_ms("2026-08-13"), "color": "#f43f5e"}]
 
     rows_html = ""
     for i, m in enumerate(markets):
@@ -203,16 +210,32 @@ def build_report(markets, title, output_path):
       scales:{{x:{{grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8',maxTicksLimit:10}}}},
         y:{{min:0,max:100,grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
 
-  const tsLabels={json.dumps(ts_dates)};
   const tsRaw={json.dumps(ts_datasets)};
-  if(tsLabels.length){{
+  const tsMarkers={json.dumps(ts_markers)};
+  if(tsRaw.length){{
+    const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
+    const fmtD=ms=>new Date(ms).toISOString().slice(0,10);
+    // size points by volume (sqrt scale) across all term-structure points
+    const allVol=tsRaw.flatMap(d=>d.points.map(p=>p.vol));
+    const maxVol=Math.max(...allVol,1);
+    const radius=v=>4+12*Math.sqrt(v/maxVol);
+    const dataDatasets=tsRaw.map(d=>({{label:d.label,data:d.points.map(p=>({{x:p.x,y:p.y,vol:p.vol}})),
+      borderColor:d.color,backgroundColor:d.color+'22',tension:.2,borderWidth:2,
+      pointRadius:ctx=>radius(ctx.raw.vol),pointHoverRadius:ctx=>radius(ctx.raw.vol)+3,
+      pointBackgroundColor:d.color}}));
+    // vertical marker lines (full-height datasets on the same linear x)
+    const markerDatasets=tsMarkers.map(mk=>({{label:mk.label,data:[{{x:mk.x,y:0}},{{x:mk.x,y:100}}],
+      borderColor:mk.color,borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}}));
     new Chart(document.getElementById('tsChart'),{{type:'line',
-      data:{{labels:tsLabels,datasets:tsRaw.map(d=>({{label:d.label,data:d.data,borderColor:d.color,
-        backgroundColor:d.color+'22',tension:.2,pointRadius:5,pointHoverRadius:7,borderWidth:2,spanGaps:true}}))}},
+      data:{{datasets:[...dataDatasets,...markerDatasets]}},
       options:{{responsive:true,maintainAspectRatio:false,interaction:{{mode:'nearest',intersect:false}},
-        plugins:{{legend:{{labels:{{color:'#cbd5e1',boxWidth:12,font:{{size:11}}}}}},
-          tooltip:{{backgroundColor:'rgba(15,23,42,.95)',callbacks:{{label:c=>c.dataset.label+': '+(c.raw==null?'—':c.raw+'%')}}}}}},
-        scales:{{x:{{title:{{display:true,text:'Resolution date',color:'#64748b'}},grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8'}}}},
+        plugins:{{legend:{{labels:{{color:'#cbd5e1',boxWidth:12,font:{{size:11}},filter:i=>true}}}},
+          tooltip:{{backgroundColor:'rgba(15,23,42,.95)',callbacks:{{
+            title:items=>items[0].raw.vol!=null?fmtD(items[0].raw.x):items[0].dataset.label,
+            label:c=>c.raw.vol!=null?(c.dataset.label+': '+c.raw.y+'%  ·  vol '+fmtV(c.raw.vol)):null}}}}}},
+        scales:{{x:{{type:'linear',min:tsRaw[0].points[0].x,
+            title:{{display:true,text:'Resolution date  (point size ∝ market volume)',color:'#64748b'}},
+            grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8',maxTicksLimit:8,callback:v=>fmtD(v)}}}},
           y:{{min:0,max:100,grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
   }}
   document.getElementById('date').textContent=new Date().toLocaleDateString();

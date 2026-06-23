@@ -61,7 +61,7 @@
           <td class="name"><a href="https://polymarket.com/event/strait-of-hormuz-traffic-returns-to-normal-by-end-of-june" target="_blank">Strait of Hormuz traffic returns to normal by end of June?</a>
               <div class="crit">This market will resolve to “Yes” if IMF Portwatch publishes a 7-day moving average of transit calls (“Arrivals of Ships”) for the Strait of Hormuz equal to or above 60 for any date between market creation and June 30, 2026. Otherwise, this market will resolve to “No”.</div></td>
           <td class="right big">3%</td>
-          <td class="right down">-15 pts</td>
+          <td class="right down">-14 pts</td>
           <td class="right mono">$32.5M</td>
           <td class="right">2026-06-30</td>
         </tr><tr>
@@ -93,7 +93,7 @@
           <td class="name"><a href="https://polymarket.com/event/strait-of-hormuz-traffic-returns-to-normal-by-december-31" target="_blank">Strait of Hormuz traffic returns to normal by December 31?</a>
               <div class="crit">This market will resolve to “Yes” if IMF Portwatch publishes a 7-day moving average of transit calls (“Arrivals of Ships”) for the Strait of Hormuz equal to or above 60 for any date between market creation and December 31, 2026. Otherwise, this market will resolve to “No”.</div></td>
           <td class="right big">86%</td>
-          <td class="right down">-2 pts</td>
+          <td class="right down">-3 pts</td>
           <td class="right mono">$2.7M</td>
           <td class="right">2026-12-31</td>
         </tr><tr>
@@ -152,16 +152,32 @@
       scales:{x:{grid:{color:'#1e293b'},ticks:{color:'#94a3b8',maxTicksLimit:10}},
         y:{min:0,max:100,grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
 
-  const tsLabels=["2026-06-30", "2026-07-15", "2026-07-31", "2026-12-31"];
-  const tsRaw=[{"label": "Will the Iranian regime fall", "data": [0.2, null, null, 9.5], "color": "#60a5fa"}, {"label": "Strait of Hormuz traffic returns to normal", "data": [3.1, 25.5, 46.5, 86.5], "color": "#f59e0b"}, {"label": " Iran agrees to end enrichment of uranium", "data": [2.4, null, 9.5, 32.5], "color": "#10b981"}];
-  if(tsLabels.length){
+  const tsRaw=[{"label": "Will the Iranian regime fall", "points": [{"x": 1782777600000, "y": 0.2, "vol": 63448686, "date": "2026-06-30"}, {"x": 1798675200000, "y": 9.5, "vol": 20753226, "date": "2026-12-31"}], "color": "#60a5fa"}, {"label": "Strait of Hormuz traffic returns to normal", "points": [{"x": 1782777600000, "y": 3.1, "vol": 32490050, "date": "2026-06-30"}, {"x": 1784073600000, "y": 25.5, "vol": 2461127, "date": "2026-07-15"}, {"x": 1785456000000, "y": 46.5, "vol": 8128076, "date": "2026-07-31"}, {"x": 1798675200000, "y": 86.5, "vol": 2716469, "date": "2026-12-31"}], "color": "#f59e0b"}, {"label": " Iran agrees to end enrichment of uranium", "points": [{"x": 1782777600000, "y": 2.4, "vol": 11605382, "date": "2026-06-30"}, {"x": 1785456000000, "y": 9.5, "vol": 690622, "date": "2026-07-31"}, {"x": 1798675200000, "y": 32.5, "vol": 1133407, "date": "2026-12-31"}], "color": "#10b981"}];
+  const tsMarkers=[{"label": "MoU 60-day window expires (~Aug 13)", "x": 1786579200000, "color": "#f43f5e"}];
+  if(tsRaw.length){
+    const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
+    const fmtD=ms=>new Date(ms).toISOString().slice(0,10);
+    // size points by volume (sqrt scale) across all term-structure points
+    const allVol=tsRaw.flatMap(d=>d.points.map(p=>p.vol));
+    const maxVol=Math.max(...allVol,1);
+    const radius=v=>4+12*Math.sqrt(v/maxVol);
+    const dataDatasets=tsRaw.map(d=>({label:d.label,data:d.points.map(p=>({x:p.x,y:p.y,vol:p.vol})),
+      borderColor:d.color,backgroundColor:d.color+'22',tension:.2,borderWidth:2,
+      pointRadius:ctx=>radius(ctx.raw.vol),pointHoverRadius:ctx=>radius(ctx.raw.vol)+3,
+      pointBackgroundColor:d.color}));
+    // vertical marker lines (full-height datasets on the same linear x)
+    const markerDatasets=tsMarkers.map(mk=>({label:mk.label,data:[{x:mk.x,y:0},{x:mk.x,y:100}],
+      borderColor:mk.color,borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}));
     new Chart(document.getElementById('tsChart'),{type:'line',
-      data:{labels:tsLabels,datasets:tsRaw.map(d=>({label:d.label,data:d.data,borderColor:d.color,
-        backgroundColor:d.color+'22',tension:.2,pointRadius:5,pointHoverRadius:7,borderWidth:2,spanGaps:true}))},
+      data:{datasets:[...dataDatasets,...markerDatasets]},
       options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},
-        plugins:{legend:{labels:{color:'#cbd5e1',boxWidth:12,font:{size:11}}},
-          tooltip:{backgroundColor:'rgba(15,23,42,.95)',callbacks:{label:c=>c.dataset.label+': '+(c.raw==null?'—':c.raw+'%')}}},
-        scales:{x:{title:{display:true,text:'Resolution date',color:'#64748b'},grid:{color:'#1e293b'},ticks:{color:'#94a3b8'}},
+        plugins:{legend:{labels:{color:'#cbd5e1',boxWidth:12,font:{size:11},filter:i=>true}},
+          tooltip:{backgroundColor:'rgba(15,23,42,.95)',callbacks:{
+            title:items=>items[0].raw.vol!=null?fmtD(items[0].raw.x):items[0].dataset.label,
+            label:c=>c.raw.vol!=null?(c.dataset.label+': '+c.raw.y+'%  ·  vol '+fmtV(c.raw.vol)):null}}},
+        scales:{x:{type:'linear',min:tsRaw[0].points[0].x,
+            title:{display:true,text:'Resolution date  (point size ∝ market volume)',color:'#64748b'},
+            grid:{color:'#1e293b'},ticks:{color:'#94a3b8',maxTicksLimit:8,callback:v=>fmtD(v)}},
           y:{min:0,max:100,grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
   }
   document.getElementById('date').textContent=new Date().toLocaleDateString();
