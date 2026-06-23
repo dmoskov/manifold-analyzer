@@ -214,7 +214,7 @@
 <script>
   const bop=[{"label": "Democrats Sweep", "p": 42.5}, {"label": "R Senate, D House", "p": 36.5}, {"label": "Republicans Sweep", "p": 17.5}, {"label": "D Senate, R House", "p": 2.2}, {"label": "Other", "p": 0.7}];
   const seats=[{"label": "Below 190", "p": 30.5}, {"label": "190-194", "p": 12.5}, {"label": "195-199", "p": 17.0}, {"label": "200-204", "p": 10.2}, {"label": "205-209", "p": 6.8}, {"label": "210-214", "p": 5.5}, {"label": "215-219", "p": 9.1}, {"label": "220-224", "p": 8.7}, {"label": "225-229", "p": 4.0}, {"label": "230+", "p": 1.8}];
-  const races=[{"state": "Ohio", "dem": 55.0, "rep": 44.5, "other": 0.5, "fav": "Sherrod Brown (D) 55%", "volume": 91805}, {"state": "Texas", "dem": 43.5, "rep": 57.5, "other": 0.0, "fav": "Ken Paxton (R) 57%", "volume": 538444}, {"state": "Nebraska", "dem": 2.7, "rep": 60.5, "other": 36.8, "fav": "Republican 60%", "volume": 139091}, {"state": "Iowa", "dem": 39.5, "rep": 60.5, "other": 0.0, "fav": "Republican 60%", "volume": 124627}, {"state": "Maine", "dem": 61.5, "rep": 38.5, "other": 0.0, "fav": "Democrat 62%", "volume": 565428}, {"state": "Alaska", "dem": 62.5, "rep": 38.0, "other": 0.0, "fav": "Mary Peltola 62%", "volume": 341244}, {"state": "Michigan", "dem": 70.0, "rep": 27.5, "other": 2.5, "fav": "Democrat 70%", "volume": 117341}, {"state": "Montana", "dem": 1.4, "rep": 77.5, "other": 21.2, "fav": "Republican 78%", "volume": 79796}, {"state": "Florida", "dem": 19.5, "rep": 81.5, "other": 0.0, "fav": "Republican 82%", "volume": 41105}, {"state": "South Carolina", "dem": 17.5, "rep": 83.0, "other": 0.0, "fav": "Republican 83%", "volume": 38268}, {"state": "Kansas", "dem": 17.5, "rep": 83.0, "other": 0.0, "fav": "Republican 83%", "volume": 31023}, {"state": "North Carolina", "dem": 85.5, "rep": 14.5, "other": 0.0, "fav": "Roy Cooper (D) 86%", "volume": 70282}, {"state": "New Hampshire", "dem": 81.0, "rep": 14.0, "other": 5.0, "fav": "Democrat 81%", "volume": 28218}, {"state": "Georgia", "dem": 86.5, "rep": 13.9, "other": 0.0, "fav": "Democrat 86%", "volume": 31282}, {"state": "Mississippi", "dem": 13.5, "rep": 86.5, "other": 0.0, "fav": "Republican 86%", "volume": 26250}, {"state": "Kentucky", "dem": 8.0, "rep": 89.0, "other": 3.0, "fav": "Andy Barr (R) 89%", "volume": 9513}, {"state": "Colorado", "dem": 91.5, "rep": 8.5, "other": 0.0, "fav": "Democrat 92%", "volume": 35745}, {"state": "Minnesota", "dem": 92.0, "rep": 7.5, "other": 0.5, "fav": "Democrat 92%", "volume": 25606}, {"state": "Oklahoma", "dem": 7.8, "rep": 93.5, "other": 0.0, "fav": "Republican 94%", "volume": 17313}, {"state": "Virginia", "dem": 92.5, "rep": 6.5, "other": 1.0, "fav": "Democrat 92%", "volume": 9748}, {"state": "Wyoming", "dem": 4.9, "rep": 94.5, "other": 0.6, "fav": "Republican 94%", "volume": 10556}];
+  const races=[{"state": "Ohio", "dem": 55.0, "rep": 44.5, "other": 0.5, "fav": "Sherrod Brown (D) 55%", "volume": 91805, "label": "Ohio \u00b7 Brown"}, {"state": "Texas", "dem": 43.5, "rep": 57.5, "other": 0.0, "fav": "Ken Paxton (R) 57%", "volume": 538444, "label": "Texas \u00b7 Paxton"}, {"state": "Nebraska", "dem": 2.7, "rep": 60.5, "other": 36.8, "fav": "Republican 60%", "volume": 139091, "label": "Nebraska"}, {"state": "Iowa", "dem": 39.5, "rep": 60.5, "other": 0.0, "fav": "Republican 60%", "volume": 124627, "label": "Iowa"}, {"state": "Maine", "dem": 61.5, "rep": 38.5, "other": 0.0, "fav": "Democrat 62%", "volume": 565428, "label": "Maine"}, {"state": "Alaska", "dem": 62.5, "rep": 38.0, "other": 0.0, "fav": "Mary Peltola 62%", "volume": 341244, "label": "Alaska \u00b7 Peltola"}, {"state": "Michigan", "dem": 70.0, "rep": 27.5, "other": 2.5, "fav": "Democrat 70%", "volume": 117341, "label": "Michigan"}, {"state": "Montana", "dem": 1.4, "rep": 77.5, "other": 21.2, "fav": "Republican 78%", "volume": 79796, "label": "Montana"}, {"state": "Florida", "dem": 19.5, "rep": 81.5, "other": 0.0, "fav": "Republican 82%", "volume": 41105, "label": "Florida"}, {"state": "South Carolina", "dem": 17.5, "rep": 83.0, "other": 0.0, "fav": "Republican 83%", "volume": 38268, "label": "South Carolina"}, {"state": "Kansas", "dem": 17.5, "rep": 83.0, "other": 0.0, "fav": "Republican 83%", "volume": 31023, "label": "Kansas"}, {"state": "North Carolina", "dem": 85.5, "rep": 14.5, "other": 0.0, "fav": "Roy Cooper (D) 86%", "volume": 70282, "label": "North Carolina \u00b7 Cooper"}, {"state": "New Hampshire", "dem": 81.0, "rep": 14.0, "other": 5.0, "fav": "Democrat 81%", "volume": 28218, "label": "New Hampshire"}, {"state": "Georgia", "dem": 86.5, "rep": 13.9, "other": 0.0, "fav": "Democrat 86%", "volume": 31282, "label": "Georgia"}, {"state": "Mississippi", "dem": 13.5, "rep": 86.5, "other": 0.0, "fav": "Republican 86%", "volume": 26250, "label": "Mississippi"}, {"state": "Kentucky", "dem": 8.0, "rep": 89.0, "other": 3.0, "fav": "Andy Barr (R) 89%", "volume": 9513, "label": "Kentucky \u00b7 Barr"}, {"state": "Colorado", "dem": 91.5, "rep": 8.5, "other": 0.0, "fav": "Democrat 92%", "volume": 35745, "label": "Colorado"}, {"state": "Minnesota", "dem": 92.0, "rep": 7.5, "other": 0.5, "fav": "Democrat 92%", "volume": 25606, "label": "Minnesota"}, {"state": "Oklahoma", "dem": 8.0, "rep": 93.5, "other": 0.0, "fav": "Republican 94%", "volume": 17313, "label": "Oklahoma"}, {"state": "Virginia", "dem": 92.5, "rep": 6.5, "other": 1.0, "fav": "Democrat 92%", "volume": 9748, "label": "Virginia"}, {"state": "Wyoming", "dem": 4.9, "rep": 94.5, "other": 0.6, "fav": "Republican 94%", "volume": 10556, "label": "Wyoming"}];
   const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
 
   new Chart(document.getElementById('bopChart'),{type:'bar',
@@ -233,14 +233,30 @@
         y:{grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
 
   const maxV=Math.max(...races.map(r=>r.volume),1);
-  const bubble=races.map(r=>({x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem}));
+  const bubble=races.map(r=>({x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem,label:r.label}));
+  // inline plugin: draw each race's label, nudged up/down alternately to reduce overlap
+  const raceLabels={id:'raceLabels',afterDatasetsDraw(chart){
+    const ctx=chart.ctx, meta=chart.getDatasetMeta(0);
+    ctx.save();ctx.font='600 10px -apple-system,BlinkMacSystemFont,sans-serif';ctx.textAlign='center';
+    meta.data.forEach((pt,i)=>{
+      const above=bubble[i].y<=92;                 // put label below if point is near the top
+      const off=pt.options.radius+(above?9:14);
+      const y=above?pt.y-off:pt.y+off;
+      ctx.fillStyle='rgba(15,23,42,.85)';
+      const t=bubble[i].label, w=ctx.measureText(t).width;
+      ctx.fillRect(pt.x-w/2-3,y-9,w+6,13);
+      ctx.fillStyle='#e2e8f0';ctx.fillText(t,pt.x,y+1);
+    });
+    ctx.restore();
+  }};
   new Chart(document.getElementById('raceBubble'),{type:'bubble',
     data:{datasets:[{data:bubble,
       backgroundColor:bubble.map(b=>b.y>50?'rgba(239,68,68,.55)':'rgba(59,130,246,.55)'),
       borderColor:bubble.map(b=>b.y>50?'#ef4444':'#3b82f6'),borderWidth:1}]},
-    options:{responsive:true,maintainAspectRatio:false,
+    plugins:[raceLabels],
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:14,bottom:14,right:30}},
       plugins:{legend:{display:false},tooltip:{callbacks:{
-        label:c=>c.raw.state+': R '+c.raw.y+'% / D '+c.raw.dem+'%  ·  vol '+fmtV(c.raw.x)}}},
+        label:c=>c.raw.label+': R '+c.raw.y+'% / D '+c.raw.dem+'%  ·  vol '+fmtV(c.raw.x)}}},
       scales:{x:{type:'logarithmic',title:{display:true,text:'Market volume (log)',color:'#64748b'},
           grid:{color:'#1e293b'},ticks:{color:'#94a3b8',callback:v=>fmtV(v)}},
         y:{min:0,max:100,title:{display:true,text:'Republican win probability',color:'#64748b'},

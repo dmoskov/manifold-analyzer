@@ -76,6 +76,16 @@ def fmt_usd(v):
     return f"${v:.0f}"
 
 
+def race_label(r):
+    """State + leading candidate surname (when the market names candidates)."""
+    fav = r["fav"]
+    m = re.match(r"(.+?)\s*\((?:D|R|I)\)", fav)         # "Ken Paxton (R) 57%"
+    name = (m.group(1) if m else re.sub(r"\s*\d+%\s*$", "", fav)).strip()
+    if name.lower() in ("democrat", "republican", "independent", ""):
+        return r["state"]
+    return f"{r['state']} · {name.split()[-1]}"
+
+
 def collect():
     sys.stderr.write("Fetching control markets...\n")
     house = fetch_event(CONTROL["house"])
@@ -128,6 +138,8 @@ def collect():
 
 def build_html(d, output_path):
     races = d["races"]
+    for r in races:
+        r["label"] = race_label(r)
     tossups = sum(1 for r in races if 40 <= r["rep"] <= 60)
     total_vol = d["house"]["vol"] + d["senate"]["vol"] + d["bop_vol"] + d["seats_vol"] + sum(r["volume"] for r in races)
 
@@ -251,14 +263,30 @@ def build_html(d, output_path):
         y:{{grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
 
   const maxV=Math.max(...races.map(r=>r.volume),1);
-  const bubble=races.map(r=>({{x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem}}));
+  const bubble=races.map(r=>({{x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem,label:r.label}}));
+  // inline plugin: draw each race's label, nudged up/down alternately to reduce overlap
+  const raceLabels={{id:'raceLabels',afterDatasetsDraw(chart){{
+    const ctx=chart.ctx, meta=chart.getDatasetMeta(0);
+    ctx.save();ctx.font='600 10px -apple-system,BlinkMacSystemFont,sans-serif';ctx.textAlign='center';
+    meta.data.forEach((pt,i)=>{{
+      const above=bubble[i].y<=92;                 // put label below if point is near the top
+      const off=pt.options.radius+(above?9:14);
+      const y=above?pt.y-off:pt.y+off;
+      ctx.fillStyle='rgba(15,23,42,.85)';
+      const t=bubble[i].label, w=ctx.measureText(t).width;
+      ctx.fillRect(pt.x-w/2-3,y-9,w+6,13);
+      ctx.fillStyle='#e2e8f0';ctx.fillText(t,pt.x,y+1);
+    }});
+    ctx.restore();
+  }}}};
   new Chart(document.getElementById('raceBubble'),{{type:'bubble',
     data:{{datasets:[{{data:bubble,
       backgroundColor:bubble.map(b=>b.y>50?'rgba(239,68,68,.55)':'rgba(59,130,246,.55)'),
       borderColor:bubble.map(b=>b.y>50?'#ef4444':'#3b82f6'),borderWidth:1}}]}},
-    options:{{responsive:true,maintainAspectRatio:false,
+    plugins:[raceLabels],
+    options:{{responsive:true,maintainAspectRatio:false,layout:{{padding:{{top:14,bottom:14,right:30}}}},
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{
-        label:c=>c.raw.state+': R '+c.raw.y+'% / D '+c.raw.dem+'%  ·  vol '+fmtV(c.raw.x)}}}}}},
+        label:c=>c.raw.label+': R '+c.raw.y+'% / D '+c.raw.dem+'%  ·  vol '+fmtV(c.raw.x)}}}}}},
       scales:{{x:{{type:'logarithmic',title:{{display:true,text:'Market volume (log)',color:'#64748b'}},
           grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8',callback:v=>fmtV(v)}}}},
         y:{{min:0,max:100,title:{{display:true,text:'Republican win probability',color:'#64748b'}},
