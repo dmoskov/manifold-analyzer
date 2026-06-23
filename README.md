@@ -160,11 +160,15 @@ In addition to Manifold, the repo analyzes real-money [Polymarket](https://polym
 python3 scripts/fetch_polymarket.py --slug <slug> -o examples/<name>/data.json
 python3 scripts/generate_poly_viz.py examples/<name>/data.json -o examples/<name>/viz.html
 
-# Multi-market topic report (overlaid probability curves + comparison table)
+# Multi-market topic report — overlaid probability curves, comparison table,
+# AND an auto-detected term structure (today's odds across resolution dates)
 python3 scripts/generate_poly_report.py --slug <slug1> --slug <slug2> --title "Topic" -o report.html
+
+# Price-range ladder for multi-outcome threshold events (e.g. oil price)
+python3 scripts/generate_poly_ladder.py --slug what-price-will-wti-hit-in-june-2026 -o ladder.html
 ```
 
-Note: Polymarket exposes no full trade-by-trade history for busy markets, so analysis uses **current holders** (positions) plus aggregate volume windows. See `examples/hormuz/` for a worked multi-market example (Iran / Strait of Hormuz crisis).
+Note: Polymarket exposes no full trade-by-trade history for busy markets, so analysis uses **current holders** (positions) plus aggregate volume windows. See `examples/hormuz/` for a worked multi-market example (Iran / Strait of Hormuz crisis) including time-series overlay, a term-structure cross-section, and an oil price-range ladder.
 
 ## Claude Code Skill
 

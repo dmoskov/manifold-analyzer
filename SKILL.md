@@ -143,10 +143,33 @@ python3 scripts/generate_poly_report.py \
 ```
 Produces overlaid YES-probability curves + a comparison table (current odds, weekly
 move, volume, resolution date) and a `_data.json` sidecar. Find related slugs via the
-Gamma `events` endpoint. **Read each market's resolution criteria** — markets that look
-contradictory are usually pricing different bars (a one-touch threshold, a single-day
-count, a 7-day moving average, an end-of-period level). Worked example lives in
-`examples/hormuz/`.
+Gamma `events` endpoint (or `public-search?q=<term>`). **Read each market's resolution
+criteria** — markets that look contradictory are usually pricing different bars (a
+one-touch threshold, a single-day count, a 7-day moving average, an end-of-period
+level). Worked example lives in `examples/hormuz/`.
+
+### Higher-level "folding" views
+Two cross-sectional lenses turn a pile of markets into structure:
+
+**Term structure (present-day cut across dates).** The topic report auto-groups markets
+that ask the *same question with different deadlines* (it normalizes titles, dropping
+the `by <date>` suffix) and draws **current probability vs resolution date** — the
+market-implied cumulative-probability-over-time curve. To get clean curves, include the
+whole family (e.g. the "returns to normal by" June/July-15/July-31/Dec markets). This is
+the right graph when the question is "how do odds change across horizons *right now*"
+rather than "how did one market move over time."
+
+**Price-range ladder (multi-outcome threshold events).** Markets like "What will WTI
+hit in June?" bundle ~30 binary barrier markets (`hit (HIGH) $X` / `hit (LOW) $X`).
+`generate_poly_ladder.py` folds them into one touch-probability curve and a single
+implied range:
+```bash
+python3 scripts/generate_poly_ladder.py --slug what-price-will-wti-hit-in-june-2026 \
+  -o examples/<name>/ladder.html
+```
+The 50% crossover of each curve is the market's even-odds reach up/down; the ≥90% band
+is the near-certain (often already-realized) range. Detect these events by their many
+sub-markets with `groupItemTitle` like `↑ $120` / `↓ $60`.
 
 ### Polymarket interpretation notes
 - Positions ≈ 50/50 in size is consistent with a price near 50%; large lopsided holder

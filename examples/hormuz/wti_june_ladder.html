@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What will WTI Crude Oil (WTI) hit in June 2026? - Price Ladder</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;
+       background:linear-gradient(135deg,#0f172a,#1e293b 50%,#0f172a);color:#fff;padding:32px}
+  .container{max-width:1000px;margin:0 auto}
+  h1{font-size:22px;margin-bottom:6px}
+  .subtitle{color:#64748b;font-size:14px;margin-bottom:8px}
+  .range{display:inline-block;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);
+         border-radius:12px;padding:10px 16px;font-size:14px;margin-bottom:24px}
+  .chart-container{background:rgba(51,65,85,.2);border-radius:20px;padding:24px;border:1px solid rgba(71,85,105,.3)}
+  .chart-title{font-size:18px;font-weight:600;margin-bottom:6px}
+  .note{color:#64748b;font-size:12px;margin:10px 0 18px;line-height:1.5}
+  .footer{margin-top:24px;text-align:center;color:#64748b;font-size:12px}
+</style></head>
+<body><div class="container">
+  <h1>What will WTI Crude Oil (WTI) hit in June 2026?</h1>
+  <p class="subtitle">Market-implied price range · 27 barrier markets folded into one curve · <span id="date"></span></p>
+  <div class="range">📏 ≥90% touch range: $75 – $90 · ~50% downside reach: $70 · ~50% upside reach: $90</div>
+  <div class="chart-container">
+    <h2 class="chart-title">Touch Probability by Price Level</h2>
+    <p class="note">Red = probability price <b>rises</b> to touch a high level (falls as level increases).
+       Blue = probability price <b>falls</b> to touch a low level (falls as level decreases).
+       Where each curve crosses 50% is the market's even-odds reach in that direction.</p>
+    <div style="position:relative;height:420px;width:100%"><canvas id="ladder"></canvas></div>
+  </div>
+  <div class="footer">Data: Polymarket Gamma · barrier-touch markets</div>
+</div>
+<script>
+  const up=[{"x": 80.0, "y": 16.5}, {"x": 85.0, "y": 6.5}, {"x": 90.0, "y": 3.1}, {"x": 90.0, "y": 100.0}, {"x": 95.0, "y": 1.2}, {"x": 100.0, "y": 0.6}, {"x": 105.0, "y": 0.8}, {"x": 110.0, "y": 0.7}, {"x": 115.0, "y": 0.4}, {"x": 120.0, "y": 0.4}, {"x": 125.0, "y": 0.4}, {"x": 130.0, "y": 0.2}, {"x": 140.0, "y": 0.1}, {"x": 150.0, "y": 0.2}, {"x": 175.0, "y": 0.1}, {"x": 200.0, "y": 0.1}];
+  const down=[{"x": 20.0, "y": 0.1}, {"x": 30.0, "y": 0.1}, {"x": 40.0, "y": 0.1}, {"x": 50.0, "y": 0.7}, {"x": 60.0, "y": 2.1}, {"x": 65.0, "y": 10.1}, {"x": 70.0, "y": 50.5}, {"x": 75.0, "y": 100.0}, {"x": 80.0, "y": 100.0}, {"x": 85.0, "y": 100.0}, {"x": 90.0, "y": 100.0}];
+  new Chart(document.getElementById('ladder'),{type:'line',
+    data:{datasets:[
+      {label:'Upside touch (price rises to $X)',data:up,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.12)',tension:.2,pointRadius:4,borderWidth:2,fill:true},
+      {label:'Downside touch (price falls to $X)',data:down,borderColor:'#60a5fa',backgroundColor:'rgba(96,165,250,.12)',tension:.2,pointRadius:4,borderWidth:2,fill:true}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},
+      plugins:{legend:{labels:{color:'#cbd5e1',boxWidth:12,font:{size:11}}},
+        tooltip:{backgroundColor:'rgba(15,23,42,.95)',callbacks:{label:c=>c.dataset.label+': '+c.raw.y+'% @ $'+c.raw.x}}},
+      scales:{x:{type:'linear',title:{display:true,text:'Price level ($)',color:'#64748b'},grid:{color:'#1e293b'},ticks:{color:'#94a3b8',callback:v=>'$'+v}},
+        y:{min:0,max:100,title:{display:true,text:'Touch probability',color:'#64748b'},grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
+  document.getElementById('date').textContent=new Date().toLocaleDateString();
+</script></body></html>

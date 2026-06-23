@@ -22,13 +22,23 @@ Usage:
 """
 
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from argparse import ArgumentParser
 
 from fetch_polymarket import fetch_event, fetch_price_history
 
-PALETTE = ["#60a5fa", "#f59e0b", "#10b981", "#ef4444", "#a78bfa", "#ec4899", "#22d3ee"]
+PALETTE = ["#60a5fa", "#f59e0b", "#10b981", "#ef4444", "#a78bfa", "#ec4899", "#22d3ee", "#fbbf24", "#34d399"]
+
+
+def family_stem(title):
+    """Normalize a market title to its deadline-independent 'family' (e.g. all
+    'Strait of Hormuz traffic returns to normal by <date>' markets share a stem)."""
+    t = title.lower().strip().rstrip("?").strip()
+    t = re.split(r"\b(?:by|before)\b", t)[0]
+    t = re.sub(r"\b(?:end of|the)\b", "", t)
+    return " ".join(t.split())
 
 
 def fmt_usd(v):
@@ -89,6 +99,26 @@ def build_report(markets, title, output_path):
             "color": PALETTE[i % len(PALETTE)],
         })
 
+    # --- Term structure: today's probability across resolution dates ---
+    # Group markets into families (same question, different deadline) and plot
+    # current YES% vs end date. This is the present-day cross-section over time.
+    families = {}
+    for m in markets:
+        families.setdefault(family_stem(m["title"]), []).append(m)
+    ts_dates = sorted({m["end_date"] for fam in families.values() if len(fam) >= 2 for m in fam})
+    ts_datasets = []
+    color_i = 0
+    for stem, fam in families.items():
+        if len(fam) < 2:
+            continue
+        by_date = {m["end_date"]: m["yes"] for m in fam}
+        ts_datasets.append({
+            "label": min(fam, key=lambda m: m["end_date"])["title"].rstrip("?").split(" by ")[0],
+            "data": [by_date.get(d) for d in ts_dates],
+            "color": PALETTE[color_i % len(PALETTE)],
+        })
+        color_i += 1
+
     rows_html = ""
     for i, m in enumerate(markets):
         wk = m["wk_change"]
@@ -103,6 +133,17 @@ def build_report(markets, title, output_path):
           <td class="right mono">{fmt_usd(m['volume'])}</td>
           <td class="right">{m['end_date']}</td>
         </tr>"""
+
+    ts_block = ""
+    if ts_datasets:
+        ts_block = (
+            '<div class="chart-container">'
+            '<h2 class="chart-title">Term Structure — today\'s probability by resolution date '
+            '<span style="font-size:13px;color:#64748b;font-weight:400">(present-day cross-section; '
+            'each line is one question priced across deadlines)</span></h2>'
+            '<div style="position:relative;height:340px;width:100%"><canvas id="tsChart"></canvas></div>'
+            '</div>'
+        )
 
     html = f"""<!DOCTYPE html>
 <html lang="en"><head>
@@ -136,9 +177,11 @@ def build_report(markets, title, output_path):
   <p class="subtitle">{len(markets)} related Polymarket markets · combined volume {fmt_usd(sum(m['volume'] for m in markets))} · generated <span id="date"></span></p>
 
   <div class="chart-container">
-    <h2 class="chart-title">YES Probability — all markets</h2>
+    <h2 class="chart-title">YES Probability — all markets <span style="font-size:13px;color:#64748b;font-weight:400">(history)</span></h2>
     <div style="position:relative;height:380px;width:100%"><canvas id="chart"></canvas></div>
   </div>
+
+  {ts_block}
 
   <div class="chart-container">
     <h2 class="chart-title">Market Comparison</h2>
@@ -159,6 +202,19 @@ def build_report(markets, title, output_path):
         tooltip:{{backgroundColor:'rgba(15,23,42,.95)',callbacks:{{label:c=>c.dataset.label+': '+(c.raw==null?'—':c.raw+'%')}}}}}},
       scales:{{x:{{grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8',maxTicksLimit:10}}}},
         y:{{min:0,max:100,grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
+
+  const tsLabels={json.dumps(ts_dates)};
+  const tsRaw={json.dumps(ts_datasets)};
+  if(tsLabels.length){{
+    new Chart(document.getElementById('tsChart'),{{type:'line',
+      data:{{labels:tsLabels,datasets:tsRaw.map(d=>({{label:d.label,data:d.data,borderColor:d.color,
+        backgroundColor:d.color+'22',tension:.2,pointRadius:5,pointHoverRadius:7,borderWidth:2,spanGaps:true}}))}},
+      options:{{responsive:true,maintainAspectRatio:false,interaction:{{mode:'nearest',intersect:false}},
+        plugins:{{legend:{{labels:{{color:'#cbd5e1',boxWidth:12,font:{{size:11}}}}}},
+          tooltip:{{backgroundColor:'rgba(15,23,42,.95)',callbacks:{{label:c=>c.dataset.label+': '+(c.raw==null?'—':c.raw+'%')}}}}}},
+        scales:{{x:{{title:{{display:true,text:'Resolution date',color:'#64748b'}},grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8'}}}},
+          y:{{min:0,max:100,grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
+  }}
   document.getElementById('date').textContent=new Date().toLocaleDateString();
 </script></body></html>"""
 
