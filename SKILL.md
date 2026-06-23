@@ -171,6 +171,28 @@ The 50% crossover of each curve is the market's even-odds reach up/down; the ≥
 is the near-certain (often already-realized) range. Detect these events by their many
 sub-markets with `groupItemTitle` like `↑ $120` / `↓ $60`.
 
+### Multi-outcome markets (scenarios, party races, distributions)
+Many Polymarket events are **mutually-exclusive multi-outcome** rather than binary:
+scenario splits ("Balance of Power"), party/candidate races, and value
+distributions (seat counts, price buckets). Their sub-markets live in
+`event["markets"]`, each with a `groupItemTitle` (e.g. `Democrats Sweep`,
+`Ken Paxton (R)`, `195-199`). Notes:
+- Sum the relevant sub-market YES prices to get a category total (e.g. Dem win %
+  = sum of all Democrat-labeled outcomes). Parse party from `(D)`/`(R)` tags or a
+  small name→party map for untagged candidate races.
+- Watch for **3-way races** (an independent): Dem% + Rep% < 100. Prefer plotting
+  the directly-priced side (e.g. Republican win %) so independents are handled.
+- Distributions: parse the numeric bound from each bucket label to order them, and
+  mark reference thresholds (e.g. 218 = House majority).
+
+`generate_poly_midterms.py` is a worked example folding control markets, the
+Balance-of-Power scenario split, the Republican House-seat distribution, and ~21
+Senate races (Dem%-vs-volume bubble + competitiveness-sorted table) into one
+dashboard:
+```bash
+python3 scripts/generate_poly_midterms.py -o examples/midterms/midterms_dashboard.html
+```
+
 ### Polymarket interpretation notes
 - Positions ≈ 50/50 in size is consistent with a price near 50%; large lopsided holder
   sums on one side signal conviction.

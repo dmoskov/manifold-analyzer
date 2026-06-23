@@ -166,6 +166,9 @@ python3 scripts/generate_poly_report.py --slug <slug1> --slug <slug2> --title "T
 
 # Price-range ladder for multi-outcome threshold events (e.g. oil price)
 python3 scripts/generate_poly_ladder.py --slug what-price-will-wti-hit-in-june-2026 -o ladder.html
+
+# Multi-outcome dashboard (scenarios, party races, seat distribution) — e.g. 2026 midterms
+python3 scripts/generate_poly_midterms.py -o examples/midterms/midterms_dashboard.html
 ```
 
 Note: Polymarket exposes no full trade-by-trade history for busy markets, so analysis uses **current holders** (positions) plus aggregate volume windows. See `examples/hormuz/` for a worked multi-market example (Iran / Strait of Hormuz crisis) including time-series overlay, a term-structure cross-section, and an oil price-range ladder.

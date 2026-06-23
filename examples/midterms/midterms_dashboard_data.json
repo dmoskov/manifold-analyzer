@@ -1,0 +1,248 @@
+{
+  "house": {
+    "d": 80.5,
+    "r": 19.5,
+    "vol": 7616951.332490884
+  },
+  "senate": {
+    "d": 43.5,
+    "r": 55.5,
+    "vol": 2782276.189119023
+  },
+  "bop": [
+    {
+      "label": "Democrats Sweep",
+      "p": 42.5
+    },
+    {
+      "label": "R Senate, D House",
+      "p": 36.5
+    },
+    {
+      "label": "Republicans Sweep",
+      "p": 17.5
+    },
+    {
+      "label": "D Senate, R House",
+      "p": 2.2
+    },
+    {
+      "label": "Other",
+      "p": 0.7
+    }
+  ],
+  "bop_vol": 8056255.624071023,
+  "seats": [
+    {
+      "label": "Below 190",
+      "p": 30.5
+    },
+    {
+      "label": "190-194",
+      "p": 12.5
+    },
+    {
+      "label": "195-199",
+      "p": 17.0
+    },
+    {
+      "label": "200-204",
+      "p": 10.2
+    },
+    {
+      "label": "205-209",
+      "p": 6.8
+    },
+    {
+      "label": "210-214",
+      "p": 5.5
+    },
+    {
+      "label": "215-219",
+      "p": 9.1
+    },
+    {
+      "label": "220-224",
+      "p": 8.7
+    },
+    {
+      "label": "225-229",
+      "p": 4.0
+    },
+    {
+      "label": "230+",
+      "p": 1.8
+    }
+  ],
+  "seats_vol": 256162.56759199995,
+  "races": [
+    {
+      "state": "Ohio",
+      "dem": 55.0,
+      "rep": 44.5,
+      "other": 0.5,
+      "fav": "Sherrod Brown (D) 55%",
+      "volume": 91805
+    },
+    {
+      "state": "Texas",
+      "dem": 43.5,
+      "rep": 57.5,
+      "other": 0.0,
+      "fav": "Ken Paxton (R) 57%",
+      "volume": 538444
+    },
+    {
+      "state": "Nebraska",
+      "dem": 2.7,
+      "rep": 60.5,
+      "other": 36.8,
+      "fav": "Republican 60%",
+      "volume": 139091
+    },
+    {
+      "state": "Iowa",
+      "dem": 39.5,
+      "rep": 60.5,
+      "other": 0.0,
+      "fav": "Republican 60%",
+      "volume": 124627
+    },
+    {
+      "state": "Maine",
+      "dem": 61.5,
+      "rep": 38.5,
+      "other": 0.0,
+      "fav": "Democrat 62%",
+      "volume": 565428
+    },
+    {
+      "state": "Alaska",
+      "dem": 62.5,
+      "rep": 38.0,
+      "other": 0.0,
+      "fav": "Mary Peltola 62%",
+      "volume": 341244
+    },
+    {
+      "state": "Michigan",
+      "dem": 70.0,
+      "rep": 27.5,
+      "other": 2.5,
+      "fav": "Democrat 70%",
+      "volume": 117341
+    },
+    {
+      "state": "Montana",
+      "dem": 1.4,
+      "rep": 77.5,
+      "other": 21.2,
+      "fav": "Republican 78%",
+      "volume": 79796
+    },
+    {
+      "state": "Florida",
+      "dem": 19.5,
+      "rep": 81.5,
+      "other": 0.0,
+      "fav": "Republican 82%",
+      "volume": 41105
+    },
+    {
+      "state": "South Carolina",
+      "dem": 17.5,
+      "rep": 83.0,
+      "other": 0.0,
+      "fav": "Republican 83%",
+      "volume": 38268
+    },
+    {
+      "state": "Kansas",
+      "dem": 17.5,
+      "rep": 83.0,
+      "other": 0.0,
+      "fav": "Republican 83%",
+      "volume": 31023
+    },
+    {
+      "state": "North Carolina",
+      "dem": 85.5,
+      "rep": 14.5,
+      "other": 0.0,
+      "fav": "Roy Cooper (D) 86%",
+      "volume": 70282
+    },
+    {
+      "state": "New Hampshire",
+      "dem": 81.0,
+      "rep": 14.0,
+      "other": 5.0,
+      "fav": "Democrat 81%",
+      "volume": 28218
+    },
+    {
+      "state": "Georgia",
+      "dem": 86.5,
+      "rep": 13.9,
+      "other": 0.0,
+      "fav": "Democrat 86%",
+      "volume": 31282
+    },
+    {
+      "state": "Mississippi",
+      "dem": 13.5,
+      "rep": 86.5,
+      "other": 0.0,
+      "fav": "Republican 86%",
+      "volume": 26250
+    },
+    {
+      "state": "Kentucky",
+      "dem": 8.0,
+      "rep": 89.0,
+      "other": 3.0,
+      "fav": "Andy Barr (R) 89%",
+      "volume": 9513
+    },
+    {
+      "state": "Colorado",
+      "dem": 91.5,
+      "rep": 8.5,
+      "other": 0.0,
+      "fav": "Democrat 92%",
+      "volume": 35745
+    },
+    {
+      "state": "Minnesota",
+      "dem": 92.0,
+      "rep": 7.5,
+      "other": 0.5,
+      "fav": "Democrat 92%",
+      "volume": 25606
+    },
+    {
+      "state": "Oklahoma",
+      "dem": 7.8,
+      "rep": 93.5,
+      "other": 0.0,
+      "fav": "Republican 94%",
+      "volume": 17313
+    },
+    {
+      "state": "Virginia",
+      "dem": 92.5,
+      "rep": 6.5,
+      "other": 1.0,
+      "fav": "Democrat 92%",
+      "volume": 9748
+    },
+    {
+      "state": "Wyoming",
+      "dem": 4.9,
+      "rep": 94.5,
+      "other": 0.6,
+      "fav": "Republican 94%",
+      "volume": 10556
+    }
+  ]
+}

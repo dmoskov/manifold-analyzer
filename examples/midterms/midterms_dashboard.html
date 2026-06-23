@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Midterms - Polymarket Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;
+       background:linear-gradient(135deg,#0f172a,#1e293b 50%,#0f172a);color:#fff;padding:32px}
+  .container{max-width:1150px;margin:0 auto}
+  h1{font-size:24px;margin-bottom:6px}
+  .subtitle{color:#64748b;font-size:14px;margin-bottom:24px}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .stat-card{background:rgba(51,65,85,.3);border-radius:16px;padding:18px;border:1px solid rgba(71,85,105,.5)}
+  .stat-label{font-size:11px;color:#64748b;text-transform:uppercase;margin-bottom:6px}
+  .stat-value{font-size:22px;font-weight:700}
+  .chart-container{background:rgba(51,65,85,.2);border-radius:20px;padding:24px;margin-bottom:24px;border:1px solid rgba(71,85,105,.3)}
+  .chart-title{font-size:18px;font-weight:600;margin-bottom:4px}
+  .chart-title span{font-size:13px;color:#64748b;font-weight:400;margin-left:8px}
+  .gauge{margin:14px 0}
+  .gauge-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+  .bar{display:flex;height:34px;border-radius:8px;overflow:hidden}
+  .bar .d{background:#3b82f6;display:flex;align-items:center;padding-left:10px;font-size:12px;font-weight:600}
+  .bar .r{background:#ef4444;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-size:12px;font-weight:600}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  table{width:100%;font-size:13px;border-collapse:collapse}
+  th{text-align:left;padding:8px;color:#64748b;font-weight:500;border-bottom:1px solid rgba(71,85,105,.5)}
+  th.right,td.right{text-align:right}
+  td{padding:8px;border-bottom:1px solid rgba(71,85,105,.2)}
+  .name{color:#e2e8f0;font-weight:500}
+  .dem{color:#60a5fa;font-weight:700} .rep{color:#f87171;font-weight:700}
+  .mono{font-family:monospace;color:#fbbf24}
+  .note{color:#64748b;font-size:12px;margin-top:10px;line-height:1.5}
+  .footer{margin-top:24px;text-align:center;color:#64748b;font-size:12px}
+  @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}}
+</style></head>
+<body><div class="container">
+  <h1>2026 U.S. Midterms — Polymarket Dashboard</h1>
+  <p class="subtitle">Control, scenarios, seat distribution & 21 Senate races · combined volume $21.1M · generated <span id="date"></span></p>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">House control</div><div class="stat-value"><span class="dem">D 80%</span></div></div>
+    <div class="stat-card"><div class="stat-label">Senate control</div><div class="stat-value"><span class="rep">R 56%</span></div></div>
+    <div class="stat-card"><div class="stat-label">Top scenario</div><div class="stat-value" style="font-size:15px">Democrats Sweep<br><span style="color:#94a3b8">42%</span></div></div>
+    <div class="stat-card"><div class="stat-label">Toss-up Senate seats (40–60% R)</div><div class="stat-value">2 / 21</div></div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Chamber Control <span>(Dem vs Rep)</span></h2>
+    <div class="gauge">
+      <div class="gauge-label"><span class="dem">House — Democrats 80%</span><span class="rep">Republicans 20%</span></div>
+      <div class="bar"><div class="d" style="width:80%">D</div><div class="r" style="width:20%">R</div></div>
+    </div>
+    <div class="gauge">
+      <div class="gauge-label"><span class="dem">Senate — Democrats 44%</span><span class="rep">Republicans 56%</span></div>
+      <div class="bar"><div class="d" style="width:44%">D</div><div class="r" style="width:56%">R</div></div>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="chart-container">
+      <h2 class="chart-title">Balance of Power <span>($8.1M)</span></h2>
+      <div style="position:relative;height:240px"><canvas id="bopChart"></canvas></div>
+    </div>
+    <div class="chart-container">
+      <h2 class="chart-title">Republican House Seats <span>($256k)</span></h2>
+      <div style="position:relative;height:240px"><canvas id="seatsChart"></canvas></div>
+      <p class="note">Dashed line = 218 (majority). Distribution sits well below it → market expects GOP losses.</p>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Senate Races — Republican win probability <span>(point size ∝ volume; below the 50% line = seat leans Dem/Ind)</span></h2>
+    <div style="position:relative;height:360px"><canvas id="raceBubble"></canvas></div>
+    <p class="note">Plotting Republican win % (directly priced) handles 3-way races: e.g. Nebraska is a Republican-vs-independent contest, so its Dem share is tiny but the seat is still competitive.</p>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Senate Races — detail <span>(most competitive first)</span></h2>
+    <table>
+      <thead><tr><th>State</th><th class="right">Dem</th><th class="right">Rep</th><th class="right">Favorite</th><th class="right">Volume</th></tr></thead>
+      <tbody><tr>
+          <td class="name">Ohio</td>
+          <td class="right"><span class="dem">55%</span></td>
+          <td class="right"><span class="rep">44%</span></td>
+          <td class="right" style="color:#94a3b8">Sherrod Brown (D) 55%</td>
+          <td class="right mono">$92k</td>
+        </tr><tr>
+          <td class="name">Texas</td>
+          <td class="right"><span class="dem">44%</span></td>
+          <td class="right"><span class="rep">58%</span></td>
+          <td class="right" style="color:#94a3b8">Ken Paxton (R) 57%</td>
+          <td class="right mono">$538k</td>
+        </tr><tr>
+          <td class="name">Nebraska</td>
+          <td class="right"><span class="dem">3%</span></td>
+          <td class="right"><span class="rep">60%</span> <span style="color:#a78bfa">· Ind 37%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 60%</td>
+          <td class="right mono">$139k</td>
+        </tr><tr>
+          <td class="name">Iowa</td>
+          <td class="right"><span class="dem">40%</span></td>
+          <td class="right"><span class="rep">60%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 60%</td>
+          <td class="right mono">$125k</td>
+        </tr><tr>
+          <td class="name">Maine</td>
+          <td class="right"><span class="dem">62%</span></td>
+          <td class="right"><span class="rep">38%</span></td>
+          <td class="right" style="color:#94a3b8">Democrat 62%</td>
+          <td class="right mono">$565k</td>
+        </tr><tr>
+          <td class="name">Alaska</td>
+          <td class="right"><span class="dem">62%</span></td>
+          <td class="right"><span class="rep">38%</span></td>
+          <td class="right" style="color:#94a3b8">Mary Peltola 62%</td>
+          <td class="right mono">$341k</td>
+        </tr><tr>
+          <td class="name">Michigan</td>
+          <td class="right"><span class="dem">70%</span></td>
+          <td class="right"><span class="rep">28%</span></td>
+          <td class="right" style="color:#94a3b8">Democrat 70%</td>
+          <td class="right mono">$117k</td>
+        </tr><tr>
+          <td class="name">Montana</td>
+          <td class="right"><span class="dem">1%</span></td>
+          <td class="right"><span class="rep">78%</span> <span style="color:#a78bfa">· Ind 21%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 78%</td>
+          <td class="right mono">$80k</td>
+        </tr><tr>
+          <td class="name">Florida</td>
+          <td class="right"><span class="dem">20%</span></td>
+          <td class="right"><span class="rep">82%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 82%</td>
+          <td class="right mono">$41k</td>
+        </tr><tr>
+          <td class="name">South Carolina</td>
+          <td class="right"><span class="dem">18%</span></td>
+          <td class="right"><span class="rep">83%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 83%</td>
+          <td class="right mono">$38k</td>
+        </tr><tr>
+          <td class="name">Kansas</td>
+          <td class="right"><span class="dem">18%</span></td>
+          <td class="right"><span class="rep">83%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 83%</td>
+          <td class="right mono">$31k</td>
+        </tr><tr>
+          <td class="name">North Carolina</td>
+          <td class="right"><span class="dem">86%</span></td>
+          <td class="right"><span class="rep">14%</span></td>
+          <td class="right" style="color:#94a3b8">Roy Cooper (D) 86%</td>
+          <td class="right mono">$70k</td>
+        </tr><tr>
+          <td class="name">New Hampshire</td>
+          <td class="right"><span class="dem">81%</span></td>
+          <td class="right"><span class="rep">14%</span> <span style="color:#a78bfa">· Ind 5%</span></td>
+          <td class="right" style="color:#94a3b8">Democrat 81%</td>
+          <td class="right mono">$28k</td>
+        </tr><tr>
+          <td class="name">Georgia</td>
+          <td class="right"><span class="dem">86%</span></td>
+          <td class="right"><span class="rep">14%</span></td>
+          <td class="right" style="color:#94a3b8">Democrat 86%</td>
+          <td class="right mono">$31k</td>
+        </tr><tr>
+          <td class="name">Mississippi</td>
+          <td class="right"><span class="dem">14%</span></td>
+          <td class="right"><span class="rep">86%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 86%</td>
+          <td class="right mono">$26k</td>
+        </tr><tr>
+          <td class="name">Kentucky</td>
+          <td class="right"><span class="dem">8%</span></td>
+          <td class="right"><span class="rep">89%</span></td>
+          <td class="right" style="color:#94a3b8">Andy Barr (R) 89%</td>
+          <td class="right mono">$10k</td>
+        </tr><tr>
+          <td class="name">Colorado</td>
+          <td class="right"><span class="dem">92%</span></td>
+          <td class="right"><span class="rep">8%</span></td>
+          <td class="right" style="color:#94a3b8">Democrat 92%</td>
+          <td class="right mono">$36k</td>
+        </tr><tr>
+          <td class="name">Minnesota</td>
+          <td class="right"><span class="dem">92%</span></td>
+          <td class="right"><span class="rep">8%</span></td>
+          <td class="right" style="color:#94a3b8">Democrat 92%</td>
+          <td class="right mono">$26k</td>
+        </tr><tr>
+          <td class="name">Oklahoma</td>
+          <td class="right"><span class="dem">8%</span></td>
+          <td class="right"><span class="rep">94%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 94%</td>
+          <td class="right mono">$17k</td>
+        </tr><tr>
+          <td class="name">Virginia</td>
+          <td class="right"><span class="dem">92%</span></td>
+          <td class="right"><span class="rep">6%</span></td>
+          <td class="right" style="color:#94a3b8">Democrat 92%</td>
+          <td class="right mono">$10k</td>
+        </tr><tr>
+          <td class="name">Wyoming</td>
+          <td class="right"><span class="dem">5%</span></td>
+          <td class="right"><span class="rep">94%</span></td>
+          <td class="right" style="color:#94a3b8">Republican 94%</td>
+          <td class="right mono">$11k</td>
+        </tr></tbody>
+    </table>
+  </div>
+
+  <div class="footer">Data: Polymarket Gamma · multi-outcome markets folded to party totals</div>
+</div>
+<script>
+  const bop=[{"label": "Democrats Sweep", "p": 42.5}, {"label": "R Senate, D House", "p": 36.5}, {"label": "Republicans Sweep", "p": 17.5}, {"label": "D Senate, R House", "p": 2.2}, {"label": "Other", "p": 0.7}];
+  const seats=[{"label": "Below 190", "p": 30.5}, {"label": "190-194", "p": 12.5}, {"label": "195-199", "p": 17.0}, {"label": "200-204", "p": 10.2}, {"label": "205-209", "p": 6.8}, {"label": "210-214", "p": 5.5}, {"label": "215-219", "p": 9.1}, {"label": "220-224", "p": 8.7}, {"label": "225-229", "p": 4.0}, {"label": "230+", "p": 1.8}];
+  const races=[{"state": "Ohio", "dem": 55.0, "rep": 44.5, "other": 0.5, "fav": "Sherrod Brown (D) 55%", "volume": 91805}, {"state": "Texas", "dem": 43.5, "rep": 57.5, "other": 0.0, "fav": "Ken Paxton (R) 57%", "volume": 538444}, {"state": "Nebraska", "dem": 2.7, "rep": 60.5, "other": 36.8, "fav": "Republican 60%", "volume": 139091}, {"state": "Iowa", "dem": 39.5, "rep": 60.5, "other": 0.0, "fav": "Republican 60%", "volume": 124627}, {"state": "Maine", "dem": 61.5, "rep": 38.5, "other": 0.0, "fav": "Democrat 62%", "volume": 565428}, {"state": "Alaska", "dem": 62.5, "rep": 38.0, "other": 0.0, "fav": "Mary Peltola 62%", "volume": 341244}, {"state": "Michigan", "dem": 70.0, "rep": 27.5, "other": 2.5, "fav": "Democrat 70%", "volume": 117341}, {"state": "Montana", "dem": 1.4, "rep": 77.5, "other": 21.2, "fav": "Republican 78%", "volume": 79796}, {"state": "Florida", "dem": 19.5, "rep": 81.5, "other": 0.0, "fav": "Republican 82%", "volume": 41105}, {"state": "South Carolina", "dem": 17.5, "rep": 83.0, "other": 0.0, "fav": "Republican 83%", "volume": 38268}, {"state": "Kansas", "dem": 17.5, "rep": 83.0, "other": 0.0, "fav": "Republican 83%", "volume": 31023}, {"state": "North Carolina", "dem": 85.5, "rep": 14.5, "other": 0.0, "fav": "Roy Cooper (D) 86%", "volume": 70282}, {"state": "New Hampshire", "dem": 81.0, "rep": 14.0, "other": 5.0, "fav": "Democrat 81%", "volume": 28218}, {"state": "Georgia", "dem": 86.5, "rep": 13.9, "other": 0.0, "fav": "Democrat 86%", "volume": 31282}, {"state": "Mississippi", "dem": 13.5, "rep": 86.5, "other": 0.0, "fav": "Republican 86%", "volume": 26250}, {"state": "Kentucky", "dem": 8.0, "rep": 89.0, "other": 3.0, "fav": "Andy Barr (R) 89%", "volume": 9513}, {"state": "Colorado", "dem": 91.5, "rep": 8.5, "other": 0.0, "fav": "Democrat 92%", "volume": 35745}, {"state": "Minnesota", "dem": 92.0, "rep": 7.5, "other": 0.5, "fav": "Democrat 92%", "volume": 25606}, {"state": "Oklahoma", "dem": 7.8, "rep": 93.5, "other": 0.0, "fav": "Republican 94%", "volume": 17313}, {"state": "Virginia", "dem": 92.5, "rep": 6.5, "other": 1.0, "fav": "Democrat 92%", "volume": 9748}, {"state": "Wyoming", "dem": 4.9, "rep": 94.5, "other": 0.6, "fav": "Republican 94%", "volume": 10556}];
+  const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
+
+  new Chart(document.getElementById('bopChart'),{type:'bar',
+    data:{labels:bop.map(b=>b.label),datasets:[{data:bop.map(b=>b.p),
+      backgroundColor:bop.map(b=>b.label.includes('Democrat')?'#3b82f6':b.label.includes('Republican')?'#ef4444':'#94a3b8')}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},
+      scales:{x:{max:100,grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}},y:{grid:{display:false},ticks:{color:'#cbd5e1',font:{size:11}}}}}});
+
+  const maj=218;
+  new Chart(document.getElementById('seatsChart'),{type:'bar',
+    data:{labels:seats.map(s=>s.label),datasets:[{data:seats.map(s=>s.p),backgroundColor:'#a78bfa'}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#94a3b8',font:{size:9},maxRotation:60,minRotation:45}},
+        y:{grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
+
+  const maxV=Math.max(...races.map(r=>r.volume),1);
+  const bubble=races.map(r=>({x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem}));
+  new Chart(document.getElementById('raceBubble'),{type:'bubble',
+    data:{datasets:[{data:bubble,
+      backgroundColor:bubble.map(b=>b.y>50?'rgba(239,68,68,.55)':'rgba(59,130,246,.55)'),
+      borderColor:bubble.map(b=>b.y>50?'#ef4444':'#3b82f6'),borderWidth:1}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{
+        label:c=>c.raw.state+': R '+c.raw.y+'% / D '+c.raw.dem+'%  ·  vol '+fmtV(c.raw.x)}}},
+      scales:{x:{type:'logarithmic',title:{display:true,text:'Market volume (log)',color:'#64748b'},
+          grid:{color:'#1e293b'},ticks:{color:'#94a3b8',callback:v=>fmtV(v)}},
+        y:{min:0,max:100,title:{display:true,text:'Republican win probability',color:'#64748b'},
+          grid:{color:c=>c.tick.value===50?'#64748b':'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
+  document.getElementById('date').textContent=new Date().toLocaleDateString();
+</script></body></html>
