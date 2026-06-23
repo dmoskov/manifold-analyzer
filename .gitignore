@@ -24,3 +24,5 @@ venv/
 # But keep example data
 !examples/*_data.json
 !examples/*_usernames.json
+!examples/**/*_data.json
+!examples/**/*_usernames.json

@@ -151,19 +151,36 @@ The generated HTML files include:
 - **Responsive Design**: Works on mobile
 - **Dark Theme**: Easy on the eyes
 
+## Polymarket Support
+
+In addition to Manifold, the repo analyzes real-money [Polymarket](https://polymarket.com) markets via their public APIs (no key required):
+
+```bash
+# Single market: fetch + deep-dive viz (price curve, volume, order flow, holders)
+python3 scripts/fetch_polymarket.py --slug <slug> -o examples/<name>/data.json
+python3 scripts/generate_poly_viz.py examples/<name>/data.json -o examples/<name>/viz.html
+
+# Multi-market topic report (overlaid probability curves + comparison table)
+python3 scripts/generate_poly_report.py --slug <slug1> --slug <slug2> --title "Topic" -o report.html
+```
+
+Note: Polymarket exposes no full trade-by-trade history for busy markets, so analysis uses **current holders** (positions) plus aggregate volume windows. See `examples/hormuz/` for a worked multi-market example (Iran / Strait of Hormuz crisis).
+
 ## Claude Code Skill
 
 This repo includes a skill definition (`SKILL.md`) that enables Claude Code to:
 
-1. Fetch market data from any Manifold URL
-2. Process and aggregate trade history
-3. Generate interactive visualizations
+1. Fetch market data from any Manifold or Polymarket URL
+2. Process and aggregate trade history / current positions
+3. Generate interactive visualizations and multi-market topic reports
 4. Identify key traders and market dynamics
 
 Trigger phrases:
 - "Analyze this Manifold market: [URL]"
+- "Analyze this Polymarket: [URL]"
 - "Show me the traders on [market name]"
 - "Create a visualization for [market]"
+- "Produce a topic report across these markets"
 
 ## Tech Stack
 

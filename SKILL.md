@@ -1,11 +1,13 @@
 ---
 name: manifold-analysis
-description: Analyze Manifold Markets prediction market data. Use when processing HTML exports or trade history from manifold.markets to create visualizations of trading volume, trader leaderboards, probability movements, and market dynamics. Triggers on requests involving Manifold Markets data, prediction market analysis, or when user uploads Manifold HTML files.
+description: Analyze prediction market data from Manifold Markets and Polymarket. Use when processing HTML exports or trade history to create visualizations of trading volume, trader leaderboards, probability movements, position holders, and market dynamics. Also handles multi-market "topic" reports. Triggers on requests involving Manifold Markets or Polymarket data, prediction market analysis, or when user uploads market HTML files or pastes a polymarket.com / manifold.markets URL.
 ---
 
-# Manifold Markets Analysis
+# Prediction Market Analysis
 
-Analyze prediction market data from Manifold Markets to create interactive visualizations and trader analytics.
+Analyze prediction market data from Manifold Markets and Polymarket to create interactive visualizations and trader analytics.
+
+> Two platforms are supported. Manifold is play-money (see notes below); Polymarket is real-money USDC. Pick the section that matches the source. For Polymarket, jump to [Polymarket](#polymarket).
 
 ## Overview
 
@@ -96,6 +98,63 @@ Include:
 See `references/visualization_template.md` for React/Recharts approach (less reliable CDN loading).
 
 **Example output**: `iran_market_viz_chartjs.html` - full standalone visualization
+
+## Polymarket
+
+Polymarket is a real-money (USDC) prediction market. No API key is required for
+the public read endpoints. Unlike Manifold, there is **no public full trade-by-trade
+history** for busy markets (the trades endpoint caps pagination at ~3,500 rows and
+the on-chain subgraph is stale), so analysis leans on **current holders** (positions)
+plus **aggregate volume windows** rather than every fill.
+
+### Data Sources (no auth)
+- **Gamma** `https://gamma-api.polymarket.com/events?slug=<slug>` — market metadata,
+  outcomes/prices, and `volume`, `volume1mo`, `volume1wk`, `volume24hr` aggregates.
+- **CLOB** `https://clob.polymarket.com/prices-history?market=<tokenId>&interval=all&fidelity=60`
+  — full probability curve (use the YES `clobTokenIds[0]`).
+- **data-api holders** `https://data-api.polymarket.com/holders?market=<conditionId>&limit=100`
+  — top holders per outcome token (the cleanest "puts and takes" / bull-vs-bear view).
+- **data-api trades** `https://data-api.polymarket.com/trades?market=<conditionId>&limit=500&offset=N`
+  — recent trades only; `offset` caps near 3,500 (≈ last days on busy markets). Use for
+  recent order flow, not full history.
+
+Outcome ordering is `["Yes", "No"]` with YES = index 0 (verify per market before
+trusting derived numbers).
+
+### Single-market workflow
+```bash
+# 1. Fetch everything into one JSON (slug from the polymarket.com/event/<slug> URL)
+python3 scripts/fetch_polymarket.py --slug <slug> -o examples/<name>/data.json
+# or: --url https://polymarket.com/event/<slug>
+
+# 2. Render the deep-dive viz (price curve, volume-by-period, order flow, holders leaderboard)
+python3 scripts/generate_poly_viz.py examples/<name>/data.json -o examples/<name>/viz.html
+```
+
+### Multi-market topic report
+For a topic spanning several related markets, fetch each and overlay them:
+```bash
+python3 scripts/generate_poly_report.py \
+  --slug will-the-iranian-regime-fall-by-june-30 \
+  --slug strait-of-hormuz-traffic-returns-to-normal-by-end-of-june \
+  --slug strait-of-hormuz-traffic-returns-to-normal-by-july-31 \
+  --title "Iran / Strait of Hormuz Crisis" \
+  -o examples/hormuz/iran_topic_report.html
+```
+Produces overlaid YES-probability curves + a comparison table (current odds, weekly
+move, volume, resolution date) and a `_data.json` sidecar. Find related slugs via the
+Gamma `events` endpoint. **Read each market's resolution criteria** — markets that look
+contradictory are usually pricing different bars (a one-touch threshold, a single-day
+count, a 7-day moving average, an end-of-period level). Worked example lives in
+`examples/hormuz/`.
+
+### Polymarket interpretation notes
+- Positions ≈ 50/50 in size is consistent with a price near 50%; large lopsided holder
+  sums on one side signal conviction.
+- Wallets appearing in *both* outcome top-100 lists are likely hedgers/market-makers;
+  their absence means the leaders are committed directional traders.
+- Recent flow can diverge from price when a *realized* data print (the resolution
+  source) moves the odds independent of order flow.
 
 ## Color Scheme for Answers
 
