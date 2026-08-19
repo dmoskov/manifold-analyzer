@@ -20,6 +20,7 @@ import sys
 from argparse import ArgumentParser
 
 from fetch_polymarket import fetch_event
+from fetch_wiki_polls import race_polls
 
 CONTROL = {
     "house": "which-party-will-win-the-house-in-2026",
@@ -39,29 +40,32 @@ NAME_PARTY = {"peltola": "D", "sullivan": "R"}
 
 # Known 2026 general-election nominees / leading candidates per race (many race
 # markets resolve by party only, so candidate names come from here). Source:
-# Wikipedia "2026 United States Senate elections" + Ballotpedia, as of June 2026.
-# "TBD" nominees are simply omitted.
+# Wikipedia "2026 United States Senate elections" + Ballotpedia, as of Aug 19
+# 2026: every primary through Aug 18 (MN, AK, WY, FL) is decided; only New
+# Hampshire (Sep 8) still lists poll leaders. "TBD" nominees are omitted.
+# Maine: Platner won the June 9 primary but withdrew; Troy Jackson is the
+# presumptive replacement nominee via the state convention.
 CANDIDATES = {
-    "maine": {"D": "Graham Platner", "R": "Susan Collins"},
+    "maine": {"D": "Troy Jackson", "R": "Susan Collins"},
     "texas": {"D": "James Talarico", "R": "Ken Paxton"},
     "alaska": {"D": "Mary Peltola", "R": "Dan Sullivan"},
-    "nebraska": {"I": "Dan Osborn", "R": "Pete Ricketts"},
+    "nebraska": {"D": "Cindy Burbank", "I": "Dan Osborn", "R": "Pete Ricketts"},
     "iowa": {"D": "Josh Turek", "R": "Ashley Hinson"},
-    "michigan": {"R": "Mike Rogers"},
+    "michigan": {"D": "Abdul El-Sayed", "R": "Mike Rogers"},
     "ohio": {"D": "Sherrod Brown", "R": "Jon Husted"},
-    "montana": {"D": "Alani Bankhead"},
+    "montana": {"D": "Alani Bankhead", "R": "Kurt Alme", "I": "Seth Bodnar"},
     "north-carolina": {"D": "Roy Cooper", "R": "Michael Whatley"},
-    "florida": {"D": "Alexander Vindman", "R": "Ashley Moody"},
+    "florida": {"D": "Angie Nixon", "R": "Ashley Moody"},
     "south-carolina": {"D": "Annie Andrews", "R": "Lindsey Graham"},
     "colorado": {"D": "John Hickenlooper", "R": "Mark Baisley"},
     "georgia": {"D": "Jon Ossoff", "R": "Mike Collins"},
-    "kansas": {"R": "Roger Marshall"},
-    "new-hampshire": {"R": "John E. Sununu"},
+    "kansas": {"D": "Adam Hamilton", "R": "Roger Marshall"},
+    "new-hampshire": {"D": "Chris Pappas", "R": "John E. Sununu"},
     "mississippi": {"D": "Scott Colom", "R": "Cindy Hyde-Smith"},
-    "minnesota": {},
+    "minnesota": {"D": "Peggy Flanagan", "R": "Michele Tafoya"},
     "oklahoma": {"R": "Kevin Hern"},
-    "wyoming": {"R": "Harriet Hageman"},
-    "virginia": {},
+    "wyoming": {"D": "James Byrd", "R": "Harriet Hageman"},
+    "virginia": {"D": "Mark Warner", "R": "Bert Mizusawa"},
     "kentucky": {"D": "Charles Booker", "R": "Andy Barr"},
 }
 
@@ -111,11 +115,32 @@ def fmt_usd(v):
 
 
 def race_label(r):
-    """State + the leading candidate's surname, from the known-candidate map."""
+    """State + matchup surnames. Known candidates whose party prices >= 5% are
+    shown (so 3-way races surface the real contest, e.g. Osborn v Ricketts);
+    if none clear that bar, fall back to every known candidate."""
     cand = CANDIDATES.get(r["slug"], {})
-    lead = max({"D": r["dem"], "R": r["rep"], "I": r.get("other", 0)}.items(), key=lambda x: x[1])[0]
-    name = cand.get(lead)
-    return f"{r['state']} · {name.split()[-1]}" if name else r["state"]
+    share = {"D": r["dem"], "I": r.get("other", 0), "R": r["rep"]}
+    names = [cand[p].split()[-1] for p in ("D", "I", "R") if cand.get(p) and share[p] >= 5]
+    if not names:
+        names = [cand[p].split()[-1] for p in ("D", "I", "R") if cand.get(p)]
+    return f"{r['state']} · {' v '.join(names)}" if names else r["state"]
+
+
+def poll_html(r):
+    """Table cell: who leads the polls and by how much, or an em-dash."""
+    p = r.get("poll")
+    if not p:
+        return '<span style="color:#475569">—</span>'
+    cand = CANDIDATES.get(r["slug"], {})
+    if p["margin"] >= 0:
+        name, tag = cand.get("R", "Rep"), 'class="rep"'
+    elif p["opp_party"] == "I":
+        name, tag = cand.get("I", "Ind"), 'style="color:#a78bfa;font-weight:700"'
+    else:
+        name, tag = cand.get("D", "Dem"), 'class="dem"'
+    src = "poll aggregates" if p["kind"] == "agg" else f'last {p["n"]} polls'
+    return (f'<span {tag}>{name.split()[-1]} +{abs(p["margin"]):.1f}</span>'
+            f' <span style="color:#64748b;font-size:11px">({src})</span>')
 
 
 def collect():
@@ -158,6 +183,14 @@ def collect():
         })
     races.sort(key=lambda x: abs(x["rep"] - 50))  # most competitive first
 
+    sys.stderr.write("Fetching Wikipedia polling...\n")
+    for r in races:
+        surnames = {p: n.split()[-1] for p, n in CANDIDATES.get(r["slug"], {}).items()}
+        r["poll"] = race_polls(r["state"].replace(" ", "_"), surnames) if surnames else None
+        if r["poll"] is None:
+            sys.stderr.write(f"  {r['state']}: no usable general-election polling\n")
+    sys.stderr.write(f"  polling found for {sum(1 for r in races if r['poll'])}/{len(races)} races\n")
+
     return {
         "house": {"d": round(house_d, 1), "r": round(house_r, 1), "vol": float(house.get("volume", 0))},
         "senate": {"d": round(senate_d, 1), "r": round(senate_r, 1), "vol": float(senate.get("volume", 0))},
@@ -174,6 +207,7 @@ def build_html(d, output_path):
     for r in races:
         r["label"] = race_label(r)
     tossups = sum(1 for r in races if 40 <= r["rep"] <= 60)
+    n_polled = sum(1 for r in races if r.get("poll"))
     total_vol = d["house"]["vol"] + d["senate"]["vol"] + d["bop_vol"] + d["seats_vol"] + sum(r["volume"] for r in races)
 
     races_rows = ""
@@ -184,6 +218,7 @@ def build_html(d, output_path):
           <td style="color:#cbd5e1">{matchup(r['slug'])}</td>
           <td class="right"><span class="dem">{r['dem']:.0f}%</span></td>
           <td class="right"><span class="rep">{r['rep']:.0f}%</span>{ind}</td>
+          <td class="right">{poll_html(r)}</td>
           <td class="right mono">{fmt_usd(r['volume'])}</td>
         </tr>"""
 
@@ -244,6 +279,7 @@ def build_html(d, output_path):
       <div class="gauge-label"><span class="dem">Senate — Democrats {d['senate']['d']:.0f}%</span><span class="rep">Republicans {d['senate']['r']:.0f}%</span></div>
       <div class="bar"><div class="d" style="width:{d['senate']['d']:.0f}%">D</div><div class="r" style="width:{d['senate']['r']:.0f}%">R</div></div>
     </div>
+    <p class="note">Senate control means 51+ seats for Democrats: at 50–50 the Republican Vice President breaks ties, so Republicans keep control. These market prices resolve on that rule — the D% here is the chance Democrats reach 51, not 50.</p>
   </div>
 
   <div class="cols">
@@ -260,19 +296,25 @@ def build_html(d, output_path):
 
   <div class="chart-container">
     <h2 class="chart-title">Senate Races — Republican win probability <span>(point size ∝ volume; below the 50% line = seat leans Dem/Ind)</span></h2>
-    <div style="position:relative;height:360px"><canvas id="raceBubble"></canvas></div>
+    <div style="position:relative;height:440px"><canvas id="raceBubble"></canvas></div>
     <p class="note">Plotting Republican win % (directly priced) handles 3-way races: e.g. Nebraska is a Republican-vs-independent contest, so its Dem share is tiny but the seat is still competitive.</p>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Markets vs Polls <span>(where public polling exists: {n_polled} of {len(races)} races)</span></h2>
+    <div style="position:relative;height:400px"><canvas id="mvpChart"></canvas></div>
+    <p class="note">x = Republican polling margin over the top opponent (Wikipedia poll aggregates where available, otherwise the average of the newest head-to-head polls) · y = the market's Republican win probability. Dashed line = tied polls; the bold gridline = 50% odds. Points far from the natural S-shape are where money and polls disagree — polls measure vote share, markets price the chance of winning, so a small polled lead in a stable race can justify lopsided odds.</p>
   </div>
 
   <div class="chart-container">
     <h2 class="chart-title">Senate Races — detail <span>(most competitive first)</span></h2>
     <table>
-      <thead><tr><th>State</th><th>Matchup</th><th class="right">Dem</th><th class="right">Rep</th><th class="right">Volume</th></tr></thead>
+      <thead><tr><th>State</th><th>Matchup</th><th class="right">Dem</th><th class="right">Rep</th><th class="right">Poll avg</th><th class="right">Volume</th></tr></thead>
       <tbody>{races_rows}</tbody>
     </table>
   </div>
 
-  <div class="footer">Data: Polymarket Gamma · multi-outcome markets folded to party totals</div>
+  <div class="footer">Data: Polymarket Gamma · multi-outcome markets folded to party totals · polling scraped from Wikipedia race pages</div>
 </div>
 <script>
   const bop={json.dumps(d['bop'])};
@@ -311,26 +353,51 @@ def build_html(d, output_path):
 
   const maxV=Math.max(...races.map(r=>r.volume),1);
   const bubble=races.map(r=>({{x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem,label:r.label}}));
-  // inline plugin: draw each race's label, nudged up/down alternately to reduce overlap
-  const raceLabels={{id:'raceLabels',afterDatasetsDraw(chart){{
-    const ctx=chart.ctx, meta=chart.getDatasetMeta(0);
+  // label-plugin factory: labels every point, greedily dodging collisions.
+  // Each label tries above / below / right / left of its point, stepping
+  // further out until it finds space free of other labels; boxes are clamped
+  // to the chart area. Labels pushed far away get a connector line.
+  const mkLabels=(id,data)=>({{id,afterDatasetsDraw(chart){{
+    const ctx=chart.ctx, meta=chart.getDatasetMeta(0), area=chart.chartArea;
     ctx.save();ctx.font='600 10px -apple-system,BlinkMacSystemFont,sans-serif';ctx.textAlign='center';
+    const placed=[], H=13;
+    const hits=b=>placed.some(p=>b.x<p.x+p.w&&b.x+b.w>p.x&&b.y<p.y+p.h&&b.y+b.h>p.y);
     meta.data.forEach((pt,i)=>{{
-      const above=bubble[i].y<=92;                 // put label below if point is near the top
-      const off=pt.options.radius+(above?9:14);
-      const y=above?pt.y-off:pt.y+off;
-      ctx.fillStyle='rgba(15,23,42,.85)';
-      const t=bubble[i].label, w=ctx.measureText(t).width;
-      ctx.fillRect(pt.x-w/2-3,y-9,w+6,13);
-      ctx.fillStyle='#e2e8f0';ctx.fillText(t,pt.x,y+1);
+      const t=data[i].label, w=ctx.measureText(t).width+6, r=pt.options.radius;
+      const cands=[];
+      for(let k=0;k<8;k++){{
+        cands.push([pt.x,           pt.y-r-9-(H+2)*k]);   // above, stepping up
+        cands.push([pt.x,           pt.y+r+14+(H+2)*k]);  // below, stepping down
+        cands.push([pt.x+r+w/2+4,   pt.y+3+(H+2)*k]);     // right, drifting down
+        cands.push([pt.x-r-w/2-4,   pt.y+3-(H+2)*k]);     // left, drifting up
+      }}
+      let box=null, tx=0, ty=0;
+      for(const [cx,cy] of cands){{
+        const bx=Math.min(Math.max(cx-w/2,area.left),area.right-w);
+        const b={{x:bx,y:cy-9,w:w,h:H}};
+        if(b.y<area.top||b.y+H>area.bottom)continue;
+        if(!hits(b)){{box=b;tx=bx+w/2;ty=cy;break;}}
+      }}
+      if(!box){{  // fallback: directly above, clamped, even if it overlaps
+        const bx=Math.min(Math.max(pt.x-w/2,area.left),area.right-w);
+        box={{x:bx,y:pt.y-r-18,w:w,h:H}};tx=bx+w/2;ty=pt.y-r-9;
+      }}
+      placed.push(box);
+      const dx=tx-pt.x, dy=ty-4-pt.y, dist=Math.hypot(dx,dy);
+      if(dist>r+22){{  // connector from bubble edge to label box
+        ctx.strokeStyle='rgba(148,163,184,.5)';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(pt.x+dx/dist*r,pt.y+dy/dist*r);ctx.lineTo(tx,ty-4);ctx.stroke();
+      }}
+      ctx.fillStyle='rgba(15,23,42,.88)';ctx.fillRect(box.x,box.y,w,H);
+      ctx.fillStyle='#e2e8f0';ctx.fillText(t,tx,ty+1);
     }});
     ctx.restore();
-  }}}};
+  }}}});
   new Chart(document.getElementById('raceBubble'),{{type:'bubble',
     data:{{datasets:[{{data:bubble,
       backgroundColor:bubble.map(b=>b.y>50?'rgba(239,68,68,.55)':'rgba(59,130,246,.55)'),
       borderColor:bubble.map(b=>b.y>50?'#ef4444':'#3b82f6'),borderWidth:1}}]}},
-    plugins:[raceLabels],
+    plugins:[mkLabels('raceLabels',bubble)],
     options:{{responsive:true,maintainAspectRatio:false,layout:{{padding:{{top:14,bottom:14,right:30}}}},
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{
         label:c=>c.raw.label+': R '+c.raw.y+'% / D '+c.raw.dem+'%  ·  vol '+fmtV(c.raw.x)}}}}}},
@@ -338,6 +405,30 @@ def build_html(d, output_path):
           grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8',callback:v=>fmtV(v)}}}},
         y:{{min:0,max:100,title:{{display:true,text:'Republican win probability',color:'#64748b'}},
           grid:{{color:c=>c.tick.value===50?'#64748b':'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
+  // markets-vs-polls scatter: only races with polling; quadrant guides at 0 / 50%
+  const polled=races.filter(r=>r.poll);
+  const mvp=polled.map(r=>({{x:r.poll.margin,y:r.rep,r:6+10*Math.sqrt(r.volume/maxV),label:r.label}}));
+  const mlo=Math.min(0,...mvp.map(p=>p.x))-6, mhi=Math.max(0,...mvp.map(p=>p.x))+6;
+  const zeroLine={{id:'zeroLine',afterDatasetsDraw(chart){{
+    const x=chart.scales.x,y=chart.scales.y,ctx=chart.ctx;
+    if(x.min>=0||x.max<=0)return;
+    const px=x.getPixelForValue(0);
+    ctx.save();ctx.strokeStyle='#64748b';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(px,y.top);ctx.lineTo(px,y.bottom);ctx.stroke();ctx.restore();
+  }}}};
+  new Chart(document.getElementById('mvpChart'),{{type:'bubble',
+    data:{{datasets:[{{data:mvp,
+      backgroundColor:mvp.map(b=>b.y>50?'rgba(239,68,68,.55)':'rgba(59,130,246,.55)'),
+      borderColor:mvp.map(b=>b.y>50?'#ef4444':'#3b82f6'),borderWidth:1}}]}},
+    plugins:[mkLabels('mvpLabels',mvp),zeroLine],
+    options:{{responsive:true,maintainAspectRatio:false,layout:{{padding:{{top:14,bottom:6,right:24}}}},
+      plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{
+        label:c=>c.raw.label+': polls R'+(c.raw.x>0?'+':'')+c.raw.x.toFixed(1)+' · market R '+c.raw.y+'%'}}}}}},
+      scales:{{x:{{min:mlo,max:mhi,title:{{display:true,text:'Republican polling margin (points)',color:'#64748b'}},
+          grid:{{color:'#1e293b'}},ticks:{{color:'#94a3b8',callback:v=>(v>0?'+':'')+v}}}},
+        y:{{min:0,max:100,title:{{display:true,text:'Market: Republican win probability',color:'#64748b'}},
+          grid:{{color:c=>c.tick.value===50?'#64748b':'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
+
   document.getElementById('date').textContent=new Date().toLocaleDateString();
 </script></body></html>"""
 

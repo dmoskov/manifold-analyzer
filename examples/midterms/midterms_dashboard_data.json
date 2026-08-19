@@ -1,290 +1,447 @@
 {
   "house": {
-    "d": 80.5,
-    "r": 19.5,
-    "vol": 7616971.852490884
+    "d": 87.5,
+    "r": 12.5,
+    "vol": 9508548.757380998
   },
   "senate": {
-    "d": 43.5,
-    "r": 55.5,
-    "vol": 2782276.189119023
+    "d": 50.5,
+    "r": 49.5,
+    "vol": 3949389.0742999986
   },
   "bop": [
     {
       "label": "Democrats Sweep",
-      "p": 42.5
+      "p": 47.5
     },
     {
       "label": "R Senate, D House",
-      "p": 36.5
+      "p": 39.5
     },
     {
       "label": "Republicans Sweep",
-      "p": 17.5
-    },
-    {
-      "label": "D Senate, R House",
-      "p": 2.2
-    },
-    {
-      "label": "Other",
-      "p": 0.7
-    }
-  ],
-  "bop_vol": 8056255.624071023,
-  "seats": [
-    {
-      "label": "Below 190",
-      "p": 30.5
-    },
-    {
-      "label": "190-194",
       "p": 12.5
     },
     {
+      "label": "D Senate, R House",
+      "p": 0.9
+    },
+    {
+      "label": "Other",
+      "p": 0.4
+    }
+  ],
+  "bop_vol": 10154077.29999,
+  "seats": [
+    {
+      "label": "Below 190",
+      "p": 23.5
+    },
+    {
+      "label": "190-194",
+      "p": 14.0
+    },
+    {
       "label": "195-199",
-      "p": 17.0
+      "p": 12.0
     },
     {
       "label": "200-204",
-      "p": 10.2
+      "p": 11.6
     },
     {
       "label": "205-209",
-      "p": 6.8
+      "p": 11.2
     },
     {
       "label": "210-214",
-      "p": 5.5
+      "p": 8.8
     },
     {
       "label": "215-219",
-      "p": 9.3
+      "p": 5.1
     },
     {
       "label": "220-224",
-      "p": 8.7
+      "p": 4.7
     },
     {
       "label": "225-229",
-      "p": 4.0
+      "p": 4.7
     },
     {
       "label": "230+",
-      "p": 1.8
+      "p": 3.7
     }
   ],
-  "seats_vol": 256162.56759199995,
+  "seats_vol": 286550.187747,
   "races": [
-    {
-      "slug": "ohio",
-      "state": "Ohio",
-      "dem": 55.0,
-      "rep": 44.5,
-      "other": 0.5,
-      "fav": "Sherrod Brown (D) 55%",
-      "volume": 91805,
-      "label": "Ohio \u00b7 Brown"
-    },
     {
       "slug": "texas",
       "state": "Texas",
-      "dem": 43.5,
-      "rep": 57.5,
+      "dem": 51.5,
+      "rep": 49.5,
       "other": 0.0,
-      "fav": "Ken Paxton (R) 57%",
-      "volume": 538444,
-      "label": "Texas \u00b7 Paxton"
+      "fav": "James Talarico (D) 52%",
+      "volume": 843631,
+      "poll": {
+        "kind": "agg",
+        "n": 8,
+        "rep": 40.8,
+        "opp": 41.5,
+        "opp_party": "D",
+        "margin": -0.7,
+        "latest": "July 23 \u2013 August 10, 2026"
+      },
+      "label": "Texas \u00b7 Talarico v Paxton"
     },
     {
-      "slug": "nebraska",
-      "state": "Nebraska",
-      "dem": 2.7,
-      "rep": 60.5,
-      "other": 36.8,
-      "fav": "Republican 60%",
-      "volume": 139091,
-      "label": "Nebraska \u00b7 Ricketts"
-    },
-    {
-      "slug": "iowa",
-      "state": "Iowa",
-      "dem": 39.5,
-      "rep": 60.5,
+      "slug": "ohio",
+      "state": "Ohio",
+      "dem": 52.5,
+      "rep": 47.5,
       "other": 0.0,
-      "fav": "Republican 60%",
-      "volume": 124627,
-      "label": "Iowa \u00b7 Hinson"
-    },
-    {
-      "slug": "maine",
-      "state": "Maine",
-      "dem": 61.5,
-      "rep": 38.5,
-      "other": 0.0,
-      "fav": "Democrat 62%",
-      "volume": 565428,
-      "label": "Maine \u00b7 Platner"
+      "fav": "Sherrod Brown (D) 52%",
+      "volume": 174618,
+      "poll": {
+        "kind": "agg",
+        "n": 7,
+        "rep": 39.7,
+        "opp": 42.5,
+        "opp_party": "D",
+        "margin": -2.8,
+        "latest": "August 13 \u2013 August 14, 2026"
+      },
+      "label": "Ohio \u00b7 Brown v Husted"
     },
     {
       "slug": "alaska",
       "state": "Alaska",
-      "dem": 62.5,
-      "rep": 38.0,
+      "dem": 55.0,
+      "rep": 45.0,
       "other": 0.0,
-      "fav": "Mary Peltola 62%",
-      "volume": 341244,
-      "label": "Alaska \u00b7 Peltola"
+      "fav": "Mary Peltola 55%",
+      "volume": 425290,
+      "poll": {
+        "kind": "agg",
+        "n": 4,
+        "rep": 36.5,
+        "opp": 36.4,
+        "opp_party": "D",
+        "margin": 0.0,
+        "latest": "through August 5, 2026"
+      },
+      "label": "Alaska \u00b7 Peltola v Sullivan"
+    },
+    {
+      "slug": "iowa",
+      "state": "Iowa",
+      "dem": 40.0,
+      "rep": 60.0,
+      "other": 0.0,
+      "fav": "Ashley Hinson (R) 60%",
+      "volume": 209295,
+      "poll": {
+        "kind": "agg",
+        "n": 5,
+        "rep": 39.0,
+        "opp": 37.1,
+        "opp_party": "D",
+        "margin": 2.0,
+        "latest": "through August 4, 2026"
+      },
+      "label": "Iowa \u00b7 Turek v Hinson"
     },
     {
       "slug": "michigan",
       "state": "Michigan",
-      "dem": 70.0,
-      "rep": 27.5,
-      "other": 2.5,
-      "fav": "Democrat 70%",
-      "volume": 117341,
-      "label": "Michigan"
+      "dem": 60.5,
+      "rep": 39.0,
+      "other": 0.5,
+      "fav": "Abdul El-Sayed (D) 60%",
+      "volume": 498395,
+      "poll": {
+        "kind": "agg",
+        "n": 6,
+        "rep": 37.6,
+        "opp": 39.3,
+        "opp_party": "D",
+        "margin": -1.6,
+        "latest": "July 24 \u2013 August 17, 2026"
+      },
+      "label": "Michigan \u00b7 El-Sayed v Rogers"
     },
     {
-      "slug": "montana",
-      "state": "Montana",
-      "dem": 1.4,
-      "rep": 77.5,
-      "other": 21.2,
-      "fav": "Republican 78%",
-      "volume": 79796,
-      "label": "Montana"
-    },
-    {
-      "slug": "florida",
-      "state": "Florida",
-      "dem": 19.5,
-      "rep": 81.5,
+      "slug": "maine",
+      "state": "Maine",
+      "dem": 69.5,
+      "rep": 30.5,
       "other": 0.0,
-      "fav": "Republican 82%",
-      "volume": 41105,
-      "label": "Florida \u00b7 Moody"
+      "fav": "Troy Jackson (D) 70%",
+      "volume": 1155706,
+      "poll": {
+        "kind": "agg",
+        "n": 5,
+        "rep": 37.9,
+        "opp": 39.0,
+        "opp_party": "D",
+        "margin": -1.1,
+        "latest": "through August 10, 2026"
+      },
+      "label": "Maine \u00b7 Jackson v Collins"
+    },
+    {
+      "slug": "nebraska",
+      "state": "Nebraska",
+      "dem": 0.2,
+      "rep": 71.5,
+      "other": 28.2,
+      "fav": "Pete Ricketts (R) 72%",
+      "volume": 192620,
+      "poll": {
+        "kind": "agg",
+        "n": 1,
+        "rep": 44.5,
+        "opp": 45.6,
+        "opp_party": "I",
+        "margin": -1.1,
+        "latest": "through May 11, 2026"
+      },
+      "label": "Nebraska \u00b7 Osborn v Ricketts"
     },
     {
       "slug": "kansas",
       "state": "Kansas",
-      "dem": 17.5,
-      "rep": 82.5,
-      "other": 0.0,
-      "fav": "Republican 82%",
-      "volume": 31023,
-      "label": "Kansas \u00b7 Marshall"
-    },
-    {
-      "slug": "south-carolina",
-      "state": "South Carolina",
-      "dem": 17.5,
-      "rep": 83.0,
-      "other": 0.0,
-      "fav": "Republican 83%",
-      "volume": 38268,
-      "label": "South Carolina \u00b7 Graham"
-    },
-    {
-      "slug": "north-carolina",
-      "state": "North Carolina",
-      "dem": 85.5,
-      "rep": 14.5,
-      "other": 0.0,
-      "fav": "Roy Cooper (D) 86%",
-      "volume": 70282,
-      "label": "North Carolina \u00b7 Cooper"
+      "dem": 19.0,
+      "rep": 78.0,
+      "other": 3.0,
+      "fav": "Republican 78%",
+      "volume": 43167,
+      "poll": {
+        "kind": "raw",
+        "n": 3,
+        "rep": 49.0,
+        "opp": 44.7,
+        "opp_party": "D",
+        "margin": 4.3,
+        "latest": "August 7\u20138, 2026"
+      },
+      "label": "Kansas \u00b7 Hamilton v Marshall"
     },
     {
       "slug": "new-hampshire",
       "state": "New Hampshire",
-      "dem": 81.0,
-      "rep": 14.0,
-      "other": 5.0,
-      "fav": "Democrat 81%",
-      "volume": 28218,
-      "label": "New Hampshire"
-    },
-    {
-      "slug": "georgia",
-      "state": "Georgia",
-      "dem": 86.5,
-      "rep": 13.9,
+      "dem": 85.5,
+      "rep": 15.0,
       "other": 0.0,
       "fav": "Democrat 86%",
-      "volume": 31282,
-      "label": "Georgia \u00b7 Ossoff"
+      "volume": 47400,
+      "poll": {
+        "kind": "raw",
+        "n": 5,
+        "rep": 42.6,
+        "opp": 46.2,
+        "opp_party": "D",
+        "margin": -3.6,
+        "latest": "June 24\u201327, 2026"
+      },
+      "label": "New Hampshire \u00b7 Pappas v Sununu"
     },
     {
-      "slug": "mississippi",
-      "state": "Mississippi",
-      "dem": 13.5,
-      "rep": 86.5,
-      "other": 0.0,
-      "fav": "Republican 86%",
-      "volume": 26250,
-      "label": "Mississippi \u00b7 Hyde-Smith"
-    },
-    {
-      "slug": "kentucky",
-      "state": "Kentucky",
-      "dem": 8.0,
+      "slug": "south-carolina",
+      "state": "South Carolina",
+      "dem": 11.5,
       "rep": 89.0,
-      "other": 3.0,
-      "fav": "Andy Barr (R) 89%",
-      "volume": 9513,
-      "label": "Kentucky \u00b7 Barr"
+      "other": 0.0,
+      "fav": "Republican 89%",
+      "volume": 144804,
+      "poll": {
+        "kind": "raw",
+        "n": 3,
+        "rep": 45.7,
+        "opp": 41.0,
+        "opp_party": "D",
+        "margin": 4.7,
+        "latest": "June 17\u201322, 2026"
+      },
+      "label": "South Carolina \u00b7 Andrews v Graham"
     },
     {
-      "slug": "colorado",
-      "state": "Colorado",
-      "dem": 91.5,
-      "rep": 8.5,
-      "other": 0.0,
-      "fav": "Democrat 92%",
-      "volume": 35745,
-      "label": "Colorado \u00b7 Hickenlooper"
+      "slug": "florida",
+      "state": "Florida",
+      "dem": 6.5,
+      "rep": 91.0,
+      "other": 2.5,
+      "fav": "Ashley Moody (R) 91%",
+      "volume": 81437,
+      "poll": {
+        "kind": "raw",
+        "n": 4,
+        "rep": 48.5,
+        "opp": 38.5,
+        "opp_party": "D",
+        "margin": 10.0,
+        "latest": "July 8\u201317, 2026"
+      },
+      "label": "Florida \u00b7 Nixon v Moody"
     },
     {
       "slug": "minnesota",
       "state": "Minnesota",
-      "dem": 92.0,
+      "dem": 89.5,
+      "rep": 9.0,
+      "other": 1.5,
+      "fav": "Peggy Flanagan (D) 90%",
+      "volume": 54322,
+      "poll": null,
+      "label": "Minnesota \u00b7 Flanagan v Tafoya"
+    },
+    {
+      "slug": "montana",
+      "state": "Montana",
+      "dem": 0.8,
+      "rep": 91.5,
+      "other": 7.8,
+      "fav": "Republican 92%",
+      "volume": 115107,
+      "poll": {
+        "kind": "agg",
+        "n": 3,
+        "rep": 38.5,
+        "opp": 23.7,
+        "opp_party": "I",
+        "margin": 14.8,
+        "latest": "through August 4, 2026"
+      },
+      "label": "Montana \u00b7 Bodnar v Alme"
+    },
+    {
+      "slug": "kentucky",
+      "state": "Kentucky",
+      "dem": 4.1,
+      "rep": 91.8,
+      "other": 4.1,
+      "fav": "Andy Barr (R) 92%",
+      "volume": 19046,
+      "poll": {
+        "kind": "raw",
+        "n": 1,
+        "rep": 49.0,
+        "opp": 38.0,
+        "opp_party": "D",
+        "margin": 11.0,
+        "latest": "December 18\u201319, 2025"
+      },
+      "label": "Kentucky \u00b7 Barr"
+    },
+    {
+      "slug": "north-carolina",
+      "state": "North Carolina",
+      "dem": 93.5,
       "rep": 7.5,
-      "other": 0.5,
-      "fav": "Democrat 92%",
-      "volume": 25606,
-      "label": "Minnesota"
+      "other": 0.0,
+      "fav": "Roy Cooper (D) 94%",
+      "volume": 93928,
+      "poll": {
+        "kind": "agg",
+        "n": 6,
+        "rep": 36.3,
+        "opp": 44.3,
+        "opp_party": "D",
+        "margin": -7.9,
+        "latest": "July 29 \u2013 August 13, 2026"
+      },
+      "label": "North Carolina \u00b7 Cooper v Whatley"
+    },
+    {
+      "slug": "mississippi",
+      "state": "Mississippi",
+      "dem": 7.5,
+      "rep": 92.5,
+      "other": 0.0,
+      "fav": "Republican 92%",
+      "volume": 36738,
+      "poll": {
+        "kind": "raw",
+        "n": 2,
+        "rep": 46.5,
+        "opp": 38.5,
+        "opp_party": "D",
+        "margin": 8.0,
+        "latest": "April 8\u201312, 2026"
+      },
+      "label": "Mississippi \u00b7 Colom v Hyde-Smith"
+    },
+    {
+      "slug": "georgia",
+      "state": "Georgia",
+      "dem": 93.5,
+      "rep": 5.6,
+      "other": 0.9,
+      "fav": "Jon Ossoff (D)  94%",
+      "volume": 111521,
+      "poll": {
+        "kind": "agg",
+        "n": 6,
+        "rep": 37.2,
+        "opp": 43.7,
+        "opp_party": "D",
+        "margin": -6.5,
+        "latest": "July 23 \u2013 August 18, 2026"
+      },
+      "label": "Georgia \u00b7 Ossoff v Collins"
     },
     {
       "slug": "oklahoma",
       "state": "Oklahoma",
-      "dem": 8.0,
-      "rep": 93.5,
-      "other": 0.0,
-      "fav": "Republican 94%",
-      "volume": 17313,
+      "dem": 3.4,
+      "rep": 95.5,
+      "other": 1.1,
+      "fav": "Republican 96%",
+      "volume": 19316,
+      "poll": null,
       "label": "Oklahoma \u00b7 Hern"
     },
     {
       "slug": "virginia",
       "state": "Virginia",
-      "dem": 92.5,
-      "rep": 6.5,
-      "other": 1.0,
-      "fav": "Democrat 92%",
-      "volume": 9748,
-      "label": "Virginia"
+      "dem": 95.0,
+      "rep": 4.5,
+      "other": 0.5,
+      "fav": "Democrat 95%",
+      "volume": 16817,
+      "poll": {
+        "kind": "raw",
+        "n": 2,
+        "rep": 31.0,
+        "opp": 53.0,
+        "opp_party": "D",
+        "margin": -22.0,
+        "latest": "June 12\u201316, 2026"
+      },
+      "label": "Virginia \u00b7 Warner"
     },
     {
       "slug": "wyoming",
       "state": "Wyoming",
-      "dem": 5.0,
-      "rep": 94.5,
-      "other": 0.5,
-      "fav": "Republican 94%",
-      "volume": 10556,
+      "dem": 2.2,
+      "rep": 96.4,
+      "other": 1.4,
+      "fav": "Republican 96%",
+      "volume": 16713,
+      "poll": null,
       "label": "Wyoming \u00b7 Hageman"
+    },
+    {
+      "slug": "colorado",
+      "state": "Colorado",
+      "dem": 96.2,
+      "rep": 3.0,
+      "other": 0.7,
+      "fav": "Democrat 96%",
+      "volume": 47977,
+      "poll": null,
+      "label": "Colorado \u00b7 Hickenlooper"
     }
   ]
 }
