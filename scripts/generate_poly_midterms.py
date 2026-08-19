@@ -317,6 +317,10 @@ def build_html(d, output_path):
   <div class="footer">Data: Polymarket Gamma · multi-outcome markets folded to party totals · polling scraped from Wikipedia race pages</div>
 </div>
 <script>
+(function init(){{
+  // htmlpreview & similar proxies eval inline scripts before the CDN script
+  // loads — poll until Chart.js is present instead of assuming order
+  if(!window.Chart){{setTimeout(init,50);return;}}
   const bop={json.dumps(d['bop'])};
   const seats={json.dumps(d['seats'])};
   const races={json.dumps(races)};
@@ -430,6 +434,7 @@ def build_html(d, output_path):
           grid:{{color:c=>c.tick.value===50?'#64748b':'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
 
   document.getElementById('date').textContent=new Date().toLocaleDateString();
+}})();
 </script></body></html>"""
 
     with open(output_path, "w") as f:
