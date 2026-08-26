@@ -36,13 +36,13 @@
 </style></head>
 <body><div class="container">
   <h1>2026 U.S. Midterms — Polymarket Dashboard</h1>
-  <p class="subtitle">Control, scenarios, seat distribution & 21 Senate races · combined volume $28.3M · generated <span id="date"></span></p>
+  <p class="subtitle">Control, scenarios, seat distribution & 21 Senate races · combined volume $29.3M · generated <span id="date"></span></p>
 
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-label">House control</div><div class="stat-value"><span class="dem">D 88%</span></div></div>
     <div class="stat-card"><div class="stat-label">Senate control</div><div class="stat-value"><span class="rep">R 50%</span></div></div>
     <div class="stat-card"><div class="stat-label">Top scenario</div><div class="stat-value" style="font-size:15px">Democrats Sweep<br><span style="color:#94a3b8">48%</span></div></div>
-    <div class="stat-card"><div class="stat-label">Toss-up Senate seats (40–60% R)</div><div class="stat-value">4 / 21</div></div>
+    <div class="stat-card"><div class="stat-label">Toss-up Senate seats (40–60% R)</div><div class="stat-value">2 / 21</div></div>
   </div>
 
   <div class="chart-container">
@@ -60,11 +60,11 @@
 
   <div class="cols">
     <div class="chart-container">
-      <h2 class="chart-title">Balance of Power <span>($10.2M)</span></h2>
+      <h2 class="chart-title">Balance of Power <span>($10.5M)</span></h2>
       <div style="position:relative;height:240px"><canvas id="bopChart"></canvas></div>
     </div>
     <div class="chart-container">
-      <h2 class="chart-title">Republican House Seats <span>($287k)</span></h2>
+      <h2 class="chart-title">Republican House Seats <span>($290k)</span></h2>
       <div style="position:relative;height:240px"><canvas id="seatsChart"></canvas></div>
       <p class="note">Amber dashed line = 218 (majority); green bars = outcomes where Republicans keep a majority. The mass sits left of the line → market expects GOP losses (and a likely lost majority).</p>
     </div>
@@ -77,7 +77,7 @@
   </div>
 
   <div class="chart-container">
-    <h2 class="chart-title">Markets vs Polls <span>(where public polling exists: 17 of 21 races)</span></h2>
+    <h2 class="chart-title">Markets vs Polls <span>(where public polling exists: 18 of 21 races)</span></h2>
     <div style="position:relative;height:400px"><canvas id="mvpChart"></canvas></div>
     <p class="note">x = Republican polling margin over the top opponent (Wikipedia poll aggregates where available, otherwise the average of the newest head-to-head polls) · y = the market's Republican win probability. Dashed line = tied polls; the bold gridline = 50% odds. Points far from the natural S-shape are where money and polls disagree — polls measure vote share, markets price the chance of winning, so a small polled lead in a stable race can justify lopsided odds.</p>
   </div>
@@ -89,38 +89,38 @@
       <tbody><tr>
           <td class="name">Texas</td>
           <td style="color:#cbd5e1">James Talarico (D) v Ken Paxton (R)</td>
-          <td class="right"><span class="dem">52%</span></td>
-          <td class="right"><span class="rep">50%</span></td>
+          <td class="right"><span class="dem">50%</span></td>
+          <td class="right"><span class="rep">48%</span></td>
           <td class="right"><span class="dem">Talarico +0.7</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$844k</td>
+          <td class="right mono">$941k</td>
         </tr><tr>
           <td class="name">Ohio</td>
           <td style="color:#cbd5e1">Sherrod Brown (D) v Jon Husted (R)</td>
-          <td class="right"><span class="dem">52%</span></td>
-          <td class="right"><span class="rep">48%</span></td>
-          <td class="right"><span class="dem">Brown +2.8</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$175k</td>
-        </tr><tr>
-          <td class="name">Alaska</td>
-          <td style="color:#cbd5e1">Mary Peltola (D) v Dan Sullivan (R)</td>
-          <td class="right"><span class="dem">55%</span></td>
+          <td class="right"><span class="dem">54%</span></td>
           <td class="right"><span class="rep">45%</span></td>
-          <td class="right"><span class="rep">Sullivan +0.0</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$425k</td>
+          <td class="right"><span class="dem">Brown +2.8</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$186k</td>
         </tr><tr>
           <td class="name">Iowa</td>
           <td style="color:#cbd5e1">Josh Turek (D) v Ashley Hinson (R)</td>
           <td class="right"><span class="dem">40%</span></td>
           <td class="right"><span class="rep">60%</span></td>
-          <td class="right"><span class="rep">Hinson +2.0</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$209k</td>
+          <td class="right"><span class="rep">Hinson +2.6</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$213k</td>
+        </tr><tr>
+          <td class="name">Alaska</td>
+          <td style="color:#cbd5e1">Mary Peltola (D) v Dan Sullivan (R)</td>
+          <td class="right"><span class="dem">62%</span></td>
+          <td class="right"><span class="rep">38%</span></td>
+          <td class="right"><span class="rep">Sullivan +0.0</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$449k</td>
         </tr><tr>
           <td class="name">Michigan</td>
           <td style="color:#cbd5e1">Abdul El-Sayed (D) v Mike Rogers (R)</td>
-          <td class="right"><span class="dem">60%</span></td>
-          <td class="right"><span class="rep">39%</span></td>
-          <td class="right"><span class="dem">El-Sayed +1.9</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$499k</td>
+          <td class="right"><span class="dem">63%</span></td>
+          <td class="right"><span class="rep">38%</span></td>
+          <td class="right"><span class="dem">El-Sayed +2.1</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$597k</td>
         </tr><tr>
           <td class="name">Maine</td>
           <td style="color:#cbd5e1">Troy Jackson (D) v Susan Collins (R)</td>
@@ -132,51 +132,51 @@
           <td class="name">Nebraska</td>
           <td style="color:#cbd5e1">Cindy Burbank (D) v Dan Osborn (I) v Pete Ricketts (R)</td>
           <td class="right"><span class="dem">0%</span></td>
-          <td class="right"><span class="rep">72%</span> <span style="color:#a78bfa">· Ind 28%</span></td>
-          <td class="right"><span style="color:#a78bfa;font-weight:700">Osborn +1.1</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$193k</td>
+          <td class="right"><span class="rep">70%</span> <span style="color:#a78bfa">· Ind 30%</span></td>
+          <td class="right"><span class="rep">Ricketts +1.2</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$206k</td>
         </tr><tr>
           <td class="name">Kansas</td>
           <td style="color:#cbd5e1">Adam Hamilton (D) v Roger Marshall (R)</td>
-          <td class="right"><span class="dem">19%</span></td>
+          <td class="right"><span class="dem">20%</span></td>
           <td class="right"><span class="rep">78%</span></td>
-          <td class="right"><span class="rep">Marshall +4.3</span> <span style="color:#64748b;font-size:11px">(last 3 polls)</span></td>
-          <td class="right mono">$43k</td>
-        </tr><tr>
-          <td class="name">New Hampshire</td>
-          <td style="color:#cbd5e1">Chris Pappas (D) v John E. Sununu (R)</td>
-          <td class="right"><span class="dem">86%</span></td>
-          <td class="right"><span class="rep">15%</span></td>
-          <td class="right"><span class="dem">Pappas +3.6</span> <span style="color:#64748b;font-size:11px">(last 5 polls)</span></td>
-          <td class="right mono">$47k</td>
+          <td class="right"><span class="rep">Marshall +4.2</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$45k</td>
         </tr><tr>
           <td class="name">South Carolina</td>
           <td style="color:#cbd5e1">Annie Andrews (D) v Lindsey Graham (R)</td>
-          <td class="right"><span class="dem">12%</span></td>
-          <td class="right"><span class="rep">89%</span></td>
-          <td class="right"><span class="rep">Graham +4.7</span> <span style="color:#64748b;font-size:11px">(last 3 polls)</span></td>
-          <td class="right mono">$145k</td>
+          <td class="right"><span class="dem">14%</span></td>
+          <td class="right"><span class="rep">87%</span></td>
+          <td class="right"><span class="rep">Graham +0.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span></td>
+          <td class="right mono">$153k</td>
+        </tr><tr>
+          <td class="name">New Hampshire</td>
+          <td style="color:#cbd5e1">Chris Pappas (D) v John E. Sununu (R)</td>
+          <td class="right"><span class="dem">88%</span></td>
+          <td class="right"><span class="rep">12%</span></td>
+          <td class="right"><span class="dem">Pappas +3.0</span> <span style="color:#64748b;font-size:11px">(last 5 polls)</span></td>
+          <td class="right mono">$83k</td>
         </tr><tr>
           <td class="name">Minnesota</td>
           <td style="color:#cbd5e1">Peggy Flanagan (D) v Michele Tafoya (R)</td>
           <td class="right"><span class="dem">90%</span></td>
           <td class="right"><span class="rep">10%</span></td>
           <td class="right"><span style="color:#475569">—</span></td>
-          <td class="right mono">$54k</td>
+          <td class="right mono">$56k</td>
+        </tr><tr>
+          <td class="name">North Carolina</td>
+          <td style="color:#cbd5e1">Roy Cooper (D) v Michael Whatley (R)</td>
+          <td class="right"><span class="dem">92%</span></td>
+          <td class="right"><span class="rep">8%</span></td>
+          <td class="right"><span class="dem">Cooper +7.2</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$100k</td>
         </tr><tr>
           <td class="name">Florida</td>
           <td style="color:#cbd5e1">Angie Nixon (D) v Ashley Moody (R)</td>
-          <td class="right"><span class="dem">6%</span></td>
+          <td class="right"><span class="dem">10%</span></td>
           <td class="right"><span class="rep">92%</span></td>
-          <td class="right"><span class="rep">Moody +10.0</span> <span style="color:#64748b;font-size:11px">(last 4 polls)</span></td>
-          <td class="right mono">$81k</td>
-        </tr><tr>
-          <td class="name">Kentucky</td>
-          <td style="color:#cbd5e1">Charles Booker (D) v Andy Barr (R)</td>
-          <td class="right"><span class="dem">4%</span></td>
-          <td class="right"><span class="rep">92%</span></td>
-          <td class="right"><span class="rep">Barr +11.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span></td>
-          <td class="right mono">$19k</td>
+          <td class="right"><span class="rep">Moody +9.7</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
+          <td class="right mono">$107k</td>
         </tr><tr>
           <td class="name">Montana</td>
           <td style="color:#cbd5e1">Alani Bankhead (D) v Seth Bodnar (I) v Kurt Alme (R)</td>
@@ -185,32 +185,25 @@
           <td class="right"><span class="rep">Alme +14.8</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
           <td class="right mono">$115k</td>
         </tr><tr>
-          <td class="name">North Carolina</td>
-          <td style="color:#cbd5e1">Roy Cooper (D) v Michael Whatley (R)</td>
-          <td class="right"><span class="dem">94%</span></td>
-          <td class="right"><span class="rep">8%</span></td>
-          <td class="right"><span class="dem">Cooper +7.9</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$94k</td>
-        </tr><tr>
-          <td class="name">Mississippi</td>
-          <td style="color:#cbd5e1">Scott Colom (D) v Cindy Hyde-Smith (R)</td>
-          <td class="right"><span class="dem">8%</span></td>
-          <td class="right"><span class="rep">92%</span></td>
-          <td class="right"><span class="rep">Hyde-Smith +8.0</span> <span style="color:#64748b;font-size:11px">(last 2 polls)</span></td>
-          <td class="right mono">$37k</td>
-        </tr><tr>
           <td class="name">Georgia</td>
           <td style="color:#cbd5e1">Jon Ossoff (D) v Mike Collins (R)</td>
           <td class="right"><span class="dem">94%</span></td>
           <td class="right"><span class="rep">6%</span></td>
           <td class="right"><span class="dem">Ossoff +6.5</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$112k</td>
+          <td class="right mono">$123k</td>
+        </tr><tr>
+          <td class="name">Mississippi</td>
+          <td style="color:#cbd5e1">Scott Colom (D) v Cindy Hyde-Smith (R)</td>
+          <td class="right"><span class="dem">6%</span></td>
+          <td class="right"><span class="rep">94%</span></td>
+          <td class="right"><span class="rep">Hyde-Smith +8.0</span> <span style="color:#64748b;font-size:11px">(last 2 polls)</span></td>
+          <td class="right mono">$45k</td>
         </tr><tr>
           <td class="name">Oklahoma</td>
-          <td style="color:#cbd5e1">Kevin Hern (R)</td>
-          <td class="right"><span class="dem">3%</span></td>
+          <td style="color:#cbd5e1">N'Kiyla Jasmine Thomas (D) v Kevin Hern (R)</td>
+          <td class="right"><span class="dem">4%</span></td>
           <td class="right"><span class="rep">96%</span></td>
-          <td class="right"><span style="color:#475569">—</span></td>
+          <td class="right"><span class="rep">Hern +24.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span></td>
           <td class="right mono">$19k</td>
         </tr><tr>
           <td class="name">Virginia</td>
@@ -222,10 +215,17 @@
         </tr><tr>
           <td class="name">Wyoming</td>
           <td style="color:#cbd5e1">James Byrd (D) v Harriet Hageman (R)</td>
-          <td class="right"><span class="dem">2%</span></td>
+          <td class="right"><span class="dem">3%</span></td>
           <td class="right"><span class="rep">96%</span></td>
           <td class="right"><span style="color:#475569">—</span></td>
           <td class="right mono">$17k</td>
+        </tr><tr>
+          <td class="name">Kentucky</td>
+          <td style="color:#cbd5e1">Charles Booker (D) v Andy Barr (R)</td>
+          <td class="right"><span class="dem">3%</span></td>
+          <td class="right"><span class="rep">97%</span></td>
+          <td class="right"><span class="rep">Barr +11.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span></td>
+          <td class="right mono">$33k</td>
         </tr><tr>
           <td class="name">Colorado</td>
           <td style="color:#cbd5e1">John Hickenlooper (D) v Mark Baisley (R)</td>
@@ -244,9 +244,9 @@
   // htmlpreview & similar proxies eval inline scripts before the CDN script
   // loads — poll until Chart.js is present instead of assuming order
   if(!window.Chart){setTimeout(init,50);return;}
-  const bop=[{"label": "Democrats Sweep", "p": 47.5}, {"label": "R Senate, D House", "p": 39.5}, {"label": "Republicans Sweep", "p": 12.5}, {"label": "D Senate, R House", "p": 1.1}, {"label": "Other", "p": 0.4}];
-  const seats=[{"label": "Below 190", "p": 23.5}, {"label": "190-194", "p": 14.0}, {"label": "195-199", "p": 12.5}, {"label": "200-204", "p": 11.6}, {"label": "205-209", "p": 11.2}, {"label": "210-214", "p": 8.8}, {"label": "215-219", "p": 5.1}, {"label": "220-224", "p": 5.3}, {"label": "225-229", "p": 4.7}, {"label": "230+", "p": 3.7}];
-  const races=[{"slug": "texas", "state": "Texas", "dem": 51.5, "rep": 49.5, "other": 0.0, "fav": "James Talarico (D) 52%", "volume": 844167, "poll": {"kind": "agg", "n": 8, "rep": 40.8, "opp": 41.5, "opp_party": "D", "margin": -0.7, "latest": "July 23 \u2013 August 10, 2026"}, "label": "Texas \u00b7 Talarico v Paxton"}, {"slug": "ohio", "state": "Ohio", "dem": 52.5, "rep": 47.5, "other": 0.0, "fav": "Sherrod Brown (D) 52%", "volume": 174618, "poll": {"kind": "agg", "n": 7, "rep": 39.7, "opp": 42.5, "opp_party": "D", "margin": -2.8, "latest": "August 13 \u2013 August 14, 2026"}, "label": "Ohio \u00b7 Brown v Husted"}, {"slug": "alaska", "state": "Alaska", "dem": 55.0, "rep": 45.0, "other": 0.0, "fav": "Mary Peltola 55%", "volume": 425325, "poll": {"kind": "agg", "n": 4, "rep": 36.5, "opp": 36.4, "opp_party": "D", "margin": 0.0, "latest": "through August 5, 2026"}, "label": "Alaska \u00b7 Peltola v Sullivan"}, {"slug": "iowa", "state": "Iowa", "dem": 40.0, "rep": 60.0, "other": 0.0, "fav": "Ashley Hinson (R) 60%", "volume": 209295, "poll": {"kind": "agg", "n": 5, "rep": 39.0, "opp": 37.1, "opp_party": "D", "margin": 2.0, "latest": "through August 4, 2026"}, "label": "Iowa \u00b7 Turek v Hinson"}, {"slug": "michigan", "state": "Michigan", "dem": 60.5, "rep": 39.0, "other": 0.5, "fav": "Abdul El-Sayed (D) 60%", "volume": 498764, "poll": {"kind": "agg", "n": 6, "rep": 37.4, "opp": 39.4, "opp_party": "D", "margin": -1.9, "latest": "July 24 \u2013 August 17, 2026"}, "label": "Michigan \u00b7 El-Sayed v Rogers"}, {"slug": "maine", "state": "Maine", "dem": 69.5, "rep": 30.5, "other": 0.0, "fav": "Troy Jackson (D) 70%", "volume": 1155706, "poll": {"kind": "agg", "n": 5, "rep": 37.9, "opp": 39.0, "opp_party": "D", "margin": -1.1, "latest": "through August 10, 2026"}, "label": "Maine \u00b7 Jackson v Collins"}, {"slug": "nebraska", "state": "Nebraska", "dem": 0.2, "rep": 71.5, "other": 28.2, "fav": "Pete Ricketts (R) 72%", "volume": 192620, "poll": {"kind": "agg", "n": 1, "rep": 44.5, "opp": 45.6, "opp_party": "I", "margin": -1.1, "latest": "through May 11, 2026"}, "label": "Nebraska \u00b7 Osborn v Ricketts"}, {"slug": "kansas", "state": "Kansas", "dem": 19.0, "rep": 78.5, "other": 2.5, "fav": "Republican 78%", "volume": 43167, "poll": {"kind": "raw", "n": 3, "rep": 49.0, "opp": 44.7, "opp_party": "D", "margin": 4.3, "latest": "August 7\u20138, 2026"}, "label": "Kansas \u00b7 Hamilton v Marshall"}, {"slug": "new-hampshire", "state": "New Hampshire", "dem": 85.5, "rep": 15.0, "other": 0.0, "fav": "Democrat 86%", "volume": 47400, "poll": {"kind": "raw", "n": 5, "rep": 42.6, "opp": 46.2, "opp_party": "D", "margin": -3.6, "latest": "June 24\u201327, 2026"}, "label": "New Hampshire \u00b7 Pappas v Sununu"}, {"slug": "south-carolina", "state": "South Carolina", "dem": 11.5, "rep": 89.0, "other": 0.0, "fav": "Republican 89%", "volume": 144804, "poll": {"kind": "raw", "n": 3, "rep": 45.7, "opp": 41.0, "opp_party": "D", "margin": 4.7, "latest": "June 17\u201322, 2026"}, "label": "South Carolina \u00b7 Andrews v Graham"}, {"slug": "minnesota", "state": "Minnesota", "dem": 89.5, "rep": 9.5, "other": 1.0, "fav": "Peggy Flanagan (D) 90%", "volume": 54322, "poll": null, "label": "Minnesota \u00b7 Flanagan v Tafoya"}, {"slug": "florida", "state": "Florida", "dem": 6.5, "rep": 91.5, "other": 2.0, "fav": "Ashley Moody (R) 92%", "volume": 81437, "poll": {"kind": "raw", "n": 4, "rep": 48.5, "opp": 38.5, "opp_party": "D", "margin": 10.0, "latest": "July 8\u201317, 2026"}, "label": "Florida \u00b7 Nixon v Moody"}, {"slug": "kentucky", "state": "Kentucky", "dem": 4.1, "rep": 91.8, "other": 4.2, "fav": "Andy Barr (R) 92%", "volume": 19046, "poll": {"kind": "raw", "n": 1, "rep": 49.0, "opp": 38.0, "opp_party": "D", "margin": 11.0, "latest": "December 18\u201319, 2025"}, "label": "Kentucky \u00b7 Barr"}, {"slug": "montana", "state": "Montana", "dem": 0.8, "rep": 92.0, "other": 7.2, "fav": "Republican 92%", "volume": 115108, "poll": {"kind": "agg", "n": 3, "rep": 38.5, "opp": 23.7, "opp_party": "I", "margin": 14.8, "latest": "through August 4, 2026"}, "label": "Montana \u00b7 Bodnar v Alme"}, {"slug": "north-carolina", "state": "North Carolina", "dem": 93.5, "rep": 7.5, "other": 0.0, "fav": "Roy Cooper (D) 94%", "volume": 93928, "poll": {"kind": "agg", "n": 6, "rep": 36.3, "opp": 44.3, "opp_party": "D", "margin": -7.9, "latest": "July 29 \u2013 August 13, 2026"}, "label": "North Carolina \u00b7 Cooper v Whatley"}, {"slug": "mississippi", "state": "Mississippi", "dem": 7.5, "rep": 92.5, "other": 0.0, "fav": "Republican 92%", "volume": 36767, "poll": {"kind": "raw", "n": 2, "rep": 46.5, "opp": 38.5, "opp_party": "D", "margin": 8.0, "latest": "April 8\u201312, 2026"}, "label": "Mississippi \u00b7 Colom v Hyde-Smith"}, {"slug": "georgia", "state": "Georgia", "dem": 93.5, "rep": 5.6, "other": 0.9, "fav": "Jon Ossoff (D)  94%", "volume": 111606, "poll": {"kind": "agg", "n": 6, "rep": 37.2, "opp": 43.7, "opp_party": "D", "margin": -6.5, "latest": "July 23 \u2013 August 18, 2026"}, "label": "Georgia \u00b7 Ossoff v Collins"}, {"slug": "oklahoma", "state": "Oklahoma", "dem": 3.2, "rep": 95.5, "other": 1.3, "fav": "Republican 96%", "volume": 19316, "poll": null, "label": "Oklahoma \u00b7 Hern"}, {"slug": "virginia", "state": "Virginia", "dem": 95.0, "rep": 4.5, "other": 0.5, "fav": "Democrat 95%", "volume": 16817, "poll": {"kind": "raw", "n": 2, "rep": 31.0, "opp": 53.0, "opp_party": "D", "margin": -22.0, "latest": "June 12\u201316, 2026"}, "label": "Virginia \u00b7 Warner"}, {"slug": "wyoming", "state": "Wyoming", "dem": 2.1, "rep": 96.4, "other": 1.5, "fav": "Republican 96%", "volume": 16713, "poll": null, "label": "Wyoming \u00b7 Hageman"}, {"slug": "colorado", "state": "Colorado", "dem": 96.2, "rep": 3.0, "other": 0.7, "fav": "Democrat 96%", "volume": 47977, "poll": null, "label": "Colorado \u00b7 Hickenlooper"}];
+  const bop=[{"label": "Democrats Sweep", "p": 48.5}, {"label": "R Senate, D House", "p": 37.5}, {"label": "Republicans Sweep", "p": 11.5}, {"label": "D Senate, R House", "p": 1.1}, {"label": "Other", "p": 0.2}];
+  const seats=[{"label": "Below 190", "p": 24.5}, {"label": "190-194", "p": 14.5}, {"label": "195-199", "p": 14.0}, {"label": "200-204", "p": 13.7}, {"label": "205-209", "p": 11.2}, {"label": "210-214", "p": 8.3}, {"label": "215-219", "p": 5.1}, {"label": "220-224", "p": 3.1}, {"label": "225-229", "p": 5.4}, {"label": "230+", "p": 2.9}];
+  const races=[{"slug": "texas", "state": "Texas", "dem": 49.5, "rep": 48.5, "other": 2.0, "fav": "James Talarico (D) 50%", "volume": 941378, "poll": {"kind": "agg", "n": 8, "rep": 40.0, "opp": 40.7, "opp_party": "D", "margin": -0.7, "latest": "July 27 \u2013 August 13, 2026"}, "label": "Texas \u00b7 Talarico v Paxton"}, {"slug": "ohio", "state": "Ohio", "dem": 54.5, "rep": 45.0, "other": 0.5, "fav": "Sherrod Brown (D) 55%", "volume": 186242, "poll": {"kind": "agg", "n": 7, "rep": 39.7, "opp": 42.5, "opp_party": "D", "margin": -2.8, "latest": "August 13 \u2013 August 14, 2026"}, "label": "Ohio \u00b7 Brown v Husted"}, {"slug": "iowa", "state": "Iowa", "dem": 40.5, "rep": 60.5, "other": 0.0, "fav": "Ashley Hinson (R) 60%", "volume": 213163, "poll": {"kind": "agg", "n": 6, "rep": 40.4, "opp": 37.7, "opp_party": "D", "margin": 2.6, "latest": "August 6\u201326, 2026"}, "label": "Iowa \u00b7 Turek v Hinson"}, {"slug": "alaska", "state": "Alaska", "dem": 61.5, "rep": 38.5, "other": 0.0, "fav": "Mary Peltola 62%", "volume": 448849, "poll": {"kind": "agg", "n": 4, "rep": 36.5, "opp": 36.4, "opp_party": "D", "margin": 0.0, "latest": "through August 5, 2026"}, "label": "Alaska \u00b7 Peltola v Sullivan"}, {"slug": "michigan", "state": "Michigan", "dem": 63.0, "rep": 37.5, "other": 0.0, "fav": "Abdul El-Sayed (D) 63%", "volume": 596751, "poll": {"kind": "agg", "n": 7, "rep": 38.4, "opp": 40.5, "opp_party": "D", "margin": -2.1, "latest": "July 24 \u2013 August 17, 2026"}, "label": "Michigan \u00b7 El-Sayed v Rogers"}, {"slug": "maine", "state": "Maine", "dem": 70.5, "rep": 30.5, "other": 0.0, "fav": "Troy Jackson (D) 70%", "volume": 1222625, "poll": {"kind": "agg", "n": 5, "rep": 37.9, "opp": 39.0, "opp_party": "D", "margin": -1.1, "latest": "through August 10, 2026"}, "label": "Maine \u00b7 Jackson v Collins"}, {"slug": "nebraska", "state": "Nebraska", "dem": 0.1, "rep": 69.5, "other": 30.3, "fav": "Pete Ricketts (R) 70%", "volume": 205534, "poll": {"kind": "agg", "n": 1, "rep": 47.5, "opp": 46.3, "opp_party": "I", "margin": 1.2, "latest": "through August 13, 2026"}, "label": "Nebraska \u00b7 Osborn v Ricketts"}, {"slug": "kansas", "state": "Kansas", "dem": 20.0, "rep": 78.0, "other": 2.0, "fav": "Republican 78%", "volume": 44708, "poll": {"kind": "agg", "n": 3, "rep": 34.7, "opp": 30.6, "opp_party": "D", "margin": 4.2, "latest": "through August 8, 2026"}, "label": "Kansas \u00b7 Hamilton v Marshall"}, {"slug": "south-carolina", "state": "South Carolina", "dem": 13.5, "rep": 87.0, "other": 0.0, "fav": "Republican 87%", "volume": 153357, "poll": {"kind": "raw", "n": 1, "rep": 41.0, "opp": 41.0, "opp_party": "D", "margin": 0.0, "latest": "August 18\u201324, 2026"}, "label": "South Carolina \u00b7 Andrews v Graham"}, {"slug": "new-hampshire", "state": "New Hampshire", "dem": 88.0, "rep": 11.5, "other": 0.5, "fav": "Democrat 88%", "volume": 82741, "poll": {"kind": "raw", "n": 5, "rep": 42.6, "opp": 45.6, "opp_party": "D", "margin": -3.0, "latest": "August 20\u201324, 2026"}, "label": "New Hampshire \u00b7 Pappas v Sununu"}, {"slug": "minnesota", "state": "Minnesota", "dem": 90.5, "rep": 9.5, "other": 0.0, "fav": "Peggy Flanagan (D) 90%", "volume": 56334, "poll": null, "label": "Minnesota \u00b7 Flanagan v Tafoya"}, {"slug": "north-carolina", "state": "North Carolina", "dem": 91.5, "rep": 8.5, "other": 0.0, "fav": "Roy Cooper (D) 92%", "volume": 99641, "poll": {"kind": "agg", "n": 6, "rep": 36.6, "opp": 43.9, "opp_party": "D", "margin": -7.2, "latest": "July 29 \u2013 August 21, 2026"}, "label": "North Carolina \u00b7 Cooper v Whatley"}, {"slug": "florida", "state": "Florida", "dem": 9.5, "rep": 91.5, "other": 0.0, "fav": "Ashley Moody (R) 92%", "volume": 107223, "poll": {"kind": "agg", "n": 1, "rep": 50.6, "opp": 40.9, "opp_party": "D", "margin": 9.7, "latest": "through July 17, 2026"}, "label": "Florida \u00b7 Nixon v Moody"}, {"slug": "montana", "state": "Montana", "dem": 0.8, "rep": 92.0, "other": 7.2, "fav": "Republican 92%", "volume": 115313, "poll": {"kind": "agg", "n": 3, "rep": 38.5, "opp": 23.7, "opp_party": "I", "margin": 14.8, "latest": "through August 4, 2026"}, "label": "Montana \u00b7 Bodnar v Alme"}, {"slug": "georgia", "state": "Georgia", "dem": 93.5, "rep": 6.3, "other": 0.2, "fav": "Jon Ossoff (D)  94%", "volume": 122537, "poll": {"kind": "agg", "n": 6, "rep": 37.2, "opp": 43.7, "opp_party": "D", "margin": -6.5, "latest": "July 23 \u2013 August 18, 2026"}, "label": "Georgia \u00b7 Ossoff v Collins"}, {"slug": "mississippi", "state": "Mississippi", "dem": 6.5, "rep": 94.0, "other": 0.0, "fav": "Republican 94%", "volume": 44619, "poll": {"kind": "raw", "n": 2, "rep": 46.5, "opp": 38.5, "opp_party": "D", "margin": 8.0, "latest": "April 8\u201312, 2026"}, "label": "Mississippi \u00b7 Colom v Hyde-Smith"}, {"slug": "oklahoma", "state": "Oklahoma", "dem": 3.5, "rep": 95.5, "other": 1.0, "fav": "Republican 96%", "volume": 19335, "poll": {"kind": "raw", "n": 1, "rep": 49.0, "opp": 25.0, "opp_party": "D", "margin": 24.0, "latest": "August 3\u20136, 2026"}, "label": "Oklahoma \u00b7 Hern"}, {"slug": "virginia", "state": "Virginia", "dem": 95.0, "rep": 4.5, "other": 0.5, "fav": "Democrat 95%", "volume": 16871, "poll": {"kind": "raw", "n": 2, "rep": 31.0, "opp": 53.0, "opp_party": "D", "margin": -22.0, "latest": "June 12\u201316, 2026"}, "label": "Virginia \u00b7 Warner"}, {"slug": "wyoming", "state": "Wyoming", "dem": 2.8, "rep": 96.5, "other": 0.8, "fav": "Republican 96%", "volume": 16728, "poll": null, "label": "Wyoming \u00b7 Hageman"}, {"slug": "kentucky", "state": "Kentucky", "dem": 2.9, "rep": 96.6, "other": 0.6, "fav": "Andy Barr (R) 97%", "volume": 33116, "poll": {"kind": "raw", "n": 1, "rep": 49.0, "opp": 38.0, "opp_party": "D", "margin": 11.0, "latest": "December 18\u201319, 2025"}, "label": "Kentucky \u00b7 Barr"}, {"slug": "colorado", "state": "Colorado", "dem": 96.2, "rep": 3.0, "other": 0.7, "fav": "Democrat 96%", "volume": 47997, "poll": null, "label": "Colorado \u00b7 Hickenlooper"}];
   const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
 
   new Chart(document.getElementById('bopChart'),{type:'bar',

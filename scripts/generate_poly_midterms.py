@@ -40,11 +40,11 @@ NAME_PARTY = {"peltola": "D", "sullivan": "R"}
 
 # Known 2026 general-election nominees / leading candidates per race (many race
 # markets resolve by party only, so candidate names come from here). Source:
-# Wikipedia "2026 United States Senate elections" + Ballotpedia, as of Aug 19
-# 2026: every primary through Aug 18 (MN, AK, WY, FL) is decided; only New
-# Hampshire (Sep 8) still lists poll leaders. "TBD" nominees are omitted.
-# Maine: Platner won the June 9 primary but withdrew; Troy Jackson is the
-# presumptive replacement nominee via the state convention.
+# Wikipedia "2026 United States Senate elections" + Ballotpedia, as of Aug 26
+# 2026: every primary through Aug 25 (incl. the OK Democratic runoff) is
+# decided; only New Hampshire (Sep 8) still lists poll leaders. "TBD" nominees
+# are omitted. Maine: Platner won the June 9 primary but withdrew; Troy Jackson
+# was formally nominated as his replacement on July 26.
 CANDIDATES = {
     "maine": {"D": "Troy Jackson", "R": "Susan Collins"},
     "texas": {"D": "James Talarico", "R": "Ken Paxton"},
@@ -63,7 +63,7 @@ CANDIDATES = {
     "new-hampshire": {"D": "Chris Pappas", "R": "John E. Sununu"},
     "mississippi": {"D": "Scott Colom", "R": "Cindy Hyde-Smith"},
     "minnesota": {"D": "Peggy Flanagan", "R": "Michele Tafoya"},
-    "oklahoma": {"R": "Kevin Hern"},
+    "oklahoma": {"D": "N'Kiyla Jasmine Thomas", "R": "Kevin Hern"},
     "wyoming": {"D": "James Byrd", "R": "Harriet Hageman"},
     "virginia": {"D": "Mark Warner", "R": "Bert Mizusawa"},
     "kentucky": {"D": "Charles Booker", "R": "Andy Barr"},
