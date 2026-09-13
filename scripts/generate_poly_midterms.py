@@ -41,6 +41,10 @@ RACE_SLUGS = [
     "georgia", "kansas", "new-hampshire", "mississippi", "minnesota",
     "oklahoma", "wyoming", "virginia", "kentucky",
 ]
+BATTLEGROUND_SLUGS = [
+    "ohio", "texas", "iowa", "nebraska", "michigan", "alaska", "maine",
+    "kansas", "new-hampshire",
+]
 # party for candidate markets that carry no (D)/(R) tag
 NAME_PARTY = {"peltola": "D", "sullivan": "R"}
 
@@ -174,6 +178,16 @@ def senate_seat_distribution(races, fixed_seats=FIXED_REPUBLICAN_SENATE_SEATS):
             for seats, prob in sorted(dist.items()) if prob >= 0.05]
 
 
+def battleground_races(races, key_slugs=BATTLEGROUND_SLUGS):
+    """Races to show in the Senate battleground zoom."""
+    key = set(key_slugs)
+    picked = []
+    for race in races:
+        if race["slug"] in key or 25 <= race["rep"] <= 75:
+            picked.append(race)
+    return sorted(picked, key=lambda race: (race["rep"], race["state"]))
+
+
 def collect():
     fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     sys.stderr.write("Fetching control markets...\n")
@@ -245,6 +259,7 @@ def build_html(d, output_path):
     races = d["races"]
     for r in races:
         r["label"] = race_label(r)
+    battleground = battleground_races(races)
     tossups = sum(1 for r in races if 40 <= r["rep"] <= 60)
     n_polled = sum(1 for r in races if r.get("poll"))
     total_vol = d["house"]["vol"] + d["senate"]["vol"] + d["bop_vol"] + d["seats_vol"] + sum(r["volume"] for r in races)
@@ -341,6 +356,12 @@ def build_html(d, output_path):
   </div>
 
   <div class="chart-container">
+    <h2 class="chart-title">Battleground Senate Zoom <span>(named battlegrounds plus any race with R between 25% and 75%)</span></h2>
+    <div style="position:relative;height:360px"><canvas id="battlegroundChart"></canvas></div>
+    <p class="note">Bars show distance from the 50% line using directly priced Republican win probability. Blue bars lean Democratic or independent; red bars lean Republican. This view intentionally expands the middle of the map so Ohio, Texas, Iowa, Nebraska, Michigan, Alaska, Maine, Kansas, and New Hampshire are easier to compare.</p>
+  </div>
+
+  <div class="chart-container">
     <h2 class="chart-title">Senate Races — Republican win probability <span>(point size ∝ volume; below the 50% line = seat leans Dem/Ind)</span></h2>
     <div style="position:relative;height:440px"><canvas id="raceBubble"></canvas></div>
     <p class="note">Plotting Republican win % (directly priced) handles 3-way races: e.g. Nebraska is a Republican-vs-independent contest, so its Dem share is tiny but the seat is still competitive.</p>
@@ -372,6 +393,7 @@ def build_html(d, output_path):
   const seats={json.dumps(d['seats'])};
   const senateSeats={json.dumps(d.get('senate_seats', []))};
   const races={json.dumps(races)};
+  const battleground={json.dumps(battleground)};
   const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
 
   new Chart(document.getElementById('bopChart'),{{type:'bar',
@@ -421,6 +443,29 @@ def build_html(d, output_path):
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.raw+'%'}}}}}},
       scales:{{x:{{grid:{{display:false}},ticks:{{color:'#94a3b8',font:{{size:9}},maxRotation:60,minRotation:45}}}},
         y:{{grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
+
+  const midLine={{id:'midLine',afterDatasetsDraw(chart){{
+    const x=chart.scales.x,y=chart.scales.y,px=x.getPixelForValue(50),ctx=chart.ctx;
+    ctx.save();ctx.strokeStyle='#fbbf24';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(px,y.top);ctx.lineTo(px,y.bottom);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#fbbf24';ctx.font='600 10px -apple-system,sans-serif';ctx.textAlign='left';
+    ctx.fillText('50%',px+4,y.top+10);ctx.restore();
+  }}}};
+  const battlegroundBars=battleground.map(r=>({{
+    x:[Math.min(r.rep,50),Math.max(r.rep,50)],
+    y:r.label, rep:r.rep, dem:r.dem, other:r.other, volume:r.volume
+  }}));
+  new Chart(document.getElementById('battlegroundChart'),{{type:'bar',
+    data:{{labels:battleground.map(r=>r.label),datasets:[{{data:battlegroundBars,
+      backgroundColor:battleground.map(r=>r.rep>=50?'rgba(239,68,68,.72)':'rgba(59,130,246,.72)'),
+      borderColor:battleground.map(r=>r.rep>=50?'#ef4444':'#3b82f6'),borderWidth:1}}]}},
+    plugins:[midLine],
+    options:{{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{
+        label:c=>c.raw.y+': R '+c.raw.rep+'% / D '+c.raw.dem+'%'+(c.raw.other>=5?' / other '+c.raw.other+'%':'')+' · vol '+fmtV(c.raw.volume)}}}}}},
+      scales:{{x:{{min:20,max:80,title:{{display:true,text:'Republican win probability',color:'#64748b'}},
+          grid:{{color:c=>c.tick.value===50?'#64748b':'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}},
+        y:{{grid:{{display:false}},ticks:{{color:'#cbd5e1',font:{{size:11}}}}}}}}}}}});
 
   const maxV=Math.max(...races.map(r=>r.volume),1);
   const bubble=races.map(r=>({{x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem,label:r.label}}));
