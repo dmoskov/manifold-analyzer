@@ -18,6 +18,8 @@ import json
 import re
 import sys
 from argparse import ArgumentParser
+from datetime import datetime, timezone
+from html import escape
 
 from fetch_polymarket import fetch_event
 from fetch_wiki_polls import race_polls
@@ -40,23 +42,28 @@ NAME_PARTY = {"peltola": "D", "sullivan": "R"}
 
 # Known 2026 general-election nominees / leading candidates per race (many race
 # markets resolve by party only, so candidate names come from here). Source:
-# Wikipedia "2026 United States Senate elections" + Ballotpedia, as of Aug 26
-# 2026: every primary through Aug 25 (incl. the OK Democratic runoff) is
-# decided; only New Hampshire (Sep 8) still lists poll leaders. "TBD" nominees
-# are omitted. Maine: Platner won the June 9 primary but withdrew; Troy Jackson
-# was formally nominated as his replacement on July 26.
+# Wikipedia "2026 United States Senate elections", checked September 13, 2026.
+# NH nominees were confirmed September 8. South Carolina nominated Darline
+# Graham in its August 25 special runoff; Nebraska's Burbank withdrew.
+CANDIDATES_AS_OF = "2026-09-13"
+CANDIDATE_SOURCES = {
+    "overview": "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+    "new-hampshire": "https://www.nhpr.org/politics/2026-09-08/pappas-sununu-win-senate-primaries-nh-newhampshire-elections-2026",
+    "south-carolina": "https://www.washingtonpost.com/politics/2026/08/25/south-carolina-election-lindsey-graham/7cc61e26-a03a-11f1-8606-1d40ad00172e_story.html",
+    "nebraska": "https://sos.nebraska.gov/secretary-evnen-issues-statement-cindy-burbank-declination-candidate-nomination",
+}
 CANDIDATES = {
     "maine": {"D": "Troy Jackson", "R": "Susan Collins"},
     "texas": {"D": "James Talarico", "R": "Ken Paxton"},
     "alaska": {"D": "Mary Peltola", "R": "Dan Sullivan"},
-    "nebraska": {"D": "Cindy Burbank", "I": "Dan Osborn", "R": "Pete Ricketts"},
+    "nebraska": {"I": "Dan Osborn", "R": "Pete Ricketts"},
     "iowa": {"D": "Josh Turek", "R": "Ashley Hinson"},
     "michigan": {"D": "Abdul El-Sayed", "R": "Mike Rogers"},
     "ohio": {"D": "Sherrod Brown", "R": "Jon Husted"},
     "montana": {"D": "Alani Bankhead", "R": "Kurt Alme", "I": "Seth Bodnar"},
     "north-carolina": {"D": "Roy Cooper", "R": "Michael Whatley"},
     "florida": {"D": "Angie Nixon", "R": "Ashley Moody"},
-    "south-carolina": {"D": "Annie Andrews", "R": "Lindsey Graham"},
+    "south-carolina": {"D": "Annie Andrews", "R": "Darline Graham"},
     "colorado": {"D": "John Hickenlooper", "R": "Mark Baisley"},
     "georgia": {"D": "Jon Ossoff", "R": "Mike Collins"},
     "kansas": {"D": "Adam Hamilton", "R": "Roger Marshall"},
@@ -139,11 +146,18 @@ def poll_html(r):
     else:
         name, tag = cand.get("D", "Dem"), 'class="dem"'
     src = "poll aggregates" if p["kind"] == "agg" else f'last {p["n"]} polls'
-    return (f'<span {tag}>{name.split()[-1]} +{abs(p["margin"]):.1f}</span>'
-            f' <span style="color:#64748b;font-size:11px">({src})</span>')
+    lead = "Tied" if p["margin"] == 0 else f'{name.split()[-1]} +{abs(p["margin"]):.1f}'
+    periods = list(dict.fromkeys(s["period"] for s in p.get("sources", []) if s["period"]))
+    dates = "; ".join(periods) or p.get("latest", "Date unavailable")
+    url = p.get("url", "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_" + r["state"].replace(" ", "_"))
+    return (f'<span {tag}>{escape(lead)}</span>'
+            f' <span style="color:#64748b;font-size:11px">({src})</span>'
+            f'<br><a class="poll-date" href="{escape(url, quote=True)}" title="{escape(dates, quote=True)}">'
+            f'{escape(p.get("latest", "Polling source"))}</a>')
 
 
 def collect():
+    fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     sys.stderr.write("Fetching control markets...\n")
     house = fetch_event(CONTROL["house"])
     senate = fetch_event(CONTROL["senate"])
@@ -167,8 +181,8 @@ def collect():
     for st in RACE_SLUGS:
         try:
             ev = fetch_event(f"{st}-senate-election-winner")
-        except Exception:
-            continue
+        except Exception as exc:
+            raise RuntimeError(f"Could not refresh {st}; keeping the previous dashboard") from exc
         d, r = dem_pct(ev)
         outs = priced_outcomes(ev)
         fav = max(outs, key=lambda x: x[1]) if outs else ("?", 0)
@@ -186,12 +200,17 @@ def collect():
     sys.stderr.write("Fetching Wikipedia polling...\n")
     for r in races:
         surnames = {p: n.split()[-1] for p, n in CANDIDATES.get(r["slug"], {}).items()}
+        if r["slug"] == "south-carolina":
+            surnames["R"] = "Darline Graham"  # Reject old Lindsey Graham matchups.
         r["poll"] = race_polls(r["state"].replace(" ", "_"), surnames) if surnames else None
         if r["poll"] is None:
             sys.stderr.write(f"  {r['state']}: no usable general-election polling\n")
     sys.stderr.write(f"  polling found for {sum(1 for r in races if r['poll'])}/{len(races)} races\n")
 
     return {
+        "fetched_at": fetched_at,
+        "candidates_as_of": CANDIDATES_AS_OF,
+        "candidate_sources": CANDIDATE_SOURCES,
         "house": {"d": round(house_d, 1), "r": round(house_r, 1), "vol": float(house.get("volume", 0))},
         "senate": {"d": round(senate_d, 1), "r": round(senate_r, 1), "vol": float(senate.get("volume", 0))},
         "bop": [{"label": l, "p": round(p, 1)} for l, p in bop],
@@ -209,12 +228,13 @@ def build_html(d, output_path):
     tossups = sum(1 for r in races if 40 <= r["rep"] <= 60)
     n_polled = sum(1 for r in races if r.get("poll"))
     total_vol = d["house"]["vol"] + d["senate"]["vol"] + d["bop_vol"] + d["seats_vol"] + sum(r["volume"] for r in races)
+    fetched_at = escape(d.get("fetched_at", "Unknown — refresh required").replace("T", " ").replace("+00:00", " UTC"))
 
     races_rows = ""
     for r in races:
         ind = f' <span style="color:#a78bfa">· Ind {r["other"]:.0f}%</span>' if r["other"] >= 5 else ""
         races_rows += f"""<tr>
-          <td class="name">{r['state']}</td>
+          <td class="name"><a href="https://polymarket.com/event/{r['slug']}-senate-election-winner">{r['state']}</a></td>
           <td style="color:#cbd5e1">{matchup(r['slug'])}</td>
           <td class="right"><span class="dem">{r['dem']:.0f}%</span></td>
           <td class="right"><span class="rep">{r['rep']:.0f}%</span>{ind}</td>
@@ -254,13 +274,14 @@ def build_html(d, output_path):
   .name{{color:#e2e8f0;font-weight:500}}
   .dem{{color:#60a5fa;font-weight:700}} .rep{{color:#f87171;font-weight:700}}
   .mono{{font-family:monospace;color:#fbbf24}}
+  a{{color:inherit}} .poll-date{{color:#94a3b8;font-size:11px}}
   .note{{color:#64748b;font-size:12px;margin-top:10px;line-height:1.5}}
   .footer{{margin-top:24px;text-align:center;color:#64748b;font-size:12px}}
   @media(max-width:768px){{.stats-grid{{grid-template-columns:repeat(2,1fr)}}.cols{{grid-template-columns:1fr}}}}
 </style></head>
 <body><div class="container">
   <h1>2026 U.S. Midterms — Polymarket Dashboard</h1>
-  <p class="subtitle">Control, scenarios, seat distribution & {len(races)} Senate races · combined volume {fmt_usd(total_vol)} · generated <span id="date"></span></p>
+  <p class="subtitle">Control, scenarios, seat distribution & {len(races)} Senate races · combined volume {fmt_usd(total_vol)} · data fetched {fetched_at}</p>
 
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-label">House control</div><div class="stat-value"><span class="dem">D {d['house']['d']:.0f}%</span></div></div>
@@ -290,7 +311,7 @@ def build_html(d, output_path):
     <div class="chart-container">
       <h2 class="chart-title">Republican House Seats <span>({fmt_usd(d['seats_vol'])})</span></h2>
       <div style="position:relative;height:240px"><canvas id="seatsChart"></canvas></div>
-      <p class="note">Amber dashed line = 218 (majority); green bars = outcomes where Republicans keep a majority. The mass sits left of the line → market expects GOP losses (and a likely lost majority).</p>
+      <p class="note">Amber dashed line = 218 (majority); green bars = buckets entirely above that threshold; the amber 215–219 bucket spans both outcomes.</p>
     </div>
   </div>
 
@@ -308,13 +329,14 @@ def build_html(d, output_path):
 
   <div class="chart-container">
     <h2 class="chart-title">Senate Races — detail <span>(most competitive first)</span></h2>
-    <table>
+    <div style="overflow-x:auto"><table>
       <thead><tr><th>State</th><th>Matchup</th><th class="right">Dem</th><th class="right">Rep</th><th class="right">Poll avg</th><th class="right">Volume</th></tr></thead>
       <tbody>{races_rows}</tbody>
-    </table>
+    </table></div>
+    <p class="note">Polling dates describe the first listed source; hover to see all included fieldwork periods and click to inspect the table. Aggregates are averaged equally, excluding Wikipedia's summary row. Missing polling means no matching table was found. Candidate names checked {escape(d.get('candidates_as_of', 'date unavailable'))}.</p>
   </div>
 
-  <div class="footer">Data: Polymarket Gamma · multi-outcome markets folded to party totals · polling scraped from Wikipedia race pages</div>
+  <div class="footer">Data: <a href="https://polymarket.com/event/{CONTROL['house']}">House</a> · <a href="https://polymarket.com/event/{CONTROL['senate']}">Senate</a> · <a href="https://polymarket.com/event/{BALANCE}">Balance of Power</a> · <a href="https://polymarket.com/event/{HOUSE_SEATS}">House seats</a> · polling from linked Wikipedia race pages · <a href="{CANDIDATE_SOURCES['overview']}">Candidates</a><br>Market prices are independently quoted and may not sum to 100%.</div>
 </div>
 <script>
 (function init(){{
@@ -348,7 +370,7 @@ def build_html(d, output_path):
   }}}};
   new Chart(document.getElementById('seatsChart'),{{type:'bar',
     data:{{labels:seats.map(s=>s.label),datasets:[{{data:seats.map(s=>s.p),
-      backgroundColor:seats.map(s=>low(s.label)>=215?'#34d399':'#a78bfa')}}]}},
+      backgroundColor:seats.map(s=>low(s.label)>=218?'#34d399':low(s.label)===215?'#fbbf24':'#a78bfa')}}]}},
     plugins:[majLine],
     options:{{responsive:true,maintainAspectRatio:false,
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.raw+'%'}}}}}},
@@ -433,7 +455,6 @@ def build_html(d, output_path):
         y:{{min:0,max:100,title:{{display:true,text:'Market: Republican win probability',color:'#64748b'}},
           grid:{{color:c=>c.tick.value===50?'#64748b':'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
 
-  document.getElementById('date').textContent=new Date().toLocaleDateString();
 }})();
 </script></body></html>"""
 

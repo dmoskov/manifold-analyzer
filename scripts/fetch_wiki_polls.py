@@ -16,6 +16,7 @@ page has no polling for the real matchup ("where available").
 import re
 import sys
 import urllib.request
+from html import unescape
 
 WIKI = "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_{}"
 POLL_LIMIT = 5  # newest head-to-head polls averaged when no aggregate exists
@@ -27,7 +28,7 @@ def _fetch(url):
 
 
 def _text(html):
-    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html)).strip()
+    return re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", html))).strip()
 
 
 def _cells(row_html):
@@ -89,12 +90,19 @@ def race_polls(state_title, surnames):
         sums = {p: 0.0 for p in cols}
         counts = {p: 0 for p in cols}
         n, latest = 0, ""
+        sources = []
         for row in rows:
+            # Summary rows often merge the first three columns with colspan.
+            # Reading them at the header offsets mistakes undecided / margin
+            # values for candidate shares, and double-counts the average.
+            if re.match(r"^(average|weighted average|summary)\b", row[0], re.I):
+                continue
             vals = {p: _pct(row[i]) if i < len(row) else None for p, i in cols.items()}
             if vals.get("R") is None or all(vals[p] is None for p in cols if p != "R"):
                 continue
             n += 1
             latest = latest or (row[1] if len(row) > 1 else "")
+            sources.append({"name": row[0], "period": row[1] if len(row) > 1 else ""})
             for p, v in vals.items():
                 if v is not None:
                     sums[p] += v
@@ -114,6 +122,8 @@ def race_polls(state_title, surnames):
             "opp": round(avg[opp], 1),
             "opp_party": opp,
             "margin": round(avg["R"] - avg[opp], 1),
-            "latest": latest[:40],
+            "latest": latest,
+            "sources": sources,
+            "url": WIKI.format(state_title),
         }
     return None
