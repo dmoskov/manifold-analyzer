@@ -8,6 +8,7 @@ distributions). This dashboard folds them into:
   - Control gauges (House / Senate, Dem vs Rep)
   - Balance-of-Power scenario breakdown
   - Republican House-seat distribution (with the 218 majority line)
+  - Republican Senate-seat distribution derived from race markets
   - Competitive Senate races: Dem win% sorted, plus a Dem%-vs-volume bubble view
 
 Usage:
@@ -30,6 +31,9 @@ CONTROL = {
 }
 BALANCE = "balance-of-power-2026-midterms"
 HOUSE_SEATS = "republican-house-seats-after-the-2026-midterm-elections"
+# 31 Republican seats are not up in 2026. Seven Republican-held 2026 seats have
+# no race market in RACE_SLUGS below, so this distribution holds them as R.
+FIXED_REPUBLICAN_SENATE_SEATS = 38
 
 RACE_SLUGS = [
     "maine", "texas", "alaska", "nebraska", "iowa", "michigan", "ohio",
@@ -156,6 +160,20 @@ def poll_html(r):
             f'{escape(p.get("latest", "Polling source"))}</a>')
 
 
+def senate_seat_distribution(races, fixed_seats=FIXED_REPUBLICAN_SENATE_SEATS):
+    """Exact Republican Senate-seat distribution from independent race prices."""
+    dist = {fixed_seats: 1.0}
+    for race in races:
+        p = max(0.0, min(1.0, race["rep"] / 100.0))
+        nxt = {}
+        for seats, prob in dist.items():
+            nxt[seats] = nxt.get(seats, 0.0) + prob * (1.0 - p)
+            nxt[seats + 1] = nxt.get(seats + 1, 0.0) + prob * p
+        dist = nxt
+    return [{"label": str(seats), "p": round(prob * 100.0, 1)}
+            for seats, prob in sorted(dist.items()) if prob >= 0.05]
+
+
 def collect():
     fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     sys.stderr.write("Fetching control markets...\n")
@@ -217,6 +235,8 @@ def collect():
         "bop_vol": float(bop_ev.get("volume", 0)),
         "seats": [{"label": l, "p": round(p, 1)} for l, p in seats],
         "seats_vol": float(seats_ev.get("volume", 0)),
+        "senate_seats": senate_seat_distribution(races),
+        "fixed_republican_senate_seats": FIXED_REPUBLICAN_SENATE_SEATS,
         "races": races,
     }
 
@@ -313,6 +333,11 @@ def build_html(d, output_path):
       <div style="position:relative;height:240px"><canvas id="seatsChart"></canvas></div>
       <p class="note">Amber dashed line = 218 (majority); green bars = buckets entirely above that threshold; the amber 215–219 bucket spans both outcomes.</p>
     </div>
+    <div class="chart-container">
+      <h2 class="chart-title">Republican Senate Seats <span>(derived from race markets)</span></h2>
+      <div style="position:relative;height:240px"><canvas id="senateSeatsChart"></canvas></div>
+      <p class="note">One-seat buckets from the listed Senate race markets, assuming independent outcomes and {d.get('fixed_republican_senate_seats', FIXED_REPUBLICAN_SENATE_SEATS)} fixed Republican seats from not-up seats plus unlisted Republican-held races. Amber line = 50, where Republicans control the Senate with the Vice President breaking ties.</p>
+    </div>
   </div>
 
   <div class="chart-container">
@@ -345,6 +370,7 @@ def build_html(d, output_path):
   if(!window.Chart){{setTimeout(init,50);return;}}
   const bop={json.dumps(d['bop'])};
   const seats={json.dumps(d['seats'])};
+  const senateSeats={json.dumps(d.get('senate_seats', []))};
   const races={json.dumps(races)};
   const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
 
@@ -372,6 +398,25 @@ def build_html(d, output_path):
     data:{{labels:seats.map(s=>s.label),datasets:[{{data:seats.map(s=>s.p),
       backgroundColor:seats.map(s=>low(s.label)>=218?'#34d399':low(s.label)===215?'#fbbf24':'#a78bfa')}}]}},
     plugins:[majLine],
+    options:{{responsive:true,maintainAspectRatio:false,
+      plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.raw+'%'}}}}}},
+      scales:{{x:{{grid:{{display:false}},ticks:{{color:'#94a3b8',font:{{size:9}},maxRotation:60,minRotation:45}}}},
+        y:{{grid:{{color:'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}}}}}}}});
+
+  const senateMajLine={{id:'senateMajLine',afterDatasetsDraw(chart){{
+    const x=chart.scales.x,y=chart.scales.y,idx=senateSeats.findIndex(s=>+s.label===50);
+    if(idx<0)return;
+    const px=x.getPixelForValue(idx);
+    const ctx=chart.ctx;ctx.save();
+    ctx.strokeStyle='#fbbf24';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(px,y.top);ctx.lineTo(px,y.bottom);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#fbbf24';ctx.font='600 10px -apple-system,sans-serif';ctx.textAlign='left';
+    ctx.fillText('50 = R control',px+4,y.top+10);ctx.restore();
+  }}}};
+  new Chart(document.getElementById('senateSeatsChart'),{{type:'bar',
+    data:{{labels:senateSeats.map(s=>s.label),datasets:[{{data:senateSeats.map(s=>s.p),
+      backgroundColor:senateSeats.map(s=>+s.label>50?'#34d399':+s.label===50?'#fbbf24':'#a78bfa')}}]}},
+    plugins:[senateMajLine],
     options:{{responsive:true,maintainAspectRatio:false,
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.raw+'%'}}}}}},
       scales:{{x:{{grid:{{display:false}},ticks:{{color:'#94a3b8',font:{{size:9}},maxRotation:60,minRotation:45}}}},
