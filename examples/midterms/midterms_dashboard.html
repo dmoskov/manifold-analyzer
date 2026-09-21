@@ -30,44 +30,56 @@
   .name{color:#e2e8f0;font-weight:500}
   .dem{color:#60a5fa;font-weight:700} .rep{color:#f87171;font-weight:700}
   .mono{font-family:monospace;color:#fbbf24}
+  a{color:inherit} .poll-date{color:#94a3b8;font-size:11px}
   .note{color:#64748b;font-size:12px;margin-top:10px;line-height:1.5}
   .footer{margin-top:24px;text-align:center;color:#64748b;font-size:12px}
   @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}}
 </style></head>
 <body><div class="container">
   <h1>2026 U.S. Midterms — Polymarket Dashboard</h1>
-  <p class="subtitle">Control, scenarios, seat distribution & 21 Senate races · combined volume $29.3M · generated <span id="date"></span></p>
+  <p class="subtitle">Control, scenarios, seat distribution & 21 Senate races · combined volume $37.3M · data fetched 2026-09-21 16:09:51 UTC</p>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">House control</div><div class="stat-value"><span class="dem">D 88%</span></div></div>
-    <div class="stat-card"><div class="stat-label">Senate control</div><div class="stat-value"><span class="rep">R 50%</span></div></div>
-    <div class="stat-card"><div class="stat-label">Top scenario</div><div class="stat-value" style="font-size:15px">Democrats Sweep<br><span style="color:#94a3b8">48%</span></div></div>
+    <div class="stat-card"><div class="stat-label">House control</div><div class="stat-value"><span class="dem">D 92%</span></div></div>
+    <div class="stat-card"><div class="stat-label">Senate control</div><div class="stat-value"><span class="rep">R 38%</span></div></div>
+    <div class="stat-card"><div class="stat-label">Top scenario</div><div class="stat-value" style="font-size:15px">Democrats Sweep<br><span style="color:#94a3b8">62%</span></div></div>
     <div class="stat-card"><div class="stat-label">Toss-up Senate seats (40–60% R)</div><div class="stat-value">2 / 21</div></div>
   </div>
 
   <div class="chart-container">
     <h2 class="chart-title">Chamber Control <span>(Dem vs Rep)</span></h2>
     <div class="gauge">
-      <div class="gauge-label"><span class="dem">House — Democrats 88%</span><span class="rep">Republicans 12%</span></div>
-      <div class="bar"><div class="d" style="width:88%">D</div><div class="r" style="width:12%">R</div></div>
+      <div class="gauge-label"><span class="dem">House — Democrats 92%</span><span class="rep">Republicans 8%</span></div>
+      <div class="bar"><div class="d" style="width:92%">D</div><div class="r" style="width:8%">R</div></div>
     </div>
     <div class="gauge">
-      <div class="gauge-label"><span class="dem">Senate — Democrats 50%</span><span class="rep">Republicans 50%</span></div>
-      <div class="bar"><div class="d" style="width:50%">D</div><div class="r" style="width:50%">R</div></div>
+      <div class="gauge-label"><span class="dem">Senate — Democrats 62%</span><span class="rep">Republicans 38%</span></div>
+      <div class="bar"><div class="d" style="width:62%">D</div><div class="r" style="width:38%">R</div></div>
     </div>
     <p class="note">Senate control means 51+ seats for Democrats: at 50–50 the Republican Vice President breaks ties, so Republicans keep control. These market prices resolve on that rule — the D% here is the chance Democrats reach 51, not 50.</p>
   </div>
 
   <div class="cols">
     <div class="chart-container">
-      <h2 class="chart-title">Balance of Power <span>($10.5M)</span></h2>
+      <h2 class="chart-title">Balance of Power <span>($13.0M)</span></h2>
       <div style="position:relative;height:240px"><canvas id="bopChart"></canvas></div>
     </div>
     <div class="chart-container">
-      <h2 class="chart-title">Republican House Seats <span>($290k)</span></h2>
+      <h2 class="chart-title">Republican House Seats <span>($308k)</span></h2>
       <div style="position:relative;height:240px"><canvas id="seatsChart"></canvas></div>
-      <p class="note">Amber dashed line = 218 (majority); green bars = outcomes where Republicans keep a majority. The mass sits left of the line → market expects GOP losses (and a likely lost majority).</p>
+      <p class="note">Amber dashed line = 218 (majority); green bars = buckets entirely above that threshold; the amber 215–219 bucket spans both outcomes.</p>
     </div>
+    <div class="chart-container">
+      <h2 class="chart-title">Republican Senate Seats <span>(derived from race markets)</span></h2>
+      <div style="position:relative;height:240px"><canvas id="senateSeatsChart"></canvas></div>
+      <p class="note">One-seat buckets from the listed Senate race markets, assuming independent outcomes and 38 fixed Republican seats from not-up seats plus unlisted Republican-held races. Amber line = 50, where Republicans control the Senate with the Vice President breaking ties.</p>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Battleground Senate Zoom <span>(named battlegrounds plus any race with R between 25% and 75%)</span></h2>
+    <div style="position:relative;height:360px"><canvas id="battlegroundChart"></canvas></div>
+    <p class="note">Bars show distance from the 50% line using directly priced Republican win probability. Blue bars lean Democratic or independent; red bars lean Republican. This view intentionally expands the middle of the map so Ohio, Texas, Iowa, Nebraska, Michigan, Alaska, Maine, Kansas, and New Hampshire are easier to compare.</p>
   </div>
 
   <div class="chart-container">
@@ -84,169 +96,172 @@
 
   <div class="chart-container">
     <h2 class="chart-title">Senate Races — detail <span>(most competitive first)</span></h2>
-    <table>
+    <div style="overflow-x:auto"><table>
       <thead><tr><th>State</th><th>Matchup</th><th class="right">Dem</th><th class="right">Rep</th><th class="right">Poll avg</th><th class="right">Volume</th></tr></thead>
       <tbody><tr>
-          <td class="name">Texas</td>
-          <td style="color:#cbd5e1">James Talarico (D) v Ken Paxton (R)</td>
-          <td class="right"><span class="dem">50%</span></td>
-          <td class="right"><span class="rep">48%</span></td>
-          <td class="right"><span class="dem">Talarico +0.7</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$941k</td>
-        </tr><tr>
-          <td class="name">Ohio</td>
+          <td class="name"><a href="https://polymarket.com/event/ohio-senate-election-winner">Ohio</a></td>
           <td style="color:#cbd5e1">Sherrod Brown (D) v Jon Husted (R)</td>
-          <td class="right"><span class="dem">54%</span></td>
-          <td class="right"><span class="rep">45%</span></td>
-          <td class="right"><span class="dem">Brown +2.8</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$186k</td>
+          <td class="right"><span class="dem">58%</span></td>
+          <td class="right"><span class="rep">42%</span></td>
+          <td class="right"><span class="dem">Brown +4.4</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Ohio" title="August 8 – September 16, 2026; through September 16, 2026; June 14 – September 10, 2026; through September 10, 2026">August 8 – September 16, 2026</a></td>
+          <td class="right mono">$599k</td>
         </tr><tr>
-          <td class="name">Iowa</td>
+          <td class="name"><a href="https://polymarket.com/event/texas-senate-election-winner">Texas</a></td>
+          <td style="color:#cbd5e1">James Talarico (D) v Ken Paxton (R)</td>
+          <td class="right"><span class="dem">60%</span></td>
+          <td class="right"><span class="rep">40%</span></td>
+          <td class="right"><span class="dem">Talarico +3.0</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas" title="August 30 – September 14, 2026; through September 17, 2026; August 24 – September 17, 2026; through September 14, 2026">August 30 – September 14, 2026</a></td>
+          <td class="right mono">$1.4M</td>
+        </tr><tr>
+          <td class="name"><a href="https://polymarket.com/event/iowa-senate-election-winner">Iowa</a></td>
           <td style="color:#cbd5e1">Josh Turek (D) v Ashley Hinson (R)</td>
           <td class="right"><span class="dem">40%</span></td>
           <td class="right"><span class="rep">60%</span></td>
-          <td class="right"><span class="rep">Hinson +2.6</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$213k</td>
+          <td class="right"><span class="rep">Hinson +0.3</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa" title="August 30 – September 18, 2026; through September 18, 2026; August 20 – September 18, 2026">August 30 – September 18, 2026</a></td>
+          <td class="right mono">$412k</td>
         </tr><tr>
-          <td class="name">Alaska</td>
-          <td style="color:#cbd5e1">Mary Peltola (D) v Dan Sullivan (R)</td>
-          <td class="right"><span class="dem">62%</span></td>
-          <td class="right"><span class="rep">38%</span></td>
-          <td class="right"><span class="rep">Sullivan +0.0</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$449k</td>
-        </tr><tr>
-          <td class="name">Michigan</td>
+          <td class="name"><a href="https://polymarket.com/event/michigan-senate-election-winner">Michigan</a></td>
           <td style="color:#cbd5e1">Abdul El-Sayed (D) v Mike Rogers (R)</td>
-          <td class="right"><span class="dem">63%</span></td>
-          <td class="right"><span class="rep">38%</span></td>
-          <td class="right"><span class="dem">El-Sayed +2.1</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$597k</td>
+          <td class="right"><span class="dem">67%</span></td>
+          <td class="right"><span class="rep">34%</span></td>
+          <td class="right"><span class="dem">El-Sayed +2.4</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan" title="August 31 – September 17, 2026; through September 17, 2026; August 6 – September 17, 2026">August 31 – September 17, 2026</a></td>
+          <td class="right mono">$853k</td>
         </tr><tr>
-          <td class="name">Maine</td>
+          <td class="name"><a href="https://polymarket.com/event/nebraska-senate-election-winner">Nebraska</a></td>
+          <td style="color:#cbd5e1">Dan Osborn (I) v Pete Ricketts (R)</td>
+          <td class="right"><span class="dem">0%</span></td>
+          <td class="right"><span class="rep">68%</span> <span style="color:#a78bfa">· Ind 31%</span></td>
+          <td class="right"><span style="color:#a78bfa;font-weight:700">Osborn +0.4</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska" title="September 8–16, 2026; through September 16, 2026">September 8–16, 2026</a></td>
+          <td class="right mono">$296k</td>
+        </tr><tr>
+          <td class="name"><a href="https://polymarket.com/event/maine-senate-election-winner">Maine</a></td>
           <td style="color:#cbd5e1">Troy Jackson (D) v Susan Collins (R)</td>
           <td class="right"><span class="dem">70%</span></td>
           <td class="right"><span class="rep">30%</span></td>
-          <td class="right"><span class="dem">Jackson +1.1</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$1.2M</td>
+          <td class="right"><span class="dem">Jackson +2.3</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine" title="August 31 – September 15, 2026; through September 15, 2026; August 6 – September 15, 2026">August 31 – September 15, 2026</a></td>
+          <td class="right mono">$1.4M</td>
         </tr><tr>
-          <td class="name">Nebraska</td>
-          <td style="color:#cbd5e1">Cindy Burbank (D) v Dan Osborn (I) v Pete Ricketts (R)</td>
-          <td class="right"><span class="dem">0%</span></td>
-          <td class="right"><span class="rep">70%</span> <span style="color:#a78bfa">· Ind 30%</span></td>
-          <td class="right"><span class="rep">Ricketts +1.2</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$206k</td>
+          <td class="name"><a href="https://polymarket.com/event/alaska-senate-election-winner">Alaska</a></td>
+          <td style="color:#cbd5e1">Mary Peltola (D) v Dan Sullivan (R)</td>
+          <td class="right"><span class="dem">74%</span></td>
+          <td class="right"><span class="rep">28%</span></td>
+          <td class="right"><span class="dem">Peltola +1.9</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska" title="through September 17, 2026; through September 11, 2026; August 20 – September 17, 2026">through September 17, 2026</a></td>
+          <td class="right mono">$620k</td>
         </tr><tr>
-          <td class="name">Kansas</td>
+          <td class="name"><a href="https://polymarket.com/event/kansas-senate-election-winner">Kansas</a></td>
           <td style="color:#cbd5e1">Adam Hamilton (D) v Roger Marshall (R)</td>
-          <td class="right"><span class="dem">20%</span></td>
-          <td class="right"><span class="rep">78%</span></td>
-          <td class="right"><span class="rep">Marshall +4.2</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$45k</td>
+          <td class="right"><span class="dem">26%</span></td>
+          <td class="right"><span class="rep">74%</span></td>
+          <td class="right"><span class="rep">Marshall +1.2</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas" title="September 8–16, 2026; through September 16, 2026">September 8–16, 2026</a></td>
+          <td class="right mono">$139k</td>
         </tr><tr>
-          <td class="name">South Carolina</td>
-          <td style="color:#cbd5e1">Annie Andrews (D) v Lindsey Graham (R)</td>
-          <td class="right"><span class="dem">14%</span></td>
-          <td class="right"><span class="rep">87%</span></td>
-          <td class="right"><span class="rep">Graham +0.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span></td>
-          <td class="right mono">$153k</td>
-        </tr><tr>
-          <td class="name">New Hampshire</td>
+          <td class="name"><a href="https://polymarket.com/event/new-hampshire-senate-election-winner">New Hampshire</a></td>
           <td style="color:#cbd5e1">Chris Pappas (D) v John E. Sununu (R)</td>
-          <td class="right"><span class="dem">88%</span></td>
-          <td class="right"><span class="rep">12%</span></td>
-          <td class="right"><span class="dem">Pappas +3.0</span> <span style="color:#64748b;font-size:11px">(last 5 polls)</span></td>
-          <td class="right mono">$83k</td>
+          <td class="right"><span class="dem">82%</span></td>
+          <td class="right"><span class="rep">18%</span></td>
+          <td class="right"><span class="dem">Pappas +3.2</span> <span style="color:#64748b;font-size:11px">(last 5 polls)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire" title="September 16–17, 2026; September 9–11, 2026; September 8–10, 2026; August 27–30, 2026; August 20–24, 2026">September 16–17, 2026</a></td>
+          <td class="right mono">$214k</td>
         </tr><tr>
-          <td class="name">Minnesota</td>
-          <td style="color:#cbd5e1">Peggy Flanagan (D) v Michele Tafoya (R)</td>
-          <td class="right"><span class="dem">90%</span></td>
-          <td class="right"><span class="rep">10%</span></td>
-          <td class="right"><span style="color:#475569">—</span></td>
-          <td class="right mono">$56k</td>
+          <td class="name"><a href="https://polymarket.com/event/south-carolina-senate-election-winner">South Carolina</a></td>
+          <td style="color:#cbd5e1">Annie Andrews (D) v Darline Graham (R)</td>
+          <td class="right"><span class="dem">12%</span></td>
+          <td class="right"><span class="rep">86%</span></td>
+          <td class="right"><span class="rep">Graham +3.5</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina" title="through September 9, 2026; September 8–14, 2026">through September 9, 2026</a></td>
+          <td class="right mono">$311k</td>
         </tr><tr>
-          <td class="name">North Carolina</td>
-          <td style="color:#cbd5e1">Roy Cooper (D) v Michael Whatley (R)</td>
-          <td class="right"><span class="dem">92%</span></td>
-          <td class="right"><span class="rep">8%</span></td>
-          <td class="right"><span class="dem">Cooper +7.2</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$100k</td>
-        </tr><tr>
-          <td class="name">Florida</td>
+          <td class="name"><a href="https://polymarket.com/event/florida-senate-election-winner">Florida</a></td>
           <td style="color:#cbd5e1">Angie Nixon (D) v Ashley Moody (R)</td>
           <td class="right"><span class="dem">10%</span></td>
           <td class="right"><span class="rep">92%</span></td>
-          <td class="right"><span class="rep">Moody +9.7</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$107k</td>
+          <td class="right"><span class="rep">Moody +4.0</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Florida" title="September 8–17, 2026; through September 17, 2026; July 8 – September 17, 2026">September 8–17, 2026</a></td>
+          <td class="right mono">$125k</td>
         </tr><tr>
-          <td class="name">Montana</td>
+          <td class="name"><a href="https://polymarket.com/event/minnesota-senate-election-winner">Minnesota</a></td>
+          <td style="color:#cbd5e1">Peggy Flanagan (D) v Michele Tafoya (R)</td>
+          <td class="right"><span class="dem">92%</span></td>
+          <td class="right"><span class="rep">8%</span></td>
+          <td class="right"><span style="color:#475569">—</span></td>
+          <td class="right mono">$93k</td>
+        </tr><tr>
+          <td class="name"><a href="https://polymarket.com/event/montana-senate-election-winner">Montana</a></td>
           <td style="color:#cbd5e1">Alani Bankhead (D) v Seth Bodnar (I) v Kurt Alme (R)</td>
           <td class="right"><span class="dem">1%</span></td>
-          <td class="right"><span class="rep">92%</span> <span style="color:#a78bfa">· Ind 7%</span></td>
-          <td class="right"><span class="rep">Alme +14.8</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$115k</td>
+          <td class="right"><span class="rep">92%</span> <span style="color:#a78bfa">· Ind 6%</span></td>
+          <td class="right"><span class="rep">Alme +16.1</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana" title="through September 15, 2026; through September 7, 2026">through September 15, 2026</a></td>
+          <td class="right mono">$125k</td>
         </tr><tr>
-          <td class="name">Georgia</td>
+          <td class="name"><a href="https://polymarket.com/event/north-carolina-senate-election-winner">North Carolina</a></td>
+          <td style="color:#cbd5e1">Roy Cooper (D) v Michael Whatley (R)</td>
+          <td class="right"><span class="dem">92%</span></td>
+          <td class="right"><span class="rep">8%</span></td>
+          <td class="right"><span class="dem">Cooper +8.9</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina" title="August 21 – September 17, 2026; through September 17, 2026; through September 15, 2026; August 3 – September 17, 2026">August 21 – September 17, 2026</a></td>
+          <td class="right mono">$144k</td>
+        </tr><tr>
+          <td class="name"><a href="https://polymarket.com/event/georgia-senate-election-winner">Georgia</a></td>
           <td style="color:#cbd5e1">Jon Ossoff (D) v Mike Collins (R)</td>
           <td class="right"><span class="dem">94%</span></td>
           <td class="right"><span class="rep">6%</span></td>
-          <td class="right"><span class="dem">Ossoff +6.5</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span></td>
-          <td class="right mono">$123k</td>
+          <td class="right"><span class="dem">Ossoff +7.1</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Georgia" title="September 10 – September 16, 2026; through September 16, 2026; through September 12, 2026; June 23 – September 16, 2026">September 10 – September 16, 2026</a></td>
+          <td class="right mono">$153k</td>
         </tr><tr>
-          <td class="name">Mississippi</td>
+          <td class="name"><a href="https://polymarket.com/event/mississippi-senate-election-winner">Mississippi</a></td>
           <td style="color:#cbd5e1">Scott Colom (D) v Cindy Hyde-Smith (R)</td>
           <td class="right"><span class="dem">6%</span></td>
           <td class="right"><span class="rep">94%</span></td>
-          <td class="right"><span class="rep">Hyde-Smith +8.0</span> <span style="color:#64748b;font-size:11px">(last 2 polls)</span></td>
-          <td class="right mono">$45k</td>
+          <td class="right"><span class="rep">Hyde-Smith +8.9</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Mississippi" title="through August 13, 2026">through August 13, 2026</a></td>
+          <td class="right mono">$82k</td>
         </tr><tr>
-          <td class="name">Oklahoma</td>
-          <td style="color:#cbd5e1">N'Kiyla Jasmine Thomas (D) v Kevin Hern (R)</td>
-          <td class="right"><span class="dem">4%</span></td>
+          <td class="name"><a href="https://polymarket.com/event/kentucky-senate-election-winner">Kentucky</a></td>
+          <td style="color:#cbd5e1">Charles Booker (D) v Andy Barr (R)</td>
+          <td class="right"><span class="dem">3%</span></td>
           <td class="right"><span class="rep">96%</span></td>
-          <td class="right"><span class="rep">Hern +24.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span></td>
-          <td class="right mono">$19k</td>
+          <td class="right"><span class="rep">Barr +10.6</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kentucky" title="through August 27, 2026">through August 27, 2026</a></td>
+          <td class="right mono">$34k</td>
         </tr><tr>
-          <td class="name">Virginia</td>
-          <td style="color:#cbd5e1">Mark Warner (D) v Bert Mizusawa (R)</td>
-          <td class="right"><span class="dem">95%</span></td>
-          <td class="right"><span class="rep">4%</span></td>
-          <td class="right"><span class="dem">Warner +22.0</span> <span style="color:#64748b;font-size:11px">(last 2 polls)</span></td>
-          <td class="right mono">$17k</td>
-        </tr><tr>
-          <td class="name">Wyoming</td>
+          <td class="name"><a href="https://polymarket.com/event/wyoming-senate-election-winner">Wyoming</a></td>
           <td style="color:#cbd5e1">James Byrd (D) v Harriet Hageman (R)</td>
           <td class="right"><span class="dem">3%</span></td>
           <td class="right"><span class="rep">96%</span></td>
           <td class="right"><span style="color:#475569">—</span></td>
           <td class="right mono">$17k</td>
         </tr><tr>
-          <td class="name">Kentucky</td>
-          <td style="color:#cbd5e1">Charles Booker (D) v Andy Barr (R)</td>
+          <td class="name"><a href="https://polymarket.com/event/oklahoma-senate-election-winner">Oklahoma</a></td>
+          <td style="color:#cbd5e1">N'Kiyla Jasmine Thomas (D) v Kevin Hern (R)</td>
           <td class="right"><span class="dem">3%</span></td>
           <td class="right"><span class="rep">97%</span></td>
-          <td class="right"><span class="rep">Barr +11.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span></td>
-          <td class="right mono">$33k</td>
+          <td class="right"><span class="rep">Hern +24.0</span> <span style="color:#64748b;font-size:11px">(last 1 polls)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Oklahoma" title="August 3–6, 2026">August 3–6, 2026</a></td>
+          <td class="right mono">$26k</td>
         </tr><tr>
-          <td class="name">Colorado</td>
+          <td class="name"><a href="https://polymarket.com/event/colorado-senate-election-winner">Colorado</a></td>
           <td style="color:#cbd5e1">John Hickenlooper (D) v Mark Baisley (R)</td>
           <td class="right"><span class="dem">96%</span></td>
           <td class="right"><span class="rep">3%</span></td>
           <td class="right"><span style="color:#475569">—</span></td>
           <td class="right mono">$48k</td>
+        </tr><tr>
+          <td class="name"><a href="https://polymarket.com/event/virginia-senate-election-winner">Virginia</a></td>
+          <td style="color:#cbd5e1">Mark Warner (D) v Bert Mizusawa (R)</td>
+          <td class="right"><span class="dem">98%</span></td>
+          <td class="right"><span class="rep">2%</span></td>
+          <td class="right"><span class="dem">Warner +18.0</span> <span style="color:#64748b;font-size:11px">(poll aggregates)</span><br><a class="poll-date" href="https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Virginia" title="through June 16, 2026">through June 16, 2026</a></td>
+          <td class="right mono">$24k</td>
         </tr></tbody>
-    </table>
+    </table></div>
+    <p class="note">Polling dates describe the first listed source; hover to see all included fieldwork periods and click to inspect the table. Aggregates are averaged equally, excluding Wikipedia's summary row. Missing polling means no matching table was found. Candidate names checked 2026-09-13.</p>
   </div>
 
-  <div class="footer">Data: Polymarket Gamma · multi-outcome markets folded to party totals · polling scraped from Wikipedia race pages</div>
+  <div class="footer">Data: <a href="https://polymarket.com/event/which-party-will-win-the-house-in-2026">House</a> · <a href="https://polymarket.com/event/which-party-will-win-the-senate-in-2026">Senate</a> · <a href="https://polymarket.com/event/balance-of-power-2026-midterms">Balance of Power</a> · <a href="https://polymarket.com/event/republican-house-seats-after-the-2026-midterm-elections">House seats</a> · polling from linked Wikipedia race pages · <a href="https://en.wikipedia.org/wiki/2026_United_States_Senate_elections">Candidates</a><br>Market prices are independently quoted and may not sum to 100%.</div>
 </div>
 <script>
 (function init(){
   // htmlpreview & similar proxies eval inline scripts before the CDN script
   // loads — poll until Chart.js is present instead of assuming order
   if(!window.Chart){setTimeout(init,50);return;}
-  const bop=[{"label": "Democrats Sweep", "p": 48.5}, {"label": "R Senate, D House", "p": 37.5}, {"label": "Republicans Sweep", "p": 11.5}, {"label": "D Senate, R House", "p": 1.1}, {"label": "Other", "p": 0.2}];
-  const seats=[{"label": "Below 190", "p": 24.5}, {"label": "190-194", "p": 14.5}, {"label": "195-199", "p": 14.0}, {"label": "200-204", "p": 13.7}, {"label": "205-209", "p": 11.2}, {"label": "210-214", "p": 8.3}, {"label": "215-219", "p": 5.1}, {"label": "220-224", "p": 3.1}, {"label": "225-229", "p": 5.4}, {"label": "230+", "p": 2.9}];
-  const races=[{"slug": "texas", "state": "Texas", "dem": 49.5, "rep": 48.5, "other": 2.0, "fav": "James Talarico (D) 50%", "volume": 941378, "poll": {"kind": "agg", "n": 8, "rep": 40.0, "opp": 40.7, "opp_party": "D", "margin": -0.7, "latest": "July 27 \u2013 August 13, 2026"}, "label": "Texas \u00b7 Talarico v Paxton"}, {"slug": "ohio", "state": "Ohio", "dem": 54.5, "rep": 45.0, "other": 0.5, "fav": "Sherrod Brown (D) 55%", "volume": 186242, "poll": {"kind": "agg", "n": 7, "rep": 39.7, "opp": 42.5, "opp_party": "D", "margin": -2.8, "latest": "August 13 \u2013 August 14, 2026"}, "label": "Ohio \u00b7 Brown v Husted"}, {"slug": "iowa", "state": "Iowa", "dem": 40.5, "rep": 60.5, "other": 0.0, "fav": "Ashley Hinson (R) 60%", "volume": 213163, "poll": {"kind": "agg", "n": 6, "rep": 40.4, "opp": 37.7, "opp_party": "D", "margin": 2.6, "latest": "August 6\u201326, 2026"}, "label": "Iowa \u00b7 Turek v Hinson"}, {"slug": "alaska", "state": "Alaska", "dem": 61.5, "rep": 38.5, "other": 0.0, "fav": "Mary Peltola 62%", "volume": 448849, "poll": {"kind": "agg", "n": 4, "rep": 36.5, "opp": 36.4, "opp_party": "D", "margin": 0.0, "latest": "through August 5, 2026"}, "label": "Alaska \u00b7 Peltola v Sullivan"}, {"slug": "michigan", "state": "Michigan", "dem": 63.0, "rep": 37.5, "other": 0.0, "fav": "Abdul El-Sayed (D) 63%", "volume": 596751, "poll": {"kind": "agg", "n": 7, "rep": 38.4, "opp": 40.5, "opp_party": "D", "margin": -2.1, "latest": "July 24 \u2013 August 17, 2026"}, "label": "Michigan \u00b7 El-Sayed v Rogers"}, {"slug": "maine", "state": "Maine", "dem": 70.5, "rep": 30.5, "other": 0.0, "fav": "Troy Jackson (D) 70%", "volume": 1222625, "poll": {"kind": "agg", "n": 5, "rep": 37.9, "opp": 39.0, "opp_party": "D", "margin": -1.1, "latest": "through August 10, 2026"}, "label": "Maine \u00b7 Jackson v Collins"}, {"slug": "nebraska", "state": "Nebraska", "dem": 0.1, "rep": 69.5, "other": 30.3, "fav": "Pete Ricketts (R) 70%", "volume": 205534, "poll": {"kind": "agg", "n": 1, "rep": 47.5, "opp": 46.3, "opp_party": "I", "margin": 1.2, "latest": "through August 13, 2026"}, "label": "Nebraska \u00b7 Osborn v Ricketts"}, {"slug": "kansas", "state": "Kansas", "dem": 20.0, "rep": 78.0, "other": 2.0, "fav": "Republican 78%", "volume": 44708, "poll": {"kind": "agg", "n": 3, "rep": 34.7, "opp": 30.6, "opp_party": "D", "margin": 4.2, "latest": "through August 8, 2026"}, "label": "Kansas \u00b7 Hamilton v Marshall"}, {"slug": "south-carolina", "state": "South Carolina", "dem": 13.5, "rep": 87.0, "other": 0.0, "fav": "Republican 87%", "volume": 153357, "poll": {"kind": "raw", "n": 1, "rep": 41.0, "opp": 41.0, "opp_party": "D", "margin": 0.0, "latest": "August 18\u201324, 2026"}, "label": "South Carolina \u00b7 Andrews v Graham"}, {"slug": "new-hampshire", "state": "New Hampshire", "dem": 88.0, "rep": 11.5, "other": 0.5, "fav": "Democrat 88%", "volume": 82741, "poll": {"kind": "raw", "n": 5, "rep": 42.6, "opp": 45.6, "opp_party": "D", "margin": -3.0, "latest": "August 20\u201324, 2026"}, "label": "New Hampshire \u00b7 Pappas v Sununu"}, {"slug": "minnesota", "state": "Minnesota", "dem": 90.5, "rep": 9.5, "other": 0.0, "fav": "Peggy Flanagan (D) 90%", "volume": 56334, "poll": null, "label": "Minnesota \u00b7 Flanagan v Tafoya"}, {"slug": "north-carolina", "state": "North Carolina", "dem": 91.5, "rep": 8.5, "other": 0.0, "fav": "Roy Cooper (D) 92%", "volume": 99641, "poll": {"kind": "agg", "n": 6, "rep": 36.6, "opp": 43.9, "opp_party": "D", "margin": -7.2, "latest": "July 29 \u2013 August 21, 2026"}, "label": "North Carolina \u00b7 Cooper v Whatley"}, {"slug": "florida", "state": "Florida", "dem": 9.5, "rep": 91.5, "other": 0.0, "fav": "Ashley Moody (R) 92%", "volume": 107223, "poll": {"kind": "agg", "n": 1, "rep": 50.6, "opp": 40.9, "opp_party": "D", "margin": 9.7, "latest": "through July 17, 2026"}, "label": "Florida \u00b7 Nixon v Moody"}, {"slug": "montana", "state": "Montana", "dem": 0.8, "rep": 92.0, "other": 7.2, "fav": "Republican 92%", "volume": 115313, "poll": {"kind": "agg", "n": 3, "rep": 38.5, "opp": 23.7, "opp_party": "I", "margin": 14.8, "latest": "through August 4, 2026"}, "label": "Montana \u00b7 Bodnar v Alme"}, {"slug": "georgia", "state": "Georgia", "dem": 93.5, "rep": 6.3, "other": 0.2, "fav": "Jon Ossoff (D)  94%", "volume": 122537, "poll": {"kind": "agg", "n": 6, "rep": 37.2, "opp": 43.7, "opp_party": "D", "margin": -6.5, "latest": "July 23 \u2013 August 18, 2026"}, "label": "Georgia \u00b7 Ossoff v Collins"}, {"slug": "mississippi", "state": "Mississippi", "dem": 6.5, "rep": 94.0, "other": 0.0, "fav": "Republican 94%", "volume": 44619, "poll": {"kind": "raw", "n": 2, "rep": 46.5, "opp": 38.5, "opp_party": "D", "margin": 8.0, "latest": "April 8\u201312, 2026"}, "label": "Mississippi \u00b7 Colom v Hyde-Smith"}, {"slug": "oklahoma", "state": "Oklahoma", "dem": 3.5, "rep": 95.5, "other": 1.0, "fav": "Republican 96%", "volume": 19335, "poll": {"kind": "raw", "n": 1, "rep": 49.0, "opp": 25.0, "opp_party": "D", "margin": 24.0, "latest": "August 3\u20136, 2026"}, "label": "Oklahoma \u00b7 Hern"}, {"slug": "virginia", "state": "Virginia", "dem": 95.0, "rep": 4.5, "other": 0.5, "fav": "Democrat 95%", "volume": 16871, "poll": {"kind": "raw", "n": 2, "rep": 31.0, "opp": 53.0, "opp_party": "D", "margin": -22.0, "latest": "June 12\u201316, 2026"}, "label": "Virginia \u00b7 Warner"}, {"slug": "wyoming", "state": "Wyoming", "dem": 2.8, "rep": 96.5, "other": 0.8, "fav": "Republican 96%", "volume": 16728, "poll": null, "label": "Wyoming \u00b7 Hageman"}, {"slug": "kentucky", "state": "Kentucky", "dem": 2.9, "rep": 96.6, "other": 0.6, "fav": "Andy Barr (R) 97%", "volume": 33116, "poll": {"kind": "raw", "n": 1, "rep": 49.0, "opp": 38.0, "opp_party": "D", "margin": 11.0, "latest": "December 18\u201319, 2025"}, "label": "Kentucky \u00b7 Barr"}, {"slug": "colorado", "state": "Colorado", "dem": 96.2, "rep": 3.0, "other": 0.7, "fav": "Democrat 96%", "volume": 47997, "poll": null, "label": "Colorado \u00b7 Hickenlooper"}];
+  const bop=[{"label": "Democrats Sweep", "p": 61.5}, {"label": "R Senate, D House", "p": 30.5}, {"label": "Republicans Sweep", "p": 8.5}, {"label": "D Senate, R House", "p": 0.9}, {"label": "Other", "p": 0.2}];
+  const seats=[{"label": "Below 190", "p": 26.0}, {"label": "190-194", "p": 10.5}, {"label": "195-199", "p": 14.5}, {"label": "200-204", "p": 12.8}, {"label": "205-209", "p": 12.2}, {"label": "210-214", "p": 9.0}, {"label": "215-219", "p": 7.4}, {"label": "220-224", "p": 3.5}, {"label": "225-229", "p": 2.2}, {"label": "230+", "p": 2.0}];
+  const senateSeats=[{"label": "46", "p": 5.7}, {"label": "47", "p": 13.8}, {"label": "48", "p": 22.2}, {"label": "49", "p": 24.4}, {"label": "50", "p": 18.3}, {"label": "51", "p": 9.4}];
+  const races=[{"slug": "ohio", "state": "Ohio", "dem": 58.5, "rep": 41.5, "other": 0.0, "fav": "Sherrod Brown (D) 58%", "volume": 598622, "poll": {"kind": "agg", "n": 6, "rep": 43.4, "opp": 47.8, "opp_party": "D", "margin": -4.4, "latest": "August 8 \u2013 September 16, 2026", "sources": [{"name": "270toWin [ 115 ]", "period": "August 8 \u2013 September 16, 2026"}, {"name": "Decision Desk HQ [ 116 ]", "period": "through September 16, 2026"}, {"name": "FiftyPlusOne [ 117 ]", "period": "through September 16, 2026"}, {"name": "Race to the WH [ 118 ]", "period": "through September 16, 2026"}, {"name": "RealClearPolitics [ 119 ]", "period": "June 14 \u2013 September 10, 2026"}, {"name": "Silver Bulletin [ 105 ]", "period": "through September 10, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Ohio"}, "label": "Ohio \u00b7 Brown v Husted"}, {"slug": "texas", "state": "Texas", "dem": 60.5, "rep": 40.5, "other": 0.0, "fav": "James Talarico (D) 60%", "volume": 1372660, "poll": {"kind": "agg", "n": 7, "rep": 44.7, "opp": 47.7, "opp_party": "D", "margin": -3.0, "latest": "August 30 \u2013 September 14, 2026", "sources": [{"name": "270toWin [ 398 ]", "period": "August 30 \u2013 September 14, 2026"}, {"name": "Decision Desk HQ [ 399 ]", "period": "through September 17, 2026"}, {"name": "FiftyPlusOne [ 400 ]", "period": "through September 17, 2026"}, {"name": "Race to the WH [ 193 ]", "period": "through September 17, 2026"}, {"name": "RealClearPolitics [ 401 ]", "period": "August 24 \u2013 September 17, 2026"}, {"name": "The Texas Tribune [ 402 ]", "period": "through September 17, 2026"}, {"name": "Silver Bulletin [ 347 ]", "period": "through September 14, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"}, "label": "Texas \u00b7 Talarico v Paxton"}, {"slug": "iowa", "state": "Iowa", "dem": 39.5, "rep": 60.5, "other": 0.0, "fav": "Ashley Hinson (R) 60%", "volume": 411629, "poll": {"kind": "agg", "n": 6, "rep": 44.6, "opp": 44.4, "opp_party": "D", "margin": 0.3, "latest": "August 30 \u2013 September 18, 2026", "sources": [{"name": "270toWin [ 119 ]", "period": "August 30 \u2013 September 18, 2026"}, {"name": "Decision Desk HQ [ 120 ]", "period": "through September 18, 2026"}, {"name": "FiftyPlusOne [ 121 ]", "period": "through September 18, 2026"}, {"name": "Race to the WH [ 122 ]", "period": "through September 18, 2026"}, {"name": "RealClearPolitics [ 123 ]", "period": "August 20 \u2013 September 18, 2026"}, {"name": "Silver Bulletin [ 90 ]", "period": "through September 18, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"}, "label": "Iowa \u00b7 Turek v Hinson"}, {"slug": "michigan", "state": "Michigan", "dem": 67.0, "rep": 34.0, "other": 0.0, "fav": "Abdul El-Sayed (D) 67%", "volume": 853253, "poll": {"kind": "agg", "n": 6, "rep": 44.7, "opp": 47.0, "opp_party": "D", "margin": -2.4, "latest": "August 31 \u2013 September 17, 2026", "sources": [{"name": "270toWin [ 204 ]", "period": "August 31 \u2013 September 17, 2026"}, {"name": "Decision Desk HQ [ 327 ]", "period": "through September 17, 2026"}, {"name": "FiftyPlusOne [ 328 ]", "period": "through September 17, 2026"}, {"name": "Race to the WH [ 206 ]", "period": "through September 17, 2026"}, {"name": "RealClearPolitics [ 329 ]", "period": "August 6 \u2013 September 17, 2026"}, {"name": "Silver Bulletin [ 281 ]", "period": "through September 17, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"}, "label": "Michigan \u00b7 El-Sayed v Rogers"}, {"slug": "nebraska", "state": "Nebraska", "dem": 0.1, "rep": 68.5, "other": 31.3, "fav": "Pete Ricketts (R) 68%", "volume": 295747, "poll": {"kind": "agg", "n": 3, "rep": 46.5, "opp": 46.9, "opp_party": "I", "margin": -0.4, "latest": "September 8\u201316, 2026", "sources": [{"name": "270toWin [ 85 ]", "period": "September 8\u201316, 2026"}, {"name": "Race to the WH [ 86 ]", "period": "through September 16, 2026"}, {"name": "Silver Bulletin [ 62 ]", "period": "through September 16, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"}, "label": "Nebraska \u00b7 Osborn v Ricketts"}, {"slug": "maine", "state": "Maine", "dem": 70.5, "rep": 30.5, "other": 0.0, "fav": "Troy Jackson (D) 70%", "volume": 1446259, "poll": {"kind": "agg", "n": 6, "rep": 45.2, "opp": 47.5, "opp_party": "D", "margin": -2.3, "latest": "August 31 \u2013 September 15, 2026", "sources": [{"name": "270toWin [ 337 ]", "period": "August 31 \u2013 September 15, 2026"}, {"name": "Decision Desk HQ [ 338 ]", "period": "through September 15, 2026"}, {"name": "FiftyPlusOne [ 339 ]", "period": "through September 15, 2026"}, {"name": "Race to the WH [ 195 ]", "period": "through September 15, 2026"}, {"name": "RealClearPolitics [ 340 ]", "period": "August 6 \u2013 September 15, 2026"}, {"name": "Silver Bulletin [ 309 ]", "period": "through September 15, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"}, "label": "Maine \u00b7 Jackson v Collins"}, {"slug": "alaska", "state": "Alaska", "dem": 73.5, "rep": 27.6, "other": 0.0, "fav": "Mary Peltola 74%", "volume": 619616, "poll": {"kind": "agg", "n": 5, "rep": 47.6, "opp": 49.5, "opp_party": "D", "margin": -1.9, "latest": "through September 17, 2026", "sources": [{"name": "Decision Desk HQ [ 98 ]", "period": "through September 17, 2026"}, {"name": "FiftyPlusOne [ 99 ]", "period": "through September 17, 2026"}, {"name": "Race to the WH [ 100 ]", "period": "through September 11, 2026"}, {"name": "RealClearPolitics [ 101 ]", "period": "August 20 \u2013 September 17, 2026"}, {"name": "Silver Bulletin [ 91 ]", "period": "through September 17, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"}, "label": "Alaska \u00b7 Peltola v Sullivan"}, {"slug": "kansas", "state": "Kansas", "dem": 26.5, "rep": 73.5, "other": 0.0, "fav": "Roger Marshall (R) 74%", "volume": 139028, "poll": {"kind": "agg", "n": 4, "rep": 45.8, "opp": 44.6, "opp_party": "D", "margin": 1.2, "latest": "September 8\u201316, 2026", "sources": [{"name": "270toWin [ 44 ]", "period": "September 8\u201316, 2026"}, {"name": "Race to the WH [ 45 ]", "period": "through September 16, 2026"}, {"name": "RealClearPolitics [ 46 ]", "period": "through September 16, 2026"}, {"name": "Silver Bulletin [ 35 ]", "period": "through September 16, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"}, "label": "Kansas \u00b7 Hamilton v Marshall"}, {"slug": "new-hampshire", "state": "New Hampshire", "dem": 82.0, "rep": 18.5, "other": 0.0, "fav": "Chris Pappas (D) 82%", "volume": 214073, "poll": {"kind": "raw", "n": 5, "rep": 40.4, "opp": 43.6, "opp_party": "D", "margin": -3.2, "latest": "September 16\u201317, 2026", "sources": [{"name": "InsiderAdvantage (R) [ 119 ]", "period": "September 16\u201317, 2026"}, {"name": "co/efficient (R) [ 120 ]", "period": "September 9\u201311, 2026"}, {"name": "Rasmussen Reports (R) [ 121 ]", "period": "September 8\u201310, 2026"}, {"name": "Fabrizio, Lee, & Associates (R) [ 122 ] [ C ]", "period": "August 27\u201330, 2026"}, {"name": "University of New Hampshire [ 57 ]", "period": "August 20\u201324, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"}, "label": "New Hampshire \u00b7 Pappas v Sununu"}, {"slug": "south-carolina", "state": "South Carolina", "dem": 11.5, "rep": 86.5, "other": 2.0, "fav": "Darline Graham Nordone (R) 86%", "volume": 311343, "poll": {"kind": "agg", "n": 4, "rep": 45.9, "opp": 42.3, "opp_party": "D", "margin": 3.5, "latest": "through September 9, 2026", "sources": [{"name": "FiftyPlusOne [ 182 ]", "period": "through September 9, 2026"}, {"name": "Race to the WH [ 183 ]", "period": "through September 9, 2026"}, {"name": "RealClearPolitics [ 184 ]", "period": "September 8\u201314, 2026"}, {"name": "Silver Bulletin [ 173 ]", "period": "through September 9, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"}, "label": "South Carolina \u00b7 Andrews v Graham"}, {"slug": "florida", "state": "Florida", "dem": 9.5, "rep": 91.5, "other": 0.0, "fav": "Ashley Moody (R) 92%", "volume": 124531, "poll": {"kind": "agg", "n": 4, "rep": 47.4, "opp": 43.4, "opp_party": "D", "margin": 4.0, "latest": "September 8\u201317, 2026", "sources": [{"name": "270toWin [ 116 ]", "period": "September 8\u201317, 2026"}, {"name": "Race to the WH [ 117 ]", "period": "through September 17, 2026"}, {"name": "RealClearPolitics [ 118 ]", "period": "July 8 \u2013 September 17, 2026"}, {"name": "Silver Bulletin [ 110 ]", "period": "through September 17, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Florida"}, "label": "Florida \u00b7 Nixon v Moody"}, {"slug": "minnesota", "state": "Minnesota", "dem": 92.5, "rep": 8.5, "other": 0.0, "fav": "Peggy Flanagan (D) 92%", "volume": 92675, "poll": null, "label": "Minnesota \u00b7 Flanagan v Tafoya"}, {"slug": "montana", "state": "Montana", "dem": 1.4, "rep": 92.5, "other": 6.2, "fav": "Kurt Alme (R)  92%", "volume": 125116, "poll": {"kind": "agg", "n": 4, "rep": 42.5, "opp": 26.4, "opp_party": "I", "margin": 16.1, "latest": "through September 15, 2026", "sources": [{"name": "Decision Desk HQ [ 87 ]", "period": "through September 15, 2026"}, {"name": "FiftyPlusOne [ 88 ]", "period": "through September 15, 2026"}, {"name": "Race to the WH [ 89 ]", "period": "through September 7, 2026"}, {"name": "Silver Bulletin [ 66 ]", "period": "through September 15, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"}, "label": "Montana \u00b7 Bodnar v Alme"}, {"slug": "north-carolina", "state": "North Carolina", "dem": 92.5, "rep": 7.5, "other": 0.0, "fav": "Roy Cooper (D) 92%", "volume": 144063, "poll": {"kind": "agg", "n": 6, "rep": 40.1, "opp": 49.0, "opp_party": "D", "margin": -8.9, "latest": "August 21 \u2013 September 17, 2026", "sources": [{"name": "270toWin [ 105 ]", "period": "August 21 \u2013 September 17, 2026"}, {"name": "Decision Desk HQ [ 106 ]", "period": "through September 17, 2026"}, {"name": "FiftyPlusOne [ 107 ]", "period": "through September 17, 2026"}, {"name": "Race to the WH [ 108 ]", "period": "through September 15, 2026"}, {"name": "RealClearPolitics [ 109 ]", "period": "August 3 \u2013 September 17, 2026"}, {"name": "Silver Bulletin [ 94 ]", "period": "through September 17, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"}, "label": "North Carolina \u00b7 Cooper v Whatley"}, {"slug": "georgia", "state": "Georgia", "dem": 93.5, "rep": 5.8, "other": 0.7, "fav": "Jon Ossoff (D)  94%", "volume": 153040, "poll": {"kind": "agg", "n": 6, "rep": 42.9, "opp": 50.0, "opp_party": "D", "margin": -7.1, "latest": "September 10 \u2013 September 16, 2026", "sources": [{"name": "270toWin [ 106 ]", "period": "September 10 \u2013 September 16, 2026"}, {"name": "Decision Desk HQ [ 107 ]", "period": "through September 16, 2026"}, {"name": "FiftyPlusOne [ 108 ]", "period": "through September 12, 2026"}, {"name": "Race to the WH [ 56 ]", "period": "through September 12, 2026"}, {"name": "RealClearPolitics [ 109 ]", "period": "June 23 \u2013 September 16, 2026"}, {"name": "Silver Bulletin [ 92 ]", "period": "through September 12, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Georgia"}, "label": "Georgia \u00b7 Ossoff v Collins"}, {"slug": "mississippi", "state": "Mississippi", "dem": 5.5, "rep": 94.5, "other": 0.0, "fav": "Cindy Hyde-Smith (R) 94%", "volume": 82061, "poll": {"kind": "agg", "n": 1, "rep": 45.5, "opp": 36.6, "opp_party": "D", "margin": 8.9, "latest": "through August 13, 2026", "sources": [{"name": "Race to the WH [ 33 ]", "period": "through August 13, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Mississippi"}, "label": "Mississippi \u00b7 Colom v Hyde-Smith"}, {"slug": "kentucky", "state": "Kentucky", "dem": 3.1, "rep": 95.9, "other": 1.0, "fav": "Andy Barr (R) 96%", "volume": 34402, "poll": {"kind": "agg", "n": 1, "rep": 49.8, "opp": 39.2, "opp_party": "D", "margin": 10.6, "latest": "through August 27, 2026", "sources": [{"name": "Race to the WH [ 109 ]", "period": "through August 27, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kentucky"}, "label": "Kentucky \u00b7 Barr"}, {"slug": "wyoming", "state": "Wyoming", "dem": 2.8, "rep": 96.5, "other": 0.8, "fav": "Harriet Hageman (R)  96%", "volume": 16862, "poll": null, "label": "Wyoming \u00b7 Hageman"}, {"slug": "oklahoma", "state": "Oklahoma", "dem": 3.2, "rep": 96.9, "other": 0.0, "fav": "Kevin Hern (R) 97%", "volume": 26185, "poll": {"kind": "raw", "n": 1, "rep": 49.0, "opp": 25.0, "opp_party": "D", "margin": 24.0, "latest": "August 3\u20136, 2026", "sources": [{"name": "CHS & Associates [ 60 ]", "period": "August 3\u20136, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Oklahoma"}, "label": "Oklahoma \u00b7 Hern"}, {"slug": "colorado", "state": "Colorado", "dem": 96.0, "rep": 3.0, "other": 0.9, "fav": "John Hickenlooper (D) 96%", "volume": 48447, "poll": null, "label": "Colorado \u00b7 Hickenlooper"}, {"slug": "virginia", "state": "Virginia", "dem": 97.8, "rep": 1.8, "other": 0.4, "fav": "Mark Warner (D) 98%", "volume": 23648, "poll": {"kind": "agg", "n": 1, "rep": 32.5, "opp": 50.5, "opp_party": "D", "margin": -18.0, "latest": "through June 16, 2026", "sources": [{"name": "Race to the WH [ 46 ]", "period": "through June 16, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Virginia"}, "label": "Virginia \u00b7 Warner"}];
+  const battleground=[{"slug": "new-hampshire", "state": "New Hampshire", "dem": 82.0, "rep": 18.5, "other": 0.0, "fav": "Chris Pappas (D) 82%", "volume": 214073, "poll": {"kind": "raw", "n": 5, "rep": 40.4, "opp": 43.6, "opp_party": "D", "margin": -3.2, "latest": "September 16\u201317, 2026", "sources": [{"name": "InsiderAdvantage (R) [ 119 ]", "period": "September 16\u201317, 2026"}, {"name": "co/efficient (R) [ 120 ]", "period": "September 9\u201311, 2026"}, {"name": "Rasmussen Reports (R) [ 121 ]", "period": "September 8\u201310, 2026"}, {"name": "Fabrizio, Lee, & Associates (R) [ 122 ] [ C ]", "period": "August 27\u201330, 2026"}, {"name": "University of New Hampshire [ 57 ]", "period": "August 20\u201324, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"}, "label": "New Hampshire \u00b7 Pappas v Sununu"}, {"slug": "alaska", "state": "Alaska", "dem": 73.5, "rep": 27.6, "other": 0.0, "fav": "Mary Peltola 74%", "volume": 619616, "poll": {"kind": "agg", "n": 5, "rep": 47.6, "opp": 49.5, "opp_party": "D", "margin": -1.9, "latest": "through September 17, 2026", "sources": [{"name": "Decision Desk HQ [ 98 ]", "period": "through September 17, 2026"}, {"name": "FiftyPlusOne [ 99 ]", "period": "through September 17, 2026"}, {"name": "Race to the WH [ 100 ]", "period": "through September 11, 2026"}, {"name": "RealClearPolitics [ 101 ]", "period": "August 20 \u2013 September 17, 2026"}, {"name": "Silver Bulletin [ 91 ]", "period": "through September 17, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"}, "label": "Alaska \u00b7 Peltola v Sullivan"}, {"slug": "maine", "state": "Maine", "dem": 70.5, "rep": 30.5, "other": 0.0, "fav": "Troy Jackson (D) 70%", "volume": 1446259, "poll": {"kind": "agg", "n": 6, "rep": 45.2, "opp": 47.5, "opp_party": "D", "margin": -2.3, "latest": "August 31 \u2013 September 15, 2026", "sources": [{"name": "270toWin [ 337 ]", "period": "August 31 \u2013 September 15, 2026"}, {"name": "Decision Desk HQ [ 338 ]", "period": "through September 15, 2026"}, {"name": "FiftyPlusOne [ 339 ]", "period": "through September 15, 2026"}, {"name": "Race to the WH [ 195 ]", "period": "through September 15, 2026"}, {"name": "RealClearPolitics [ 340 ]", "period": "August 6 \u2013 September 15, 2026"}, {"name": "Silver Bulletin [ 309 ]", "period": "through September 15, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"}, "label": "Maine \u00b7 Jackson v Collins"}, {"slug": "michigan", "state": "Michigan", "dem": 67.0, "rep": 34.0, "other": 0.0, "fav": "Abdul El-Sayed (D) 67%", "volume": 853253, "poll": {"kind": "agg", "n": 6, "rep": 44.7, "opp": 47.0, "opp_party": "D", "margin": -2.4, "latest": "August 31 \u2013 September 17, 2026", "sources": [{"name": "270toWin [ 204 ]", "period": "August 31 \u2013 September 17, 2026"}, {"name": "Decision Desk HQ [ 327 ]", "period": "through September 17, 2026"}, {"name": "FiftyPlusOne [ 328 ]", "period": "through September 17, 2026"}, {"name": "Race to the WH [ 206 ]", "period": "through September 17, 2026"}, {"name": "RealClearPolitics [ 329 ]", "period": "August 6 \u2013 September 17, 2026"}, {"name": "Silver Bulletin [ 281 ]", "period": "through September 17, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"}, "label": "Michigan \u00b7 El-Sayed v Rogers"}, {"slug": "texas", "state": "Texas", "dem": 60.5, "rep": 40.5, "other": 0.0, "fav": "James Talarico (D) 60%", "volume": 1372660, "poll": {"kind": "agg", "n": 7, "rep": 44.7, "opp": 47.7, "opp_party": "D", "margin": -3.0, "latest": "August 30 \u2013 September 14, 2026", "sources": [{"name": "270toWin [ 398 ]", "period": "August 30 \u2013 September 14, 2026"}, {"name": "Decision Desk HQ [ 399 ]", "period": "through September 17, 2026"}, {"name": "FiftyPlusOne [ 400 ]", "period": "through September 17, 2026"}, {"name": "Race to the WH [ 193 ]", "period": "through September 17, 2026"}, {"name": "RealClearPolitics [ 401 ]", "period": "August 24 \u2013 September 17, 2026"}, {"name": "The Texas Tribune [ 402 ]", "period": "through September 17, 2026"}, {"name": "Silver Bulletin [ 347 ]", "period": "through September 14, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"}, "label": "Texas \u00b7 Talarico v Paxton"}, {"slug": "ohio", "state": "Ohio", "dem": 58.5, "rep": 41.5, "other": 0.0, "fav": "Sherrod Brown (D) 58%", "volume": 598622, "poll": {"kind": "agg", "n": 6, "rep": 43.4, "opp": 47.8, "opp_party": "D", "margin": -4.4, "latest": "August 8 \u2013 September 16, 2026", "sources": [{"name": "270toWin [ 115 ]", "period": "August 8 \u2013 September 16, 2026"}, {"name": "Decision Desk HQ [ 116 ]", "period": "through September 16, 2026"}, {"name": "FiftyPlusOne [ 117 ]", "period": "through September 16, 2026"}, {"name": "Race to the WH [ 118 ]", "period": "through September 16, 2026"}, {"name": "RealClearPolitics [ 119 ]", "period": "June 14 \u2013 September 10, 2026"}, {"name": "Silver Bulletin [ 105 ]", "period": "through September 10, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Ohio"}, "label": "Ohio \u00b7 Brown v Husted"}, {"slug": "iowa", "state": "Iowa", "dem": 39.5, "rep": 60.5, "other": 0.0, "fav": "Ashley Hinson (R) 60%", "volume": 411629, "poll": {"kind": "agg", "n": 6, "rep": 44.6, "opp": 44.4, "opp_party": "D", "margin": 0.3, "latest": "August 30 \u2013 September 18, 2026", "sources": [{"name": "270toWin [ 119 ]", "period": "August 30 \u2013 September 18, 2026"}, {"name": "Decision Desk HQ [ 120 ]", "period": "through September 18, 2026"}, {"name": "FiftyPlusOne [ 121 ]", "period": "through September 18, 2026"}, {"name": "Race to the WH [ 122 ]", "period": "through September 18, 2026"}, {"name": "RealClearPolitics [ 123 ]", "period": "August 20 \u2013 September 18, 2026"}, {"name": "Silver Bulletin [ 90 ]", "period": "through September 18, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"}, "label": "Iowa \u00b7 Turek v Hinson"}, {"slug": "nebraska", "state": "Nebraska", "dem": 0.1, "rep": 68.5, "other": 31.3, "fav": "Pete Ricketts (R) 68%", "volume": 295747, "poll": {"kind": "agg", "n": 3, "rep": 46.5, "opp": 46.9, "opp_party": "I", "margin": -0.4, "latest": "September 8\u201316, 2026", "sources": [{"name": "270toWin [ 85 ]", "period": "September 8\u201316, 2026"}, {"name": "Race to the WH [ 86 ]", "period": "through September 16, 2026"}, {"name": "Silver Bulletin [ 62 ]", "period": "through September 16, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"}, "label": "Nebraska \u00b7 Osborn v Ricketts"}, {"slug": "kansas", "state": "Kansas", "dem": 26.5, "rep": 73.5, "other": 0.0, "fav": "Roger Marshall (R) 74%", "volume": 139028, "poll": {"kind": "agg", "n": 4, "rep": 45.8, "opp": 44.6, "opp_party": "D", "margin": 1.2, "latest": "September 8\u201316, 2026", "sources": [{"name": "270toWin [ 44 ]", "period": "September 8\u201316, 2026"}, {"name": "Race to the WH [ 45 ]", "period": "through September 16, 2026"}, {"name": "RealClearPolitics [ 46 ]", "period": "through September 16, 2026"}, {"name": "Silver Bulletin [ 35 ]", "period": "through September 16, 2026"}], "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"}, "label": "Kansas \u00b7 Hamilton v Marshall"}];
   const fmtV=v=>Math.abs(v)>=1e6?'$'+(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?'$'+(v/1e3).toFixed(0)+'k':'$'+v;
 
   new Chart(document.getElementById('bopChart'),{type:'bar',
@@ -271,12 +286,54 @@
   }};
   new Chart(document.getElementById('seatsChart'),{type:'bar',
     data:{labels:seats.map(s=>s.label),datasets:[{data:seats.map(s=>s.p),
-      backgroundColor:seats.map(s=>low(s.label)>=215?'#34d399':'#a78bfa')}]},
+      backgroundColor:seats.map(s=>low(s.label)>=218?'#34d399':low(s.label)===215?'#fbbf24':'#a78bfa')}]},
     plugins:[majLine],
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},
       scales:{x:{grid:{display:false},ticks:{color:'#94a3b8',font:{size:9},maxRotation:60,minRotation:45}},
         y:{grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
+
+  const senateMajLine={id:'senateMajLine',afterDatasetsDraw(chart){
+    const x=chart.scales.x,y=chart.scales.y,idx=senateSeats.findIndex(s=>+s.label===50);
+    if(idx<0)return;
+    const px=x.getPixelForValue(idx);
+    const ctx=chart.ctx;ctx.save();
+    ctx.strokeStyle='#fbbf24';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(px,y.top);ctx.lineTo(px,y.bottom);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#fbbf24';ctx.font='600 10px -apple-system,sans-serif';ctx.textAlign='left';
+    ctx.fillText('50 = R control',px+4,y.top+10);ctx.restore();
+  }};
+  new Chart(document.getElementById('senateSeatsChart'),{type:'bar',
+    data:{labels:senateSeats.map(s=>s.label),datasets:[{data:senateSeats.map(s=>s.p),
+      backgroundColor:senateSeats.map(s=>+s.label>50?'#34d399':+s.label===50?'#fbbf24':'#a78bfa')}]},
+    plugins:[senateMajLine],
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#94a3b8',font:{size:9},maxRotation:60,minRotation:45}},
+        y:{grid:{color:'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
+
+  const midLine={id:'midLine',afterDatasetsDraw(chart){
+    const x=chart.scales.x,y=chart.scales.y,px=x.getPixelForValue(50),ctx=chart.ctx;
+    ctx.save();ctx.strokeStyle='#fbbf24';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(px,y.top);ctx.lineTo(px,y.bottom);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#fbbf24';ctx.font='600 10px -apple-system,sans-serif';ctx.textAlign='left';
+    ctx.fillText('50%',px+4,y.top+10);ctx.restore();
+  }};
+  const battlegroundBars=battleground.map(r=>({
+    x:[Math.min(r.rep,50),Math.max(r.rep,50)],
+    y:r.label, rep:r.rep, dem:r.dem, other:r.other, volume:r.volume
+  }));
+  new Chart(document.getElementById('battlegroundChart'),{type:'bar',
+    data:{labels:battleground.map(r=>r.label),datasets:[{data:battlegroundBars,
+      backgroundColor:battleground.map(r=>r.rep>=50?'rgba(239,68,68,.72)':'rgba(59,130,246,.72)'),
+      borderColor:battleground.map(r=>r.rep>=50?'#ef4444':'#3b82f6'),borderWidth:1}]},
+    plugins:[midLine],
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{
+        label:c=>c.raw.y+': R '+c.raw.rep+'% / D '+c.raw.dem+'%'+(c.raw.other>=5?' / other '+c.raw.other+'%':'')+' · vol '+fmtV(c.raw.volume)}}},
+      scales:{x:{min:20,max:80,title:{display:true,text:'Republican win probability',color:'#64748b'},
+          grid:{color:c=>c.tick.value===50?'#64748b':'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}},
+        y:{grid:{display:false},ticks:{color:'#cbd5e1',font:{size:11}}}}}});
 
   const maxV=Math.max(...races.map(r=>r.volume),1);
   const bubble=races.map(r=>({x:r.volume,y:r.rep,r:6+16*Math.sqrt(r.volume/maxV),state:r.state,dem:r.dem,label:r.label}));
@@ -356,6 +413,5 @@
         y:{min:0,max:100,title:{display:true,text:'Market: Republican win probability',color:'#64748b'},
           grid:{color:c=>c.tick.value===50?'#64748b':'#334155'},ticks:{color:'#94a3b8',callback:v=>v+'%'}}}}});
 
-  document.getElementById('date').textContent=new Date().toLocaleDateString();
 })();
 </script></body></html>
