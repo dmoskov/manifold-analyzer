@@ -169,6 +169,8 @@ python3 scripts/generate_poly_ladder.py --slug what-price-will-wti-hit-in-june-2
 
 # Multi-outcome dashboard (scenarios, party races, seat distribution) — e.g. 2026 midterms
 python3 scripts/generate_poly_midterms.py -o examples/midterms/midterms_dashboard.html
+# Refresh it, print what moved, archive history/<date>.json (add --commit to commit)
+python3 scripts/refresh_midterms.py
 ```
 
 Note: Polymarket exposes no full trade-by-trade history for busy markets, so analysis uses **current holders** (positions) plus aggregate volume windows. See `examples/hormuz/` for a worked multi-market example (Iran / Strait of Hormuz crisis) including time-series overlay, a term-structure cross-section, and an oil price-range ladder.
