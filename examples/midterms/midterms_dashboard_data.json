@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-09-22T16:50:09+00:00",
+  "fetched_at": "2026-09-22T16:58:33+00:00",
   "candidates_as_of": "2026-09-13",
   "candidate_sources": {
     "overview": "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
@@ -10,12 +10,12 @@
   "house": {
     "d": 92.5,
     "r": 7.5,
-    "vol": 12091690.984621003
+    "vol": 12091690.984621001
   },
   "senate": {
     "d": 65.5,
     "r": 35.5,
-    "vol": 4985567.584864998
+    "vol": 4985574.8575909985
   },
   "bop": [
     {
@@ -63,7 +63,7 @@
     },
     {
       "label": "210-214",
-      "p": 9.7
+      "p": 9.8
     },
     {
       "label": "215-219",
@@ -75,7 +75,7 @@
     },
     {
       "label": "225-229",
-      "p": 1.9
+      "p": 2.0
     },
     {
       "label": "230+",
@@ -86,11 +86,11 @@
   "senate_seats": [
     {
       "label": "46",
-      "p": 9.1
+      "p": 9.0
     },
     {
       "label": "47",
-      "p": 18.3
+      "p": 18.2
     },
     {
       "label": "48",
@@ -102,11 +102,11 @@
     },
     {
       "label": "50",
-      "p": 13.9
+      "p": 14.0
     },
     {
       "label": "51",
-      "p": 5.9
+      "p": 6.0
     }
   ],
   "fixed_republican_senate_seats": 38,
@@ -129,23 +129,23 @@
         "latest": "September 3 \u2013 22, 2026",
         "sources": [
           {
-            "name": "270toWin [ 120 ]",
+            "name": "270toWin [ 121 ]",
             "period": "September 3 \u2013 22, 2026"
           },
           {
-            "name": "Decision Desk HQ [ 121 ]",
+            "name": "Decision Desk HQ [ 122 ]",
             "period": "through September 20, 2026"
           },
           {
-            "name": "FiftyPlusOne [ 122 ]",
+            "name": "FiftyPlusOne [ 123 ]",
             "period": "through September 20, 2026"
           },
           {
-            "name": "Race to the WH [ 123 ]",
+            "name": "Race to the WH [ 124 ]",
             "period": "through September 20, 2026"
           },
           {
-            "name": "RealClearPolitics [ 124 ]",
+            "name": "RealClearPolitics [ 125 ]",
             "period": "August 31 \u2013 September 20, 2026"
           },
           {
@@ -164,7 +164,7 @@
       "rep": 39.5,
       "other": 0.0,
       "fav": "James Talarico (D) 62%",
-      "volume": 1419442,
+      "volume": 1419946,
       "poll": {
         "kind": "agg",
         "n": 7,
@@ -210,10 +210,10 @@
     {
       "slug": "ohio",
       "state": "Ohio",
-      "dem": 63.0,
-      "rep": 35.5,
-      "other": 1.5,
-      "fav": "Sherrod Brown (D) 63%",
+      "dem": 62.5,
+      "rep": 36.5,
+      "other": 1.0,
+      "fav": "Sherrod Brown (D) 62%",
       "volume": 697375,
       "poll": {
         "kind": "agg",
@@ -260,7 +260,7 @@
       "rep": 67.5,
       "other": 32.0,
       "fav": "Pete Ricketts (R) 68%",
-      "volume": 322896,
+      "volume": 324592,
       "poll": {
         "kind": "agg",
         "n": 3,
@@ -431,19 +431,19 @@
         "latest": "through September 17, 2026",
         "sources": [
           {
-            "name": "Decision Desk HQ [ 97 ]",
+            "name": "Decision Desk HQ [ 95 ]",
             "period": "through September 17, 2026"
           },
           {
-            "name": "FiftyPlusOne [ 98 ]",
+            "name": "FiftyPlusOne [ 96 ]",
             "period": "through September 17, 2026"
           },
           {
-            "name": "Race to the WH [ 99 ]",
+            "name": "Race to the WH [ 97 ]",
             "period": "through September 11, 2026"
           },
           {
-            "name": "RealClearPolitics [ 100 ]",
+            "name": "RealClearPolitics [ 98 ]",
             "period": "August 20 \u2013 September 17, 2026"
           },
           {

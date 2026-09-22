@@ -358,7 +358,7 @@ def build_html(d, output_path):
   <div class="chart-container">
     <h2 class="chart-title">Battleground Senate Zoom <span>(named battlegrounds plus any race with R between 25% and 75%)</span></h2>
     <div style="position:relative;height:360px"><canvas id="battlegroundChart"></canvas></div>
-    <p class="note">Bars show distance from the 50% line using directly priced Republican win probability. Blue bars lean Democratic or independent; red bars lean Republican. This view intentionally expands the middle of the map so Ohio, Texas, Iowa, Nebraska, Michigan, Alaska, Maine, Kansas, and New Hampshire are easier to compare.</p>
+    <p class="note">Bars show distance from the 50% line using directly priced Republican win probability (bottom axis). Blue bars lean Democratic or independent; red bars lean Republican. Amber diamonds show the Republican polling margin over the top opponent (top axis, in points); a diamond on the dashed line is a tied poll, and a diamond on the far side of the line from its bar is a race where polls and money disagree. Races with no polling show no diamond. This view intentionally expands the middle of the map so Ohio, Texas, Iowa, Nebraska, Michigan, Alaska, Maine, Kansas, and New Hampshire are easier to compare.</p>
   </div>
 
   <div class="chart-container">
@@ -451,20 +451,39 @@ def build_html(d, output_path):
     ctx.setLineDash([]);ctx.fillStyle='#fbbf24';ctx.font='600 10px -apple-system,sans-serif';ctx.textAlign='left';
     ctx.fillText('50%',px+4,y.top+10);ctx.restore();
   }}}};
+  // Poll-margin diamonds on the top axis (xPoll), which is centered on 0 so a
+  // tied poll sits on the 50% line.
+  const POLL_LIM=15;
+  const pollDiamonds={{id:'pollDiamonds',afterDatasetsDraw(chart){{
+    const xp=chart.scales.xPoll,y=chart.scales.y,ctx=chart.ctx;
+    ctx.save();
+    battleground.forEach((r,i)=>{{
+      if(!r.poll)return;
+      const m=Math.max(-POLL_LIM,Math.min(POLL_LIM,r.poll.margin));
+      const px=xp.getPixelForValue(m),py=y.getPixelForValue(i),s=6;
+      ctx.beginPath();ctx.moveTo(px,py-s);ctx.lineTo(px+s,py);ctx.lineTo(px,py+s);ctx.lineTo(px-s,py);ctx.closePath();
+      ctx.fillStyle='#fbbf24';ctx.strokeStyle='#0f172a';ctx.lineWidth=1.5;ctx.fill();ctx.stroke();
+    }});
+    ctx.restore();
+  }}}};
   const battlegroundBars=battleground.map(r=>({{
     x:[Math.min(r.rep,50),Math.max(r.rep,50)],
-    y:r.label, rep:r.rep, dem:r.dem, other:r.other, volume:r.volume
+    y:r.label, rep:r.rep, dem:r.dem, other:r.other, volume:r.volume, poll:r.poll
   }}));
   new Chart(document.getElementById('battlegroundChart'),{{type:'bar',
     data:{{labels:battleground.map(r=>r.label),datasets:[{{data:battlegroundBars,
       backgroundColor:battleground.map(r=>r.rep>=50?'rgba(239,68,68,.72)':'rgba(59,130,246,.72)'),
       borderColor:battleground.map(r=>r.rep>=50?'#ef4444':'#3b82f6'),borderWidth:1}}]}},
-    plugins:[midLine],
+    plugins:[midLine,pollDiamonds],
     options:{{indexAxis:'y',responsive:true,maintainAspectRatio:false,
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{
-        label:c=>c.raw.y+': R '+c.raw.rep+'% / D '+c.raw.dem+'%'+(c.raw.other>=5?' / other '+c.raw.other+'%':'')+' · vol '+fmtV(c.raw.volume)}}}}}},
-      scales:{{x:{{min:20,max:80,title:{{display:true,text:'Republican win probability',color:'#64748b'}},
+        label:c=>{{const p=c.raw.poll;const poll=p?' · poll R '+(p.margin>0?'+':'')+p.margin+' ('+(p.kind==='agg'?'aggregates':'last '+p.n+' polls')+')':' · no polling';
+          return c.raw.y+': R '+c.raw.rep+'% / D '+c.raw.dem+'%'+(c.raw.other>=5?' / other '+c.raw.other+'%':'')+poll+' · vol '+fmtV(c.raw.volume);}}}}}}}},
+      scales:{{x:{{min:20,max:80,title:{{display:true,text:'Republican win probability (bars)',color:'#64748b'}},
           grid:{{color:c=>c.tick.value===50?'#64748b':'#334155'}},ticks:{{color:'#94a3b8',callback:v=>v+'%'}}}},
+        xPoll:{{type:'linear',position:'top',min:-POLL_LIM,max:POLL_LIM,
+          title:{{display:true,text:'◆ Republican polling margin, points (diamonds)',color:'#fbbf24'}},
+          grid:{{display:false}},ticks:{{color:'#fbbf24',stepSize:5,callback:v=>(v>0?'R +':v<0?'D +':'')+Math.abs(v)}}}},
         y:{{grid:{{display:false}},ticks:{{color:'#cbd5e1',font:{{size:11}}}}}}}}}}}});
 
   const maxV=Math.max(...races.map(r=>r.volume),1);
