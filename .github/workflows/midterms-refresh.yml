@@ -1,0 +1,44 @@
+# Daily refresh of the 2026 midterms dashboard until the day after the election.
+# Runs scripts/refresh_midterms.py --commit and pushes to main.
+name: Refresh midterms dashboard
+
+on:
+  schedule:
+    - cron: "0 14 * * *"   # 14:00 UTC = 7am Pacific
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stop after the election
+        run: |
+          if [ "$(date -u +%F)" \> "2026-11-04" ]; then
+            echo "Past 2026-11-04; nothing to do."
+            exit 0
+          fi
+          echo "RUN_REFRESH=1" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        if: env.RUN_REFRESH == '1'
+
+      - uses: actions/setup-python@v5
+        if: env.RUN_REFRESH == '1'
+        with:
+          python-version: "3.12"
+
+      - name: Refresh, commit, push
+        if: env.RUN_REFRESH == '1'
+        run: |
+          git config user.name "midterms-refresh bot"
+          git config user.email "midterms-refresh@users.noreply.github.com"
+          python3 scripts/refresh_midterms.py --commit | tee refresh.log
+          git push origin HEAD:main
+
+      - name: Summary
+        if: env.RUN_REFRESH == '1'
+        run: |
+          { echo '```'; cat refresh.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
