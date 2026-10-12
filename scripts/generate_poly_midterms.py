@@ -50,10 +50,10 @@ NAME_PARTY = {"peltola": "D", "sullivan": "R"}
 
 # Known 2026 general-election nominees / leading candidates per race (many race
 # markets resolve by party only, so candidate names come from here). Source:
-# Wikipedia "2026 United States Senate elections", checked September 13, 2026.
+# Wikipedia "2026 United States Senate elections", checked October 12, 2026 (no changes since September 13).
 # NH nominees were confirmed September 8. South Carolina nominated Darline
 # Graham in its August 25 special runoff; Nebraska's Burbank withdrew.
-CANDIDATES_AS_OF = "2026-09-13"
+CANDIDATES_AS_OF = "2026-10-12"
 CANDIDATE_SOURCES = {
     "overview": "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
     "new-hampshire": "https://www.nhpr.org/politics/2026-09-08/pappas-sununu-win-senate-primaries-nh-newhampshire-elections-2026",

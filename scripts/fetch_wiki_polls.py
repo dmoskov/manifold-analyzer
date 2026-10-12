@@ -40,6 +40,11 @@ def _pct(cell):
     return float(m.group(1)) if m else None
 
 
+PARTY_TAGS = {"R": ("(r)",), "D": ("(d)", "(dfl)"), "I": ("(i)",)}  # DFL = Minnesota Democrats
+MONTHS = ("january february march april may june july august september "
+          "october november december").split()
+
+
 def _party_cols(head, surnames):
     """Column index per party; a column only counts if the known nominee's
     surname appears in its header cell (rejects hypothetical matchups)."""
@@ -48,9 +53,23 @@ def _party_cols(head, surnames):
         cl = c.lower()
         for p in ("R", "D", "I"):
             sn = surnames.get(p)
-            if f"({p.lower()})" in cl and sn and sn.lower() in cl and p not in cols:
+            if any(t in cl for t in PARTY_TAGS[p]) and sn and sn.lower() in cl and p not in cols:
                 cols[p] = i
     return cols
+
+
+def _end_date(period):
+    """(year, month, day) a polling period ends on, e.g. "September 23 – 30, 2026"
+    -> (2026, 9, 30); None when the string has no recognizable date."""
+    s = period.lower()
+    year = re.findall(r"\b(\d{4})\b", s)
+    month = [(m.start(), MONTHS.index(m.group(1)) + 1)
+             for m in re.finditer(r"\b(" + "|".join(MONTHS) + r")\b", s)]
+    if not year or not month:
+        return None
+    pos, mon = month[-1]
+    days = re.findall(r"\b(\d{1,2})\b", s[pos:])
+    return (int(year[-1]), mon, int(days[-1])) if days else None
 
 
 def race_polls(state_title, surnames):
@@ -89,7 +108,7 @@ def race_polls(state_title, surnames):
         rows, cols = table
         sums = {p: 0.0 for p in cols}
         counts = {p: 0 for p in cols}
-        n, latest = 0, ""
+        n = 0
         sources = []
         for row in rows:
             # Summary rows often merge the first three columns with colspan.
@@ -101,7 +120,6 @@ def race_polls(state_title, surnames):
             if vals.get("R") is None or all(vals[p] is None for p in cols if p != "R"):
                 continue
             n += 1
-            latest = latest or (row[1] if len(row) > 1 else "")
             sources.append({"name": row[0], "period": row[1] if len(row) > 1 else ""})
             for p, v in vals.items():
                 if v is not None:
@@ -115,6 +133,10 @@ def race_polls(state_title, surnames):
         opp = max((p for p in avg if p != "R"), key=lambda p: avg[p], default=None)
         if opp is None:
             continue
+        # Aggregators update on different schedules; report the newest period,
+        # not whichever source happens to be listed first.
+        latest = max((s["period"] for s in sources),
+                     key=lambda s: _end_date(s) or (0, 0, 0))
         return {
             "kind": kind,
             "n": n,

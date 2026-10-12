@@ -1,6 +1,6 @@
 {
-  "fetched_at": "2026-10-13T14:21:34+00:00",
-  "candidates_as_of": "2026-09-13",
+  "fetched_at": "2026-10-13T15:08:19+00:00",
+  "candidates_as_of": "2026-10-12",
   "candidate_sources": {
     "overview": "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
     "new-hampshire": "https://www.nhpr.org/politics/2026-09-08/pappas-sununu-win-senate-primaries-nh-newhampshire-elections-2026",
@@ -10,12 +10,12 @@
   "house": {
     "d": 90.5,
     "r": 9.5,
-    "vol": 16603421.551341001
+    "vol": 16606375.341341
   },
   "senate": {
     "d": 63.5,
     "r": 36.5,
-    "vol": 6382432.982858004
+    "vol": 6382780.790358002
   },
   "bop": [
     {
@@ -39,7 +39,7 @@
       "p": 0.2
     }
   ],
-  "bop_vol": 22601130.606829002,
+  "bop_vol": 22601303.850112,
   "seats": [
     {
       "label": "Below 190",
@@ -59,7 +59,7 @@
     },
     {
       "label": "205-209",
-      "p": 22.7
+      "p": 21.5
     },
     {
       "label": "210-214",
@@ -75,18 +75,18 @@
     },
     {
       "label": "225-229",
-      "p": 2.1
+      "p": 1.5
     },
     {
       "label": "230+",
-      "p": 1.5
+      "p": 1.9
     }
   ],
   "seats_vol": 324921.34245299996,
   "senate_seats": [
     {
       "label": "46",
-      "p": 7.2
+      "p": 7.1
     },
     {
       "label": "47",
@@ -102,11 +102,11 @@
     },
     {
       "label": "50",
-      "p": 16.3
+      "p": 16.4
     },
     {
       "label": "51",
-      "p": 7.6
+      "p": 7.7
     }
   ],
   "fixed_republican_senate_seats": 38,
@@ -126,7 +126,7 @@
         "opp": 46.6,
         "opp_party": "D",
         "margin": -1.1,
-        "latest": "September 22 \u2013 October 3, 2026",
+        "latest": "through October 6, 2026",
         "sources": [
           {
             "name": "270toWin [ 130 ]",
@@ -168,7 +168,7 @@
         "opp": 49.0,
         "opp_party": "D",
         "margin": -2.0,
-        "latest": "September 23 \u2013 October 5, 2026",
+        "latest": "September 14 \u2013 October 8, 2026",
         "sources": [
           {
             "name": "270toWin [ 351 ]",
@@ -210,7 +210,7 @@
         "opp": 47.6,
         "opp_party": "D",
         "margin": -3.4,
-        "latest": "September 21 \u2013 October 1, 2026",
+        "latest": "through October 6, 2026",
         "sources": [
           {
             "name": "270toWin [ 119 ]",
@@ -244,7 +244,7 @@
       "rep": 62.5,
       "other": 0.0,
       "fav": "Roger Marshall (R) 62%",
-      "volume": 885927,
+      "volume": 885930,
       "poll": {
         "kind": "agg",
         "n": 5,
@@ -252,7 +252,7 @@
         "opp": 46.2,
         "opp_party": "D",
         "margin": -0.7,
-        "latest": "September 8 \u2013 October 1, 2026",
+        "latest": "through October 10, 2026",
         "sources": [
           {
             "name": "270toWin [ 66 ]",
@@ -286,7 +286,7 @@
       "rep": 35.5,
       "other": 0.0,
       "fav": "James Talarico (D) 64%",
-      "volume": 3485424,
+      "volume": 3496086,
       "poll": {
         "kind": "agg",
         "n": 6,
@@ -294,7 +294,7 @@
         "opp": 48.5,
         "opp_party": "D",
         "margin": -3.4,
-        "latest": "September 15\u201330, 2026",
+        "latest": "through October 8, 2026",
         "sources": [
           {
             "name": "270toWin [ 430 ]",
@@ -332,7 +332,7 @@
       "rep": 30.5,
       "other": 0.0,
       "fav": "Abdul El-Sayed (D) 70%",
-      "volume": 1619204,
+      "volume": 1621234,
       "poll": {
         "kind": "agg",
         "n": 5,
@@ -340,7 +340,7 @@
         "opp": 48.4,
         "opp_party": "D",
         "margin": -3.5,
-        "latest": "September 18 \u2013 October 1, 2026",
+        "latest": "through October 10, 2026",
         "sources": [
           {
             "name": "270toWin [ 206 ]",
@@ -374,7 +374,7 @@
       "rep": 72.5,
       "other": 27.4,
       "fav": "Pete Ricketts (R) 72%",
-      "volume": 599407,
+      "volume": 600907,
       "poll": {
         "kind": "agg",
         "n": 4,
@@ -382,7 +382,7 @@
         "opp": 45.5,
         "opp_party": "I",
         "margin": 1.1,
-        "latest": "September 8\u201330, 2026",
+        "latest": "through October 5, 2026",
         "sources": [
           {
             "name": "270toWin [ 88 ]",
@@ -412,7 +412,7 @@
       "rep": 26.6,
       "other": 0.0,
       "fav": "Mary Peltola 74%",
-      "volume": 1272919,
+      "volume": 1272946,
       "poll": {
         "kind": "agg",
         "n": 4,
@@ -458,7 +458,7 @@
         "opp": 43.4,
         "opp_party": "D",
         "margin": 1.8,
-        "latest": "September 23\u201328, 2026",
+        "latest": "September 23 \u2013 October 8, 2026",
         "sources": [
           {
             "name": "270toWin [ 184 ]",
@@ -489,7 +489,38 @@
       "other": 0.0,
       "fav": "Peggy Flanagan (D) 88%",
       "volume": 220107,
-      "poll": null,
+      "poll": {
+        "kind": "agg",
+        "n": 5,
+        "rep": 42.9,
+        "opp": 45.9,
+        "opp_party": "D",
+        "margin": -3.0,
+        "latest": "through October 7, 2026",
+        "sources": [
+          {
+            "name": "270toWin [ 195 ]",
+            "period": "September 11\u201330, 2026"
+          },
+          {
+            "name": "Decision Desk HQ [ 196 ]",
+            "period": "through October 7, 2026"
+          },
+          {
+            "name": "FiftyPlusOne [ 197 ]",
+            "period": "through October 7, 2026"
+          },
+          {
+            "name": "RealClearPolitics [ 198 ]",
+            "period": "September 9 \u2013 October 7, 2026"
+          },
+          {
+            "name": "Silver Bulletin [ 181 ]",
+            "period": "through October 4, 2026"
+          }
+        ],
+        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
+      },
       "label": "Minnesota \u00b7 Flanagan v Tafoya"
     },
     {
@@ -549,7 +580,7 @@
         "opp": 42.8,
         "opp_party": "D",
         "margin": 6.2,
-        "latest": "September 8\u201327, 2026",
+        "latest": "through October 7, 2026",
         "sources": [
           {
             "name": "270toWin [ 142 ]",
@@ -652,18 +683,18 @@
       "slug": "north-carolina",
       "state": "North Carolina",
       "dem": 96.0,
-      "rep": 4.0,
+      "rep": 4.2,
       "other": 0.0,
       "fav": "Roy Cooper (D) 96%",
-      "volume": 223043,
+      "volume": 223058,
       "poll": {
         "kind": "agg",
         "n": 5,
-        "rep": 41.0,
-        "opp": 50.2,
+        "rep": 40.9,
+        "opp": 50.6,
         "opp_party": "D",
-        "margin": -9.1,
-        "latest": "September 23 \u2013 30, 2026",
+        "margin": -9.7,
+        "latest": "through October 11, 2026",
         "sources": [
           {
             "name": "270toWin [ 116 ]",
@@ -671,11 +702,11 @@
           },
           {
             "name": "Decision Desk HQ [ 117 ]",
-            "period": "through October 10, 2026"
+            "period": "through October 11, 2026"
           },
           {
             "name": "FiftyPlusOne [ 118 ]",
-            "period": "through October 10, 2026"
+            "period": "through October 11, 2026"
           },
           {
             "name": "RealClearPolitics [ 119 ]",
@@ -683,7 +714,7 @@
           },
           {
             "name": "Silver Bulletin [ 91 ]",
-            "period": "through October 3, 2026"
+            "period": "through October 10, 2026"
           }
         ],
         "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
@@ -693,7 +724,7 @@
     {
       "slug": "georgia",
       "state": "Georgia",
-      "dem": 96.1,
+      "dem": 96.0,
       "rep": 3.8,
       "other": 0.2,
       "fav": "Jon Ossoff (D)  96%",
@@ -705,7 +736,7 @@
         "opp": 51.7,
         "opp_party": "D",
         "margin": -8.5,
-        "latest": "September 14 \u2013 October 4, 2026",
+        "latest": "through October 9, 2026",
         "sources": [
           {
             "name": "270toWin [ 114 ]",
@@ -767,7 +798,7 @@
       "state": "Oklahoma",
       "dem": 2.1,
       "rep": 97.2,
-      "other": 0.7,
+      "other": 0.6,
       "fav": "Kevin Hern (R) 97%",
       "volume": 26682,
       "poll": {
@@ -792,10 +823,10 @@
       "slug": "wyoming",
       "state": "Wyoming",
       "dem": 1.8,
-      "rep": 98.0,
-      "other": 0.2,
+      "rep": 98.2,
+      "other": 0.0,
       "fav": "Harriet Hageman (R)  98%",
-      "volume": 19947,
+      "volume": 19997,
       "poll": null,
       "label": "Wyoming \u00b7 Hageman"
     },
@@ -833,8 +864,8 @@
       "slug": "colorado",
       "state": "Colorado",
       "dem": 98.0,
-      "rep": 1.5,
-      "other": 0.5,
+      "rep": 1.4,
+      "other": 0.7,
       "fav": "John Hickenlooper (D) 98%",
       "volume": 51354,
       "poll": null,
