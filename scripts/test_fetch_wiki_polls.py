@@ -1,6 +1,7 @@
 """Offline regression checks for Wikipedia polling-table parsing."""
 
 import unittest
+from datetime import date
 from unittest.mock import patch
 
 from fetch_wiki_polls import _end_date, race_polls
@@ -21,9 +22,9 @@ def aggregation(candidate="Current Candidate", opp_tag="D"):
 
 
 class PollParsingTests(unittest.TestCase):
-    def parse(self, html):
+    def parse(self, html, today=date(2026, 9, 10)):
         with patch("fetch_wiki_polls._fetch", return_value=html):
-            return race_polls("Example", {"R": "Current Candidate", "D": "Opponent"})
+            return race_polls("Example", {"R": "Current Candidate", "D": "Opponent"}, today=today)
 
     def test_colspan_average_does_not_corrupt_candidate_shares(self):
         poll = self.parse(aggregation())
@@ -52,6 +53,18 @@ class PollParsingTests(unittest.TestCase):
         self.assertEqual(_end_date("through October 10, 2026"), (2026, 10, 10))
         self.assertEqual(_end_date("October 5–7, 2026"), (2026, 10, 7))
         self.assertIsNone(_end_date("Date unavailable"))
+
+    def test_polls_older_than_60_days_are_dropped(self):
+        html = aggregation().replace("September 1–5, 2026", "June 12–16, 2026")
+        poll = self.parse(html)
+        self.assertEqual((poll["n"], poll["rep"], poll["opp"]), (1, 48.0, 44.0))
+        self.assertEqual([s["name"] for s in poll["sources"]], ["Source B"])
+
+    def test_race_with_only_old_polls_has_no_polling(self):
+        self.assertIsNone(self.parse(aggregation(), today=date(2026, 11, 6)))
+
+    def test_poll_exactly_60_days_old_is_kept(self):
+        self.assertEqual(self.parse(aggregation(), today=date(2026, 11, 5))["n"], 1)
 
     def test_missing_polling_stays_missing(self):
         self.assertIsNone(self.parse("<p>No general-election polling.</p>"))

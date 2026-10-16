@@ -153,7 +153,7 @@ def poll_html(r):
         name, tag = cand.get("I", "Ind"), 'style="color:#a78bfa;font-weight:700"'
     else:
         name, tag = cand.get("D", "Dem"), 'class="dem"'
-    src = "poll aggregates" if p["kind"] == "agg" else f'last {p["n"]} polls'
+    src = "poll aggregates" if p["kind"] == "agg" else f'last {p["n"]} poll' + ('s' if p['n'] != 1 else '')
     lead = "Tied" if p["margin"] == 0 else f'{name.split()[-1]} +{abs(p["margin"]):.1f}'
     periods = list(dict.fromkeys(s["period"] for s in p.get("sources", []) if s["period"]))
     dates = "; ".join(periods) or p.get("latest", "Date unavailable")

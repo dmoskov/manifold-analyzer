@@ -7,6 +7,7 @@ for the actual general-election matchup:
   1. the poll-aggregation table (RCP / Race to the WH / 270toWin averages)
      when the page has one, averaging the aggregate rows;
   2. otherwise the newest head-to-head polls (up to POLL_LIMIT), averaged.
+Rows whose polling period ended more than MAX_POLL_AGE_DAYS ago are ignored.
 
 Tables are matched by the known nominees' surnames in the candidate header,
 which skips hypothetical-matchup and primary tables. Returns None when the
@@ -16,10 +17,12 @@ page has no polling for the real matchup ("where available").
 import re
 import sys
 import urllib.request
+from datetime import date, timedelta
 from html import unescape
 
 WIKI = "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_{}"
 POLL_LIMIT = 5  # newest head-to-head polls averaged when no aggregate exists
+MAX_POLL_AGE_DAYS = 60
 
 
 def _fetch(url):
@@ -72,13 +75,15 @@ def _end_date(period):
     return (int(year[-1]), mon, int(days[-1])) if days else None
 
 
-def race_polls(state_title, surnames):
+def race_polls(state_title, surnames, today=None):
     """Average polling for the real matchup, or None if unavailable.
 
     state_title: e.g. "North_Carolina"; surnames: {"R": "Husted", "D": "Brown"}.
     Returns {"kind": "agg"|"raw", "n", "rep", "opp", "opp_party", "margin",
     "latest"} where margin = R minus the strongest-polling opponent.
+    today: reference date for the poll-age cutoff (defaults to date.today()).
     """
+    cutoff = (today or date.today()) - timedelta(days=MAX_POLL_AGE_DAYS)
     try:
         html = _fetch(WIKI.format(state_title))
     except Exception as e:
@@ -115,6 +120,9 @@ def race_polls(state_title, surnames):
             # Reading them at the header offsets mistakes undecided / margin
             # values for candidate shares, and double-counts the average.
             if re.match(r"^(average|weighted average|summary)\b", row[0], re.I):
+                continue
+            end = _end_date(row[1]) if len(row) > 1 else None
+            if end and date(*end) < cutoff:
                 continue
             vals = {p: _pct(row[i]) if i < len(row) else None for p, i in cols.items()}
             if vals.get("R") is None or all(vals[p] is None for p in cols if p != "R"):
