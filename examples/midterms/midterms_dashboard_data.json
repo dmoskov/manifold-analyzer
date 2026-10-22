@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-10-21T14:18:46+00:00",
+  "fetched_at": "2026-10-22T14:18:03+00:00",
   "candidates_as_of": "2026-10-12",
   "candidate_sources": {
     "overview": "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
@@ -8,23 +8,23 @@
     "nebraska": "https://sos.nebraska.gov/secretary-evnen-issues-statement-cindy-burbank-declination-candidate-nomination"
   },
   "house": {
-    "d": 91.5,
-    "r": 8.5,
-    "vol": 19236343.366128
+    "d": 92.5,
+    "r": 7.5,
+    "vol": 20154879.140697002
   },
   "senate": {
-    "d": 64.5,
-    "r": 35.5,
-    "vol": 7520591.962668999
+    "d": 68.5,
+    "r": 31.5,
+    "vol": 7793700.293165999
   },
   "bop": [
     {
       "label": "Democrats Sweep",
-      "p": 64.5
+      "p": 67.5
     },
     {
       "label": "R Senate, D House",
-      "p": 26.5
+      "p": 23.5
     },
     {
       "label": "Republicans Sweep",
@@ -39,74 +39,74 @@
       "p": 0.1
     }
   ],
-  "bop_vol": 27602283.812101,
+  "bop_vol": 29780713.493073,
   "seats": [
     {
       "label": "Below 190",
-      "p": 31.0
+      "p": 33.5
     },
     {
       "label": "190-194",
-      "p": 12.0
-    },
-    {
-      "label": "195-199",
       "p": 10.5
     },
     {
+      "label": "195-199",
+      "p": 15.0
+    },
+    {
       "label": "200-204",
-      "p": 13.6
+      "p": 13.9
     },
     {
       "label": "205-209",
-      "p": 19.0
+      "p": 15.8
     },
     {
       "label": "210-214",
-      "p": 7.2
+      "p": 7.4
     },
     {
       "label": "215-219",
-      "p": 7.5
+      "p": 4.7
     },
     {
       "label": "220-224",
-      "p": 3.1
+      "p": 3.5
     },
     {
       "label": "225-229",
-      "p": 2.5
+      "p": 1.9
     },
     {
       "label": "230+",
-      "p": 0.7
+      "p": 0.6
     }
   ],
-  "seats_vol": 342276.079145,
+  "seats_vol": 342963.18370399997,
   "senate_seats": [
     {
       "label": "46",
-      "p": 9.0
+      "p": 10.0
     },
     {
       "label": "47",
-      "p": 18.2
+      "p": 19.4
     },
     {
       "label": "48",
-      "p": 24.5
+      "p": 25.0
     },
     {
       "label": "49",
-      "p": 22.5
+      "p": 21.7
     },
     {
       "label": "50",
-      "p": 14.1
+      "p": 12.8
     },
     {
       "label": "51",
-      "p": 6.0
+      "p": 5.1
     }
   ],
   "fixed_republican_senate_seats": 38,
@@ -114,18 +114,18 @@
     {
       "slug": "iowa",
       "state": "Iowa",
-      "dem": 42.5,
-      "rep": 57.5,
+      "dem": 43.5,
+      "rep": 57.0,
       "other": 0.0,
       "fav": "Ashley Hinson (R) 57%",
-      "volume": 982743,
+      "volume": 1002612,
       "poll": {
         "kind": "agg",
         "n": 5,
         "rep": 46.1,
         "opp": 46.2,
         "opp_party": "D",
-        "margin": -0.0,
+        "margin": -0.1,
         "latest": "October 6\u201319, 2026",
         "sources": [
           {
@@ -157,37 +157,37 @@
       "slug": "kansas",
       "state": "Kansas",
       "dem": 38.5,
-      "rep": 62.0,
+      "rep": 61.5,
       "other": 0.0,
       "fav": "Roger Marshall (R) 62%",
-      "volume": 967180,
+      "volume": 1076776,
       "poll": {
         "kind": "agg",
         "n": 5,
-        "rep": 45.7,
-        "opp": 46.3,
+        "rep": 45.4,
+        "opp": 46.2,
         "opp_party": "D",
-        "margin": -0.7,
-        "latest": "through October 14, 2026",
+        "margin": -0.8,
+        "latest": "September 15 \u2013 October 14, 2026",
         "sources": [
           {
-            "name": "270toWin [ 68 ]",
-            "period": "September 8 \u2013 October 1, 2026"
+            "name": "270toWin [ 79 ]",
+            "period": "September 15 \u2013 October 14, 2026"
           },
           {
-            "name": "Decision Desk HQ [ 69 ]",
+            "name": "Decision Desk HQ [ 80 ]",
             "period": "through October 14, 2026"
           },
           {
-            "name": "FiftyPlusOne [ 70 ]",
+            "name": "FiftyPlusOne [ 81 ]",
             "period": "through October 14, 2026"
           },
           {
-            "name": "RealClearPolitics [ 71 ]",
+            "name": "RealClearPolitics [ 82 ]",
             "period": "September 8 \u2013 October 14, 2026"
           },
           {
-            "name": "Silver Bulletin [ 48 ]",
+            "name": "Silver Bulletin [ 60 ]",
             "period": "through October 14, 2026"
           }
         ],
@@ -196,21 +196,63 @@
       "label": "Kansas \u00b7 Hamilton v Marshall"
     },
     {
+      "slug": "maine",
+      "state": "Maine",
+      "dem": 65.5,
+      "rep": 33.0,
+      "other": 1.5,
+      "fav": "Troy Jackson (D) 66%",
+      "volume": 2426973,
+      "poll": {
+        "kind": "agg",
+        "n": 5,
+        "rep": 47.1,
+        "opp": 49.3,
+        "opp_party": "D",
+        "margin": -2.1,
+        "latest": "through October 14, 2026",
+        "sources": [
+          {
+            "name": "270toWin [ 362 ]",
+            "period": "September 23 \u2013 October 5, 2026"
+          },
+          {
+            "name": "Decision Desk HQ [ 363 ]",
+            "period": "through October 14, 2026"
+          },
+          {
+            "name": "FiftyPlusOne [ 364 ]",
+            "period": "through October 14, 2026"
+          },
+          {
+            "name": "RealClearPolitics [ 365 ]",
+            "period": "September 15 \u2013 October 14, 2026"
+          },
+          {
+            "name": "Silver Bulletin [ 316 ]",
+            "period": "through October 14, 2026"
+          }
+        ],
+        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+      },
+      "label": "Maine \u00b7 Jackson v Collins"
+    },
+    {
       "slug": "texas",
       "state": "Texas",
-      "dem": 64.5,
-      "rep": 35.5,
+      "dem": 67.5,
+      "rep": 32.5,
       "other": 0.0,
-      "fav": "James Talarico (D) 64%",
-      "volume": 4817787,
+      "fav": "James Talarico (D) 68%",
+      "volume": 5508004,
       "poll": {
         "kind": "agg",
         "n": 6,
-        "rep": 46.4,
-        "opp": 48.7,
+        "rep": 46.6,
+        "opp": 48.9,
         "opp_party": "D",
         "margin": -2.3,
-        "latest": "October 5\u201316, 2026",
+        "latest": "through October 21, 2026",
         "sources": [
           {
             "name": "270toWin [ 452 ]",
@@ -218,19 +260,19 @@
           },
           {
             "name": "Decision Desk HQ [ 453 ]",
-            "period": "through October 16, 2026"
+            "period": "through October 21, 2026"
           },
           {
             "name": "FiftyPlusOne [ 454 ]",
-            "period": "through October 16, 2026"
+            "period": "through October 21, 2026"
           },
           {
             "name": "RealClearPolitics [ 455 ]",
-            "period": "September 24 \u2013 October 16, 2026"
+            "period": "October 5\u201319, 2026"
           },
           {
             "name": "The Texas Tribune [ 456 ]",
-            "period": "through October 16, 2026"
+            "period": "through October 21, 2026"
           },
           {
             "name": "Silver Bulletin [ 359 ]",
@@ -242,13 +284,93 @@
       "label": "Texas \u00b7 Talarico v Paxton"
     },
     {
+      "slug": "nebraska",
+      "state": "Nebraska",
+      "dem": 0.1,
+      "rep": 70.5,
+      "other": 29.4,
+      "fav": "Pete Ricketts (R) 70%",
+      "volume": 842367,
+      "poll": {
+        "kind": "agg",
+        "n": 4,
+        "rep": 46.1,
+        "opp": 45.2,
+        "opp_party": "I",
+        "margin": 0.9,
+        "latest": "September 8 \u2013 October 5, 2026",
+        "sources": [
+          {
+            "name": "270toWin [ 90 ]",
+            "period": "September 8 \u2013 October 5, 2026"
+          },
+          {
+            "name": "Decision Desk HQ [ 91 ]",
+            "period": "through October 5, 2026"
+          },
+          {
+            "name": "FiftyPlusOne [ 92 ]",
+            "period": "through October 5, 2026"
+          },
+          {
+            "name": "Silver Bulletin [ 63 ]",
+            "period": "through October 5, 2026"
+          }
+        ],
+        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+      },
+      "label": "Nebraska \u00b7 Osborn v Ricketts"
+    },
+    {
+      "slug": "michigan",
+      "state": "Michigan",
+      "dem": 69.5,
+      "rep": 28.5,
+      "other": 2.0,
+      "fav": "Abdul El-Sayed (D) 70%",
+      "volume": 2103534,
+      "poll": {
+        "kind": "agg",
+        "n": 5,
+        "rep": 45.3,
+        "opp": 48.1,
+        "opp_party": "D",
+        "margin": -2.8,
+        "latest": "through October 18, 2026",
+        "sources": [
+          {
+            "name": "270toWin [ 210 ]",
+            "period": "September 20 \u2013 October 10, 2026"
+          },
+          {
+            "name": "Decision Desk HQ [ 351 ]",
+            "period": "through October 18, 2026"
+          },
+          {
+            "name": "FiftyPlusOne [ 352 ]",
+            "period": "through October 18, 2026"
+          },
+          {
+            "name": "RealClearPolitics [ 353 ]",
+            "period": "September 24 \u2013 October 18, 2026"
+          },
+          {
+            "name": "Silver Bulletin [ 284 ]",
+            "period": "through October 18, 2026"
+          }
+        ],
+        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+      },
+      "label": "Michigan \u00b7 El-Sayed v Rogers"
+    },
+    {
       "slug": "ohio",
       "state": "Ohio",
-      "dem": 65.5,
-      "rep": 35.0,
+      "dem": 71.5,
+      "rep": 28.5,
       "other": 0.0,
-      "fav": "Sherrod Brown (D) 66%",
-      "volume": 1417627,
+      "fav": "Sherrod Brown (D) 72%",
+      "volume": 1499850,
       "poll": {
         "kind": "agg",
         "n": 5,
@@ -284,135 +406,13 @@
       "label": "Ohio \u00b7 Brown v Husted"
     },
     {
-      "slug": "maine",
-      "state": "Maine",
-      "dem": 64.5,
-      "rep": 34.5,
-      "other": 1.0,
-      "fav": "Troy Jackson (D) 64%",
-      "volume": 2370776,
-      "poll": {
-        "kind": "agg",
-        "n": 5,
-        "rep": 47.1,
-        "opp": 49.3,
-        "opp_party": "D",
-        "margin": -2.1,
-        "latest": "through October 14, 2026",
-        "sources": [
-          {
-            "name": "270toWin [ 361 ]",
-            "period": "September 23 \u2013 October 5, 2026"
-          },
-          {
-            "name": "Decision Desk HQ [ 362 ]",
-            "period": "through October 14, 2026"
-          },
-          {
-            "name": "FiftyPlusOne [ 363 ]",
-            "period": "through October 14, 2026"
-          },
-          {
-            "name": "RealClearPolitics [ 364 ]",
-            "period": "September 15 \u2013 October 14, 2026"
-          },
-          {
-            "name": "Silver Bulletin [ 316 ]",
-            "period": "through October 14, 2026"
-          }
-        ],
-        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
-      },
-      "label": "Maine \u00b7 Jackson v Collins"
-    },
-    {
-      "slug": "nebraska",
-      "state": "Nebraska",
-      "dem": 0.1,
-      "rep": 70.5,
-      "other": 29.5,
-      "fav": "Pete Ricketts (R) 70%",
-      "volume": 809613,
-      "poll": {
-        "kind": "agg",
-        "n": 4,
-        "rep": 46.3,
-        "opp": 45.2,
-        "opp_party": "I",
-        "margin": 1.0,
-        "latest": "September 8 \u2013 October 5, 2026",
-        "sources": [
-          {
-            "name": "270toWin [ 90 ]",
-            "period": "September 8 \u2013 October 5, 2026"
-          },
-          {
-            "name": "Decision Desk HQ [ 91 ]",
-            "period": "through October 5, 2026"
-          },
-          {
-            "name": "FiftyPlusOne [ 92 ]",
-            "period": "through October 5, 2026"
-          },
-          {
-            "name": "Silver Bulletin [ 63 ]",
-            "period": "through October 5, 2026"
-          }
-        ],
-        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
-      },
-      "label": "Nebraska \u00b7 Osborn v Ricketts"
-    },
-    {
-      "slug": "michigan",
-      "state": "Michigan",
-      "dem": 70.5,
-      "rep": 29.5,
-      "other": 0.0,
-      "fav": "Abdul El-Sayed (D) 70%",
-      "volume": 2055577,
-      "poll": {
-        "kind": "agg",
-        "n": 5,
-        "rep": 45.2,
-        "opp": 47.9,
-        "opp_party": "D",
-        "margin": -2.8,
-        "latest": "through October 18, 2026",
-        "sources": [
-          {
-            "name": "270toWin [ 210 ]",
-            "period": "September 20 \u2013 October 10, 2026"
-          },
-          {
-            "name": "Decision Desk HQ [ 350 ]",
-            "period": "through October 14, 2026"
-          },
-          {
-            "name": "FiftyPlusOne [ 351 ]",
-            "period": "through October 18, 2026"
-          },
-          {
-            "name": "RealClearPolitics [ 352 ]",
-            "period": "September 24 \u2013 October 18, 2026"
-          },
-          {
-            "name": "Silver Bulletin [ 284 ]",
-            "period": "through October 10, 2026"
-          }
-        ],
-        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
-      },
-      "label": "Michigan \u00b7 El-Sayed v Rogers"
-    },
-    {
       "slug": "alaska",
       "state": "Alaska",
       "dem": 74.5,
       "rep": 25.6,
       "other": 0.0,
       "fav": "Mary Peltola 74%",
-      "volume": 1554667,
+      "volume": 1573254,
       "poll": {
         "kind": "agg",
         "n": 4,
@@ -446,11 +446,11 @@
     {
       "slug": "south-carolina",
       "state": "South Carolina",
-      "dem": 18.5,
-      "rep": 81.5,
+      "dem": 19.5,
+      "rep": 81.0,
       "other": 0.0,
-      "fav": "Darline Graham Nordone (R) 82%",
-      "volume": 928085,
+      "fav": "Darline Graham Nordone (R) 81%",
+      "volume": 962602,
       "poll": {
         "kind": "agg",
         "n": 4,
@@ -484,11 +484,11 @@
     {
       "slug": "minnesota",
       "state": "Minnesota",
-      "dem": 87.5,
-      "rep": 13.0,
+      "dem": 86.5,
+      "rep": 13.5,
       "other": 0.0,
-      "fav": "Peggy Flanagan (D) 88%",
-      "volume": 304919,
+      "fav": "Peggy Flanagan (D) 86%",
+      "volume": 319607,
       "poll": {
         "kind": "agg",
         "n": 5,
@@ -530,7 +530,7 @@
       "rep": 88.5,
       "other": 0.0,
       "fav": "Cindy Hyde-Smith (R) 88%",
-      "volume": 219331,
+      "volume": 248270,
       "poll": null,
       "label": "Mississippi \u00b7 Colom v Hyde-Smith"
     },
@@ -541,7 +541,7 @@
       "rep": 9.5,
       "other": 0.0,
       "fav": "Chris Pappas (D) 90%",
-      "volume": 413941,
+      "volume": 414863,
       "poll": {
         "kind": "raw",
         "n": 5,
@@ -577,83 +577,41 @@
       "label": "New Hampshire \u00b7 Pappas v Sununu"
     },
     {
-      "slug": "montana",
-      "state": "Montana",
-      "dem": 0.1,
-      "rep": 91.5,
-      "other": 8.3,
-      "fav": "Kurt Alme (R)  92%",
-      "volume": 184388,
-      "poll": {
-        "kind": "agg",
-        "n": 5,
-        "rep": 41.3,
-        "opp": 28.6,
-        "opp_party": "I",
-        "margin": 12.7,
-        "latest": "through October 12, 2026",
-        "sources": [
-          {
-            "name": "270toWin [ 103 ]",
-            "period": "August 27 \u2013 September 24, 2026"
-          },
-          {
-            "name": "Decision Desk HQ [ 104 ]",
-            "period": "through October 12, 2026"
-          },
-          {
-            "name": "FiftyPlusOne [ 105 ]",
-            "period": "through October 12, 2026"
-          },
-          {
-            "name": "RealClearPolitics [ 106 ]",
-            "period": "August 27 \u2013 September 15, 2026"
-          },
-          {
-            "name": "Silver Bulletin [ 71 ]",
-            "period": "through October 8, 2026"
-          }
-        ],
-        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"
-      },
-      "label": "Montana \u00b7 Bodnar v Alme"
-    },
-    {
       "slug": "florida",
       "state": "Florida",
       "dem": 9.0,
-      "rep": 91.5,
+      "rep": 91.0,
       "other": 0.0,
-      "fav": "Ashley Moody (R) 92%",
-      "volume": 248019,
+      "fav": "Ashley Moody (R) 91%",
+      "volume": 253875,
       "poll": {
         "kind": "agg",
         "n": 5,
-        "rep": 49.5,
-        "opp": 43.0,
+        "rep": 49.7,
+        "opp": 43.3,
         "opp_party": "D",
-        "margin": 6.5,
-        "latest": "through October 15, 2026",
+        "margin": 6.4,
+        "latest": "October 5\u201319, 2026",
         "sources": [
           {
             "name": "270toWin [ 146 ]",
-            "period": "September 8\u201327, 2026"
+            "period": "October 5\u201319, 2026"
           },
           {
             "name": "Decision Desk HQ [ 147 ]",
-            "period": "through October 15, 2026"
+            "period": "through October 19, 2026"
           },
           {
             "name": "FiftyPlusOne [ 148 ]",
-            "period": "through October 15, 2026"
+            "period": "through October 19, 2026"
           },
           {
             "name": "RealClearPolitics [ 149 ]",
-            "period": "September 8 \u2013 October 15, 2026"
+            "period": "September 8 \u2013 October 19, 2026"
           },
           {
             "name": "Silver Bulletin [ 111 ]",
-            "period": "through October 10, 2026"
+            "period": "through October 19, 2026"
           }
         ],
         "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Florida"
@@ -661,25 +619,67 @@
       "label": "Florida \u00b7 Nixon v Moody"
     },
     {
-      "slug": "georgia",
-      "state": "Georgia",
-      "dem": 95.8,
-      "rep": 4.1,
-      "other": 0.1,
-      "fav": "Jon Ossoff (D)  96%",
-      "volume": 250095,
+      "slug": "montana",
+      "state": "Montana",
+      "dem": 0.1,
+      "rep": 92.5,
+      "other": 7.3,
+      "fav": "Kurt Alme (R)  92%",
+      "volume": 186035,
       "poll": {
         "kind": "agg",
         "n": 5,
-        "rep": 43.7,
-        "opp": 52.2,
+        "rep": 42.5,
+        "opp": 29.5,
+        "opp_party": "I",
+        "margin": 13.1,
+        "latest": "September 19 \u2013 October 18, 2026",
+        "sources": [
+          {
+            "name": "270toWin [ 103 ]",
+            "period": "September 19 \u2013 October 18, 2026"
+          },
+          {
+            "name": "Decision Desk HQ [ 104 ]",
+            "period": "through October 18, 2026"
+          },
+          {
+            "name": "FiftyPlusOne [ 105 ]",
+            "period": "through October 18, 2026"
+          },
+          {
+            "name": "RealClearPolitics [ 106 ]",
+            "period": "August 27 \u2013 October 18, 2026"
+          },
+          {
+            "name": "Silver Bulletin [ 71 ]",
+            "period": "through October 18, 2026"
+          }
+        ],
+        "url": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"
+      },
+      "label": "Montana \u00b7 Bodnar v Alme"
+    },
+    {
+      "slug": "georgia",
+      "state": "Georgia",
+      "dem": 96.0,
+      "rep": 4.0,
+      "other": 0.0,
+      "fav": "Jon Ossoff (D)  96%",
+      "volume": 253765,
+      "poll": {
+        "kind": "agg",
+        "n": 5,
+        "rep": 43.2,
+        "opp": 51.7,
         "opp_party": "D",
         "margin": -8.5,
-        "latest": "through October 20, 2026",
+        "latest": "September 15 \u2013 October 20, 2026",
         "sources": [
           {
             "name": "270toWin [ 116 ]",
-            "period": "September 15 \u2013 October 17, 2026"
+            "period": "September 15 \u2013 October 20, 2026"
           },
           {
             "name": "Decision Desk HQ [ 117 ]",
@@ -705,27 +705,27 @@
     {
       "slug": "north-carolina",
       "state": "North Carolina",
-      "dem": 96.5,
+      "dem": 96.6,
       "rep": 3.5,
       "other": 0.0,
-      "fav": "Roy Cooper (D) 96%",
-      "volume": 232696,
+      "fav": "Roy Cooper (D) 97%",
+      "volume": 239488,
       "poll": {
         "kind": "agg",
         "n": 5,
-        "rep": 41.0,
-        "opp": 51.4,
+        "rep": 41.1,
+        "opp": 51.9,
         "opp_party": "D",
-        "margin": -10.4,
-        "latest": "October 8 \u2013 20, 2026",
+        "margin": -10.8,
+        "latest": "October 8 \u2013 21, 2026",
         "sources": [
           {
             "name": "270toWin [ 121 ]",
-            "period": "October 8 \u2013 20, 2026"
+            "period": "October 8 \u2013 21, 2026"
           },
           {
             "name": "Decision Desk HQ [ 122 ]",
-            "period": "through October 20, 2026"
+            "period": "through October 21, 2026"
           },
           {
             "name": "FiftyPlusOne [ 123 ]",
@@ -747,9 +747,9 @@
     {
       "slug": "oklahoma",
       "state": "Oklahoma",
-      "dem": 2.1,
-      "rep": 97.2,
-      "other": 0.7,
+      "dem": 1.7,
+      "rep": 97.4,
+      "other": 1.0,
       "fav": "Kevin Hern (R) 97%",
       "volume": 27825,
       "poll": null,
@@ -758,11 +758,11 @@
     {
       "slug": "kentucky",
       "state": "Kentucky",
-      "dem": 2.6,
+      "dem": 2.9,
       "rep": 97.4,
       "other": 0.0,
       "fav": "Andy Barr (R) 97%",
-      "volume": 37452,
+      "volume": 37633,
       "poll": {
         "kind": "raw",
         "n": 1,
@@ -784,9 +784,9 @@
     {
       "slug": "virginia",
       "state": "Virginia",
-      "dem": 97.8,
-      "rep": 1.9,
-      "other": 0.3,
+      "dem": 98.0,
+      "rep": 2.0,
+      "other": 0.0,
       "fav": "Mark Warner (D) 98%",
       "volume": 23886,
       "poll": null,
@@ -797,20 +797,20 @@
       "state": "Wyoming",
       "dem": 1.1,
       "rep": 98.5,
-      "other": 0.3,
+      "other": 0.5,
       "fav": "Harriet Hageman (R)  98%",
-      "volume": 20618,
+      "volume": 20628,
       "poll": null,
       "label": "Wyoming \u00b7 Hageman"
     },
     {
       "slug": "colorado",
       "state": "Colorado",
-      "dem": 98.9,
-      "rep": 1.2,
+      "dem": 99.0,
+      "rep": 1.0,
       "other": 0.0,
       "fav": "John Hickenlooper (D) 99%",
-      "volume": 51478,
+      "volume": 52068,
       "poll": null,
       "label": "Colorado \u00b7 Hickenlooper"
     }
